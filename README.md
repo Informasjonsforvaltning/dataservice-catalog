@@ -1,3 +1,3 @@
-# fdk-dataservice-catalog
+# api-catalogue
 
-An endpoint that exposes the collection of our DataServices (APIs) as DCAT-AP-NO v2.0 endpoint.
+A back end service service for creating api catalogues and api descritptions. Exposes a dcat-ap-no dataservices endpoint.
