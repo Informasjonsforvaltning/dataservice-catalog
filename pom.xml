@@ -155,29 +155,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>harvest-queue</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>datastore</artifactId>
-            <version>1.7.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>elasticsearch5-test</artifactId>
-            <version>1.1.0-SNAPHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>webutils-spring</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>io.springfox</groupId>
@@ -190,46 +167,23 @@
             <artifactId>wiremock</artifactId>
             <version>2.14.0</version>
         </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>api-cat-bindings</artifactId>
-            <version>1.12.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>informationmodel-cat-bindings</artifactId>
-            <version>1.8.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>elasticsearch5-client</artifactId>
-            <version>1.3.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>concept-cat-common</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>concept-cat-client</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>api-cat-converters</artifactId>
-            <version>1.8.0-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>5.2</version>
         </dependency>
+
         <dependency>
-            <groupId>no.fdk</groupId>
-            <artifactId>test</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-            <scope>test</scope>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fge</groupId>
+            <artifactId>json-patch</artifactId>
+            <version>1.9</version>
         </dependency>
 
     </dependencies>
