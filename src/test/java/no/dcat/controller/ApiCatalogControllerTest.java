@@ -4,7 +4,6 @@ import no.dcat.model.ApiCatalog;
 import no.dcat.service.ApiCatalogHarvesterService;
 import no.dcat.service.ApiCatalogRepository;
 import no.fdk.test.testcategories.UnitTest;
-import no.fdk.webutils.exceptions.BadRequestException;
 import no.fdk.webutils.exceptions.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
