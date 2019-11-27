@@ -7,10 +7,8 @@ RUN mkdir conf/
 COPY conf/ conf/
 RUN chmod 755 -R conf/
 
-RUN ls -l conf/
-
 VOLUME /tmp
-ADD *-exec.jar app.jar
-
-CMD java -jar $JAVA_OPTS app.jar
-
+ARG JAR_FILE
+ADD target/${JAR_FILE} app.jar
+RUN sh -c 'touch /app.jar'
+CMD java  -jar $JAVA_OPTS app.jar

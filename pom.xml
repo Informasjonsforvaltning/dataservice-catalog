@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.fdk</groupId>
     <artifactId>api-catalogue</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <name>API Catalogue</name>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -16,9 +15,15 @@
         <relativePath/>
     </parent>
 
+    <organization>
+        <name>Brønnøysundregistrene</name>
+        <url>https://www.brreg.no</url>
+    </organization>
+
     <properties>
         <!--standard properties-->
         <java.version>1.8</java.version>
+        <java.encoding>UTF-8</java.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -30,8 +35,8 @@
         <node.version>v6.10.2</node.version>
         <npm.version>4.3.0</npm.version>
 
-        <docker.image.prefix>dcatno</docker.image.prefix>
-        <docker.registry/>
+        <start-class>no.dcat.RegisterApplication</start-class>
+        <docker.image.name>dcatno/api-catalogue</docker.image.name>
 
         <unittest.category/>
         <endtoendtest.category/>
@@ -45,11 +50,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- må ha actuator for å kjøre på openshift. kreves av readyness probe -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
@@ -239,61 +239,31 @@
         </resources>
 
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <classifier>exec</classifier>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
-            <!-- Use -DskipDockerBuild to skip this rule -->
             <plugin>
                 <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>default</id>
                         <goals>
                             <goal>build</goal>
+                            <goal>push</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <imageName>
-                        ${docker.registry}${docker.image.prefix}/${project.artifactId}:latest
-                    </imageName>
-                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-                    <pushImage>false</pushImage>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.basedir}</directory>
-                            <filtering>false</filtering>
-                            <include>conf/**/*</include>
-                        </resource>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}-exec.jar</include>
-                            <excludes>
-                                <exclude>target/**/*</exclude>
-                                <exclude>pom.xml</exclude>
-                                <exclude>*.iml</exclude>
-                            </excludes>
-                        </resource>
-                    </resources>
+                    <dockerfile>Dockerfile</dockerfile>
+                    <repository>${docker.image.name}</repository>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
 
