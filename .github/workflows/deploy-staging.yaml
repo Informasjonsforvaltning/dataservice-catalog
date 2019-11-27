@@ -1,0 +1,56 @@
+name: Deploy to staging when pull request is created
+
+on:
+  - pull_request
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Package with Maven
+        run: mvn clean package -B -T 2C
+      - name: Build Docker image
+        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:latest -t eu.gcr.io/fdk-infra/api-catalogue:staging_latest -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA
+      - name: Connect to Google Cloud
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: fdk-infra
+          APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_FDK_JENKINS_GCR }}
+        with:
+          args: auth configure-docker -q
+      - name: Push docker image to Google Cloud
+        uses: actions/gcloud/cli@master
+        env:
+          PROJECT_ID: fdk-infra
+          APPLICATION_NAME: myproject
+        with:
+          runs: "sh -c"
+          args: "docker -- push eu.gcr.io/fdk-infra/api-catalogue"
+      - name: Apply Helm template
+        uses: stefanprodan/kube-tools@v1
+        with:
+          helm: 2.14.3
+          command: |
+            helm init --client-only
+            helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
+            helm fetch --untar --untardir ./helm fdk/api-catalogue
+            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA" -f ./helm/api-catalogue/values/staging.yaml ./helm/api-catalogue/ > ./kubectlapply.yaml
+            cat ./kubectlapply.yaml
+            chmod o+w ./kubectlapply.yaml
+            cat kubectlapply.yaml
+      - name: Get kubeconfig file from GKE
+        uses: machine-learning-apps/gke-kubeconfig@master
+        with:
+          application_credentials: ${{ secrets.FDK_DEV_AUTODEPLOY }}
+          project_id: fdk-dev
+          location_zone: europe-north1-a
+          cluster_name: fdk-dev
+      - name: Deploy to staging
+        uses: docker://bitnami/kubectl:latest
+        env:
+          KUBECONFIG: '/github/workspace/.kube/config'
+        with:
+          args: "apply -f ./kubectlapply.yaml --force"
