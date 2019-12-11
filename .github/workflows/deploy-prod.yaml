@@ -1,4 +1,4 @@
-name: Deploy to production
+name: Build, test and deploy to production on merge to master branch
 
 on:
   push:
@@ -6,31 +6,32 @@ on:
       - master
 
 jobs:
-  build:
-
+  build-test-and-deploy-production:
+    name: Build, test, publish and deploy to production environment
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
-      - name: Package with Maven
-        run: mvn clean package -B -T 2C
-      - name: Build Docker image
-        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:latest -t eu.gcr.io/fdk-infra/api-catalogue:production_latest -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA
-      - name: Connect to Google Cloud
-        uses: actions-hub/gcloud@master
-        env:
-          PROJECT_ID: fdk-infra
-          APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_FDK_JENKINS_GCR }}
+
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          args: auth configure-docker -q
-      - name: Push docker image to Google Cloud
-        uses: actions/gcloud/cli@master
-        env:
-          PROJECT_ID: fdk-infra
-          APPLICATION_NAME: myproject
-        with:
-          runs: "sh -c"
-          args: "docker -- push eu.gcr.io/fdk-infra/api-catalogue"
+          version: '270.0.0'
+          service_account_email: ${{ secrets.GCP_SA_FDK_JENKINS_GCR_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_FDK_JENKINS_GCR_KEY }}
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: gcloud auth configure-docker
+
+      - name: Build Docker image with GitHub commit sha and staging tag
+        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:latest
+
+      - name: Run tests
+        run: mvn verify
+
+      - name: Publish docker image to Google Cloud
+        run: docker -- push eu.gcr.io/fdk-infra/api-catalogue:latest
+
       - name: Apply Helm template
         uses: stefanprodan/kube-tools@v1
         with:
@@ -43,6 +44,7 @@ jobs:
             cat ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
+
       - name: Get kubeconfig file from GKE
         uses: machine-learning-apps/gke-kubeconfig@master
         with:
@@ -50,9 +52,16 @@ jobs:
           project_id: fdk-prod
           location_zone: europe-north1-a
           cluster_name: fdk-prod
+
       - name: Deploy to production
         uses: docker://bitnami/kubectl:latest
         env:
           KUBECONFIG: '/github/workspace/.kube/config'
         with:
           args: "apply -f ./kubectlapply.yaml --force"
+
+      - name: Trigger deploy to demo
+        uses: peter-evans/repository-dispatch@master
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          event-type: deploy-demo

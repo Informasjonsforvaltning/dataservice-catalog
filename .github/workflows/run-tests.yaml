@@ -1,0 +1,18 @@
+name: Run tests
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build Docker image
+        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:latest
+      - name: Run tests
+        run: mvn verify
