@@ -36,7 +36,6 @@
         <npm.version>4.3.0</npm.version>
 
         <start-class>no.dcat.RegisterApplication</start-class>
-        <docker.image.name>dcatno/api-catalogue</docker.image.name>
 
         <unittest.category/>
         <endtoendtest.category/>
@@ -243,28 +242,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.10</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dockerfile>Dockerfile</dockerfile>
-                    <repository>${docker.image.name}</repository>
-                    <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
             </plugin>
 
             <plugin>
