@@ -18,7 +18,7 @@ jobs:
         with:
           version: '270.0.0'
           service_account_email: ${{ secrets.GCP_SA_FDK_JENKINS_GCR_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_FDK_JENKINS_GCR }}
+          service_account_key: ${{ secrets.GCP_SA_FDK_JENKINS_GCR_KEY }}
 
       # Configure docker to use the gcloud command-line tool as a credential helper
       - run: gcloud auth configure-docker
