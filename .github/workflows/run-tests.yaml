@@ -13,6 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build Docker image
-        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:latest
+        run: docker build . -t eu.gcr.io/fdk-infra/api-catalogue:latest
       - name: Run tests
         run: mvn verify
