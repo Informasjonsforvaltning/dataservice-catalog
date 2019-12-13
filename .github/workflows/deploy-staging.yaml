@@ -24,7 +24,7 @@ jobs:
       - run: gcloud auth configure-docker
 
       - name: Build Docker image with GitHub commit sha and staging tag
-        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/fdk-infra/api-catalogue:staging_latest
+        run: docker build . -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/fdk-infra/api-catalogue:staging_latest
 
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/fdk-infra/api-catalogue

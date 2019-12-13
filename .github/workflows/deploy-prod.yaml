@@ -24,7 +24,7 @@ jobs:
       - run: gcloud auth configure-docker
 
       - name: Build Docker image with latest tag
-        run: docker build . --build-arg JAR_FILE=api-catalogue-1.0.0-SNAPSHOT.jar -t eu.gcr.io/fdk-infra/api-catalogue:latest
+        run: docker build . -t eu.gcr.io/fdk-infra/api-catalogue:latest
 
       - name: Run tests
         run: mvn verify
