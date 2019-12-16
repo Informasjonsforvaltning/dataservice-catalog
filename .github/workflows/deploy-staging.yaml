@@ -23,8 +23,11 @@ jobs:
       # Configure docker to use the gcloud command-line tool as a credential helper
       - run: gcloud auth configure-docker
 
+      - name: Package with maven
+        run: mvn clean package --no-transfer-progress
+
       - name: Build Docker image with GitHub commit sha and staging tag
-        run: docker build . -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/fdk-infra/api-catalogue:staging_latest
+        run: docker build -f Dockerfile.prod . -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/fdk-infra/api-catalogue:staging_latest
 
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/fdk-infra/api-catalogue

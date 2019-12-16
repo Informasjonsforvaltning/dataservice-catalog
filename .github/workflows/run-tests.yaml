@@ -12,7 +12,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
+      - name: Package with maven
+        run: mvn clean package --no-transfer-progress
+
       - name: Build Docker image
-        run: docker build . -t eu.gcr.io/fdk-infra/api-catalogue:latest
+        run: docker build -f Dockerfile.prod . -t eu.gcr.io/fdk-infra/api-catalogue:latest
+
       - name: Run tests
-        run: mvn verify
+        run: mvn verify --no-transfer-progress
