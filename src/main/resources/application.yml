@@ -8,7 +8,7 @@ logging:
 application:
   harvesterUsername: ${registrationApi_harvesterUsername:test_admin}
   harvesterPassword: ${registrationApi_harvesterPassword:password}
-  apiRootUrl: http://nginx-search:8080/api
+  apiRootUrl: http://fdk-nginx-search:8080/api
   # harvest every sixth hour
   harvestCron: 0 0 */6 * * *
 
