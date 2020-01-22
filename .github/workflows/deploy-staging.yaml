@@ -60,9 +60,9 @@ jobs:
         with:
           args: "apply -f ./kubectlapply.yaml --force"
 
-      - name: Trigger deploy to ut1
-        uses: peter-evans/repository-dispatch@master
+      - name: Notify slack of deploy
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: pullreminders/slack-action@master
         with:
-          token: ${{ secrets.DISPATCH_TOKEN }}
-          event-type: deploy-ut1
-          client-payload: '{"sha": "${{ github.sha }}"}'
+          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: api-catalogue deployed to staging\"}'
