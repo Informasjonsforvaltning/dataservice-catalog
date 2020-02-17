@@ -12,8 +12,6 @@ const val ELASTIC_NETWORK_NAME = "elasticsearch5"
 const val ELASTIC_CLUSERNAME = "elasticsearch"
 const val ELASTIC_CLUSTERNODES = "$ELASTIC_NETWORK_NAME:$ELASTIC_TCP_PORT"
 
-const val IMAGE_NAME = "eu.gcr.io/fdk-infra/api-catalogue:latest"
-
 const val WIREMOCK_TEST_HOST = "http://host.testcontainers.internal:$LOCAL_SERVER_PORT"
 
 val API_ENV_VALUES : Map<String,String> = ImmutableMap.of(
