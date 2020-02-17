@@ -29,6 +29,12 @@ jobs:
       - name: Build Docker image with GitHub commit sha and staging tag
         run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/api-catalogue:staging_latest
 
+      - name: Set max map count for elasticsearch
+        run: sudo sysctl -w vm.max_map_count=262144
+
+      - name: Run tests
+        run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/api-catalogue:staging_latest" verify --no-transfer-progress
+
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/digdir-fdk-infra/api-catalogue
 
