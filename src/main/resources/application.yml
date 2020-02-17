@@ -38,7 +38,6 @@ spring:
 server:
   port: 8115
 application:
-  harvesterUrl: http://localhost:8082
   apiRootUrl: http://localhost:8080/api
 
 security:
@@ -47,12 +46,13 @@ security:
       jwk.key-set-uri: http://localhost:8084/auth/realms/fdk/protocol/openid-connect/certs
 ---
 spring:
-  profiles: unit-integration
-  data:
-    elasticsearch:
-      clusterNodes: localhost:9399
-      clusterName: elasticsearch
-      properties:
-        http:
-          enabled: true
+  profiles: test
+application:
+  apiRootUrl: ${WIREMOCK_TEST_HOST}/api
+security:
+  oauth2:
+    resource:
+      jwk.key-set-uri: ${WIREMOCK_TEST_HOST}/auth/realms/fdk/protocol/openid-connect/certs
+server:
+  port: 8080
 

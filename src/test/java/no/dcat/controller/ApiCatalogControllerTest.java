@@ -3,40 +3,32 @@ package no.dcat.controller;
 import no.dcat.model.ApiCatalog;
 import no.dcat.service.ApiCatalogHarvesterService;
 import no.dcat.service.ApiCatalogRepository;
-import no.fdk.test.testcategories.UnitTest;
 import no.fdk.webutils.exceptions.NotFoundException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@Category(UnitTest.class)
-@RunWith(SpringRunner.class)
+@Tag("unit")
+@ExtendWith(MockitoExtension.class)
 public class ApiCatalogControllerTest {
 
-    private ApiCatalogController apiCatalogController;
-
-    @Spy
+    @Mock
     private ApiCatalogRepository apiCatalogRepositoryMock;
 
     @Mock
     private ApiCatalogHarvesterService apiCatalogHarvesterServiceMock;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        apiCatalogController =
-            new ApiCatalogController(apiCatalogRepositoryMock, apiCatalogHarvesterServiceMock);
-    }
+    @InjectMocks
+    private ApiCatalogController apiCatalogController;
 
     @Test
     public void getApiCatalog_ShouldReturnApiCatalog() throws NotFoundException {
@@ -49,12 +41,12 @@ public class ApiCatalogControllerTest {
         assertEquals(apiCatalog, existingApiCatalog);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getApiCatalog_WhenNotFound_ShouldThrowNotFoundException() throws NotFoundException {
         String orgNr = "testOrgNr";
         when(apiCatalogRepositoryMock.findByOrgNo(orgNr)).thenReturn(Optional.empty());
 
-        apiCatalogController.getApiCatalog(orgNr);
+        assertThrows(NotFoundException.class, () -> apiCatalogController.getApiCatalog(orgNr));
     }
 
     @Test
@@ -101,13 +93,13 @@ public class ApiCatalogControllerTest {
         verify(apiCatalogRepositoryMock).delete(existingApiCatalog);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deleteApiCatalog_WhenNotExisting_ShouldThrowNotFoundException() throws NotFoundException {
         String orgNr = "testOrgNr";
 
         when(apiCatalogRepositoryMock.findByOrgNo(orgNr)).thenReturn(Optional.empty());
 
-        apiCatalogController.deleteApiCatalog(orgNr);
+        assertThrows(NotFoundException.class, () -> apiCatalogController.deleteApiCatalog(orgNr));
 
         verify(apiCatalogRepositoryMock, never()).delete(any());
     }
