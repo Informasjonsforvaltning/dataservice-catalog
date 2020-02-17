@@ -1,10 +1,10 @@
-FROM maven:3.5.2-jdk-8-alpine AS MAVEN_BUILD_ENVIRONMENT
+FROM maven:3.6.3-ibmjava-8-alpine AS MAVEN_BUILD_ENVIRONMENT
 
 COPY pom.xml /tmp/
 COPY src /tmp/src/
 WORKDIR /tmp/
 
-RUN mvn clean package
+RUN mvn clean package --no-transfer-progress -DskipTests
 
 FROM openjdk:8-jre
 

@@ -29,6 +29,9 @@ jobs:
       - name: Build Docker image with latest tag
         run: docker build -f Dockerfile.prod . -t eu.gcr.io/fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/fdk-infra/api-catalogue:latest
 
+      - name: Set max map count for elasticsearch
+        run: sudo sysctl -w vm.max_map_count=262144
+
       - name: Run tests
         run: mvn verify --no-transfer-progress
 

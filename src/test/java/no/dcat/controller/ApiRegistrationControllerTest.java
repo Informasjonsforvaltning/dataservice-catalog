@@ -8,21 +8,22 @@ import no.dcat.service.ApiRegistrationRepository;
 import no.dcat.service.CatalogRepository;
 import no.dcat.service.InformationmodelCatService;
 import no.fdk.acat.common.model.apispecification.ApiSpecification;
-import no.fdk.test.testcategories.UnitTest;
 import no.fdk.webutils.exceptions.BadRequestException;
 import no.fdk.webutils.exceptions.NotFoundException;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,16 +32,16 @@ import static no.dcat.model.ApiRegistration.REGISTRATION_STATUS_DRAFT;
 import static no.dcat.model.ApiRegistration.REGISTRATION_STATUS_PUBLISH;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@Category(UnitTest.class)
-@RunWith(SpringRunner.class)
+@Tag("unit")
+@ExtendWith(MockitoExtension.class)
 public class ApiRegistrationControllerTest {
 
+    @InjectMocks
     private ApiRegistrationController apiRegistrationController;
-    private String catalogId = "1234";
-    private Resource apiResource;
 
     @Mock
     private CatalogRepository catalogRepositoryMock;
@@ -54,29 +55,20 @@ public class ApiRegistrationControllerTest {
     @Mock
     private InformationmodelCatService informationmodelCatMock;
 
-    @Before
-    public void setup() throws IOException {
-        MockitoAnnotations.initMocks(this);
-
-        Catalog catalog = new Catalog();
-        catalog.setId(catalogId);
-        apiResource = new ClassPathResource("raw-enhet-api.json");
-        ApiSpecification apiSpecification =
-            new Gson().fromJson(IOUtils.toString(apiResource.getInputStream(), "UTF-8"), ApiSpecification.class);
-
-        when(catalogRepositoryMock.findById(anyString())).thenReturn(Optional.of(catalog));
-        when(apiCatMock.convertSpecUrlToApiSpecification(apiResource.getURL().toString())).thenReturn(apiSpecification);
-
-        ApiRegistration apiRegData = mock(ApiRegistration.class);
-        when(apiRegData.getId()).thenReturn("id");
-        when(apiRegistrationRepositoryMock.save(any(ApiRegistration.class))).thenAnswer((invocation) -> invocation.getArguments()[0]);
-
-        apiRegistrationController =
-            new ApiRegistrationController(apiRegistrationRepositoryMock, catalogRepositoryMock, apiCatMock, informationmodelCatMock);
-    }
-
     @Test
     public void createApiRegistrationOK() throws Throwable {
+        Catalog catalog = new Catalog();
+        String catalogId = "1234";
+        catalog.setId(catalogId);
+        when(catalogRepositoryMock.findById(anyString())).thenReturn(Optional.of(catalog));
+
+        Resource apiResource = new ClassPathResource("raw-enhet-api.json");
+        ApiSpecification apiSpecification =
+            new Gson().fromJson(IOUtils.toString(apiResource.getInputStream(), StandardCharsets.UTF_8), ApiSpecification.class);
+        when(apiCatMock.convertSpecUrlToApiSpecification(apiResource.getURL().toString())).thenReturn(apiSpecification);
+
+        when(apiRegistrationRepositoryMock.save(any(ApiRegistration.class))).thenAnswer((invocation) -> invocation.getArguments()[0]);
+
 
         Map<String, Object> apiRegData = new HashMap<String, Object>() {{
             put("apiSpecUrl", apiResource.getURL().toString());
@@ -89,7 +81,7 @@ public class ApiRegistrationControllerTest {
             is("Åpne Data fra Enhetsregisteret - API Dokumentasjon"));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void checkIfCatalogIdNotMatchWillFailWithNotFound() throws NotFoundException, BadRequestException {
 
         String catalogId = "1234";
@@ -100,12 +92,11 @@ public class ApiRegistrationControllerTest {
 
         when(apiRegistrationRepositoryMock.findById(anyString())).thenReturn(Optional.of(apiRegistration));
 
-        apiRegistrationController.deleteApiRegistration(catalogId, id);
+        assertThrows(NotFoundException.class, () -> apiRegistrationController.deleteApiRegistration(catalogId, id));
     }
 
-    @Test(expected = BadRequestException.class)
-    public void checkDeleteApiRegistrationWithStatusPublishedBadRequest()
-        throws NotFoundException, BadRequestException {
+    @Test
+    public void checkDeleteApiRegistrationWithStatusPublishedBadRequest() {
 
         String catalogId = "1234";
         String id = "1234";
@@ -116,7 +107,7 @@ public class ApiRegistrationControllerTest {
 
         when(apiRegistrationRepositoryMock.findById(id)).thenReturn(Optional.of(apiRegistration));
 
-        apiRegistrationController.deleteApiRegistration(catalogId, id);
+        assertThrows(BadRequestException.class, () -> apiRegistrationController.deleteApiRegistration(catalogId, id));
     }
 
     @Test
@@ -133,7 +124,6 @@ public class ApiRegistrationControllerTest {
         when(apiRegistrationRepositoryMock.findById(id)).thenReturn(Optional.of(apiRegistration));
 
         apiRegistrationController.deleteApiRegistration(catalogId, id);
-        doNothing().when(apiRegistrationRepositoryMock).delete(apiRegistration);
 
         verify(apiRegistrationRepositoryMock, times(1)).delete(apiRegistration);
         verify(apiCatMock, times(1)).triggerHarvestApiRegistration(id);
