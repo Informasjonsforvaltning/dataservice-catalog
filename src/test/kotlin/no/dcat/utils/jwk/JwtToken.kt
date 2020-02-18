@@ -7,7 +7,7 @@ import java.util.*
 
 class JwtToken (private val access: Access) {
     private val exp = Date().time + 120 * 1000
-    private val aud = listOf("organization-catalogue")
+    private val aud = listOf("fdk-registration-api")
 
     private fun buildToken() : String{
         val claimset = JWTClaimsSet.Builder()

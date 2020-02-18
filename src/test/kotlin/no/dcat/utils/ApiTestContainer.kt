@@ -14,7 +14,6 @@ abstract class ApiTestContainer {
     companion object {
 
         private val logger = LoggerFactory.getLogger(ApiTestContainer::class.java)
-        private val apiLog = Slf4jLogConsumer(logger).withPrefix("API-LOG")
         var elasticContainer: KGenericContainer
         var TEST_API: KGenericContainer
 
@@ -41,11 +40,10 @@ abstract class ApiTestContainer {
                 .dependsOn(elasticContainer)
                 .waitingFor(HttpWaitStrategy()
                     .forPort(API_PORT)
-                    .forPath("/ping")
+                    .forPath("/ready")
                     .forStatusCode(HttpStatus.OK.value())
                     .withStartupTimeout(Duration.ofMinutes(1)))
                 .withNetwork(apiNetwork)
-                .withLogConsumer(apiLog)
                 .withEnv(API_ENV_VALUES)
 
             elasticContainer.start()
