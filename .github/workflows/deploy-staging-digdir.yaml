@@ -27,16 +27,16 @@ jobs:
         run: mvn clean package --no-transfer-progress
 
       - name: Build Docker image with GitHub commit sha and staging tag
-        run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/api-catalogue:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/api-catalogue:staging_latest
+        run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/dataservice-catalog:staging_latest
 
       - name: Set max map count for elasticsearch
         run: sudo sysctl -w vm.max_map_count=262144
 
       - name: Run tests
-        run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/api-catalogue:staging_latest" verify --no-transfer-progress
+        run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:staging_latest" verify --no-transfer-progress
 
       - name: Publish docker image to Google Cloud
-        run: docker -- push eu.gcr.io/digdir-fdk-infra/api-catalogue
+        run: docker -- push eu.gcr.io/digdir-fdk-infra/dataservice-catalog
 
       - name: Apply Helm template
         uses: stefanprodan/kube-tools@v1
@@ -45,8 +45,8 @@ jobs:
           command: |
             helm init --client-only
             helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
-            helm fetch --untar --untardir ./helm fdk/api-catalogue
-            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/api-catalogue:$GITHUB_SHA" -f ./helm/api-catalogue/values/staging-digdir.yaml ./helm/api-catalogue/ > ./kubectlapply.yaml
+            helm fetch --untar --untardir ./helm fdk/dataservice-catalog
+            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA" -f ./helm/dataservice-catalog/values/staging-digdir.yaml ./helm/dataservice-catalog/ > ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
 
@@ -70,4 +70,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: api-catalogue deployed to digdir-staging\"}'
+          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: dataservice-catalog deployed to digdir-staging\"}'
