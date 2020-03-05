@@ -1,0 +1,44 @@
+logging:
+  level.root: WARN
+  level.no: ${LOG_LEVEL:DEBUG}
+
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: dataservice-catalog
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+      host: mongodb
+      port: 27017
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBIT_USERNAME}
+    password: ${RABBIT_PASSWORD}
+    template:
+      routing-key: 'dataservice.publisher.HarvestTrigger'
+      exchange: 'harvests'
+---
+
+spring:
+  profiles: develop,test,unit-integration
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    template:
+      routing-key: 'dataservice.publisher.HarvestTrigger'
+      exchange: 'harvests'
+  data:
+    mongodb:
+      authentication-database: admin
+      database: dataservice-catalog
+      username: admin
+      password: admin
+      host: localhost
+      port: 27017
+server:
+  port: 9080
