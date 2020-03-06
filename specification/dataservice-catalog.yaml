@@ -1,0 +1,152 @@
+openapi: 3.0.2
+info:
+  description: Tilgjengeliggjør dataservice-beskrivelser fra en dataservice-katalog ihht DCAT-AP-NO v2.0
+  version: '1.0'
+  title: Dataservice-katalogens DCAT-AP-NO v2 endepunkt
+  contact:
+    name: Digitaliseringsdirektoratet
+    url: 'https://fellesdatakatalog.digdir.no'
+    email: fellesdatakatalog@digdir.no
+  license:
+    name: License of API
+    url: 'http://data.norge.no/nlod/no/2.0'
+tags:
+  - name: catalogs
+    description: Catalogs as a collection
+  - name: dataservices
+    description: Dataservices as a colleciont
+  - name: catalog
+    description: Catalog details
+  - name: dataservice
+    description: Dataservice details
+servers:
+  - url: 'https://dataservice-catalog.fellesdatakatalog.digdir.no/'
+    description: Produksjonsmiljø
+  - url: 'https://dataservice-catalog.staging.fellesdatakatalog.digdir.no/'
+    description: Testmiljø
+  - url: 'https://dataservice-catalog.demo.fellesdatakatalog.digdir.no/'
+    description: Demomiljø
+paths:
+  /catalogs:
+    get:
+      tags:
+        - catalogs
+      description: Returnerer samlinger av kataloger
+      operationId: getCatalogs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Catalog'
+  /catalogs/{id}:
+    get:
+      tags:
+        - dcat-ap-no-catalogs
+      description: Returnerer en katalog
+      operationId: getCatalogById
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+  /dataservices:
+    get:
+      tags:
+        - dataservices
+      description: Returnerer samlinger av dataservicer
+      operationId: getDataServices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataService'
+  /dataservices/{id}:
+    get:
+      tags:
+        - dataservice
+      description: Returnerer en dataservice
+      operationId: getDataServiceById
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataService'
+components:
+  schemas:
+    Catalog:
+      properties:
+        id:
+          type: string
+        publisherUrl:
+          type: string
+          format: uri
+        title:
+          type: string
+        description:
+          type: string
+        dataservices:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataService'
+    DataService:
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        endpointURL:
+          type: string
+          format: uri
+        endpointDescription:
+          type: string
+          format: uri
+        mediaType:
+          format: string
+        contactpoint:
+          $ref: '#/components/schemas/Contact'
+    Contact:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        url:
+          type: string
+          format: uri
+        telephone:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
