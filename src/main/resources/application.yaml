@@ -42,3 +42,8 @@ spring:
       port: 27017
 server:
   port: 9080
+
+application:
+  external:
+    api-harvester:
+      url: http://localhost:8103
