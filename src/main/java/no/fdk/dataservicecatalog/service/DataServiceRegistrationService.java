@@ -49,7 +49,7 @@ public class DataServiceRegistrationService {
     public Mono<DataService> importFromSpecification(ApiSpecificationSource source) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
         Mono<DataService> dataServiceMono = apiSpecification.map(this::parseApiSpecification)
-                .doOnNext(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
+                .doOnSuccess(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
                 .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
         return dataServiceMono.flatMap(dataServiceMongoRepository::save);
 
@@ -58,7 +58,7 @@ public class DataServiceRegistrationService {
     public Mono<DataService> importFromSpecification(String dataServiceId, ApiSpecificationSource source) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
         Mono<DataService> dataServiceMono = apiSpecification.map(spec -> this.updateFromSpecification(dataServiceId, spec))
-                .doOnNext(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
+                .doOnSuccess(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
                 .doOnError(error -> log.error("dataservice with id {} failed mapping {}", dataServiceId, error.getMessage()));
         return dataServiceMono.flatMap(dataServiceMongoRepository::save);
     }
@@ -72,13 +72,19 @@ public class DataServiceRegistrationService {
 
     public Mono<DataService> create(DataService dataService) {
         return dataServiceMongoRepository.save(dataService)
-                .doOnNext(saved -> log.debug("dataservice {} saved", saved.getId()))
+                .doOnSuccess(saved -> log.debug("dataservice {} saved", saved.getId()))
                 .doOnError(error -> log.error("error saving dataservice to database: {}", error.getMessage()));
     }
 
     public Mono<DataService> findById(String id) {
         return dataServiceMongoRepository.findById(id)
-                .doOnNext(dataService -> log.debug("dataservice {} retrieved", dataService.getId()))
+                .doOnSuccess(dataService -> {
+                    if (dataService != null) {
+                        log.debug("dataservice {} retrieved", dataService.getId());
+                    } else {
+                        log.error("no dataservice exists with id {}", id);
+                    }
+                })
                 .doOnError(error -> log.error("error retrieving dataservice {}: {}", id, error.getMessage()));
     }
 
