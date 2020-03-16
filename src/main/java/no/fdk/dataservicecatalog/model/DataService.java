@@ -41,6 +41,7 @@ public class DataService {
     public LocalDateTime modified;
     @Id
     private String id;
+    private String catalogId;
     @NotEmpty
     private Map<String, String> title;
     private String version;
@@ -57,9 +58,5 @@ public class DataService {
     private Status status;
     private String serviceType;
     private Set<String> servesDataset;
-
-    public static DataService empty() {
-        return new DataService();
-    }
 
 }
