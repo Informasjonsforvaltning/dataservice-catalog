@@ -74,6 +74,7 @@ public class DataServiceRegistrationService {
         });
     }
 
+    //    @PreAuthorize("@permissionService.hasPermission(#catalogId, 'organization', 'read')")
     public Flux<DataService> getAllDataServices(String catalogId) {
         var all = dataServiceMongoRepository.findAllByCatalogId(catalogId)
                 .doOnError(error -> log.error("error retrieving all dataservices from mongo: {}", error.getMessage()));
@@ -103,7 +104,7 @@ public class DataServiceRegistrationService {
     public Mono<Boolean> deleteById(String dataServiceId, String catalogId) {
         return dataServiceMongoRepository.deleteByIdAndCatalogId(dataServiceId, catalogId)
                 .doOnError(error -> log.error("error deleting dataservice {}: {}", dataServiceId, error.getMessage()))
-                .flatMap(deletedCount -> Mono.just(deletedCount > 0))
+                .map(deletedCount -> deletedCount > 0)
                 .doOnSuccess(deleted -> log.debug("dataset {} deleted: {}", dataServiceId, deleted));
     }
 

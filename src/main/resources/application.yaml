@@ -19,7 +19,15 @@ spring:
     template:
       routing-key: 'dataservice.publisher.HarvestTrigger'
       exchange: 'harvests'
+
+security:
+  jwks:
+    uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
 ---
+
+security:
+  jwks:
+    uri: https://sso.staging.fellesdatakatalog.digdir.no/auth/realms/fdk/protocol/openid-connect/certs
 
 spring:
   profiles: develop,test,unit-integration
