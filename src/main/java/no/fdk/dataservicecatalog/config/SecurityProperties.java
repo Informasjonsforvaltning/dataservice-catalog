@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties("security.jwks")
+@ConfigurationProperties("security")
 public class SecurityProperties {
-    private String uri;
+    private String jwksUri;
 }
