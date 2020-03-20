@@ -23,9 +23,8 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        var token = authentication.getCredentials();
-        return NimbusReactiveJwtDecoder.withJwkSetUri(securityProperties.getUri())
-                .build().decode(token.toString())
+        return NimbusReactiveJwtDecoder.withJwkSetUri(securityProperties.getJwksUri())
+                .build().decode(authentication.getCredentials().toString())
                 .flatMap(jwt -> {
                     var authorities = authoritiesExtractor.extractAuthorities(jwt.getClaims());
                     var auth = new OpenIDAuthenticationToken(authentication.getPrincipal(), authorities, "", Collections.emptyList());

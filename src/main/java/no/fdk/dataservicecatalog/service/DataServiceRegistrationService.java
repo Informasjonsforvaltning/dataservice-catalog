@@ -74,7 +74,6 @@ public class DataServiceRegistrationService {
         });
     }
 
-    //    @PreAuthorize("@permissionService.hasPermission(#catalogId, 'organization', 'read')")
     public Flux<DataService> getAllDataServices(String catalogId) {
         var all = dataServiceMongoRepository.findAllByCatalogId(catalogId)
                 .doOnError(error -> log.error("error retrieving all dataservices from mongo: {}", error.getMessage()));
