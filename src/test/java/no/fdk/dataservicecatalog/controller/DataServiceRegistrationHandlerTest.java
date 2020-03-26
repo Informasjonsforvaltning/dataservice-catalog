@@ -1,11 +1,9 @@
-package no.fdk.dataservicecatalog;
+package no.fdk.dataservicecatalog.controller;
 
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
 import no.fdk.dataservicecatalog.security.AuthenticationManager;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,11 +22,9 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DataServiceRegistrationTest {
+class DataServiceRegistrationHandlerTest {
 
     @MockBean
     private AuthenticationManager authenticationManager;
