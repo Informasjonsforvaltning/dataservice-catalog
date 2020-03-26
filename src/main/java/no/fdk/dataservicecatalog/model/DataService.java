@@ -51,7 +51,7 @@ public class DataService {
     private String endpointUrl;
     private MediaType format;
     private Map<String, String> description;
-    private Map<String, String> endpointDescription;
+    private String endpointDescription;
     private License license;
     private Access access;
     private TermsAndConditions termsAndConditions;
