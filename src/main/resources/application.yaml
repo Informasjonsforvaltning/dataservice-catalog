@@ -22,6 +22,11 @@ spring:
 
 security:
   jwks-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
+
+application:
+  external:
+    api-harvester:
+      url: http://fdk-nginx-search:8080/api
 ---
 
 security:
