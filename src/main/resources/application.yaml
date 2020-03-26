@@ -24,6 +24,7 @@ security:
   jwks-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
 
 application:
+  catalog-base-uri: ${CATALOG_BASE_URI:http://localhost}
   external:
     api-harvester:
       url: http://fdk-nginx-search:8080/api
