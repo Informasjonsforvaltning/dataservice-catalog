@@ -1,5 +1,6 @@
 package no.fdk.dataservicecatalog.config;
 
+import no.fdk.dataservicecatalog.controller.CatalogHandler;
 import no.fdk.dataservicecatalog.controller.DataServiceRegistrationHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,4 +24,11 @@ public class WebConfig {
                 .andRoute(POST("/catalogs/{catalogId}/dataservices/import"), dataServiceRegistrationHandler::importByUrl)
                 .andRoute(POST("/catalogs/{catalogId}/dataservices/{dataServiceId}/import"), dataServiceRegistrationHandler::editByUrl);
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> catalogRouter(CatalogHandler catalogHandler) {
+        return route(GET("/catalogs"), catalogHandler::listCatalogs)
+                .andRoute(GET("/catalogs/{catalogId}"), catalogHandler::getCatalog);
+    }
+
 }
