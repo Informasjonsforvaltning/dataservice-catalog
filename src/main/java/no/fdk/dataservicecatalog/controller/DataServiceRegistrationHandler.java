@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
 import no.fdk.dataservicecatalog.model.DataService;
-import no.fdk.dataservicecatalog.service.DataServiceRegistrationService;
+import no.fdk.dataservicecatalog.service.DataServiceService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -24,20 +24,20 @@ import static org.springframework.web.reactive.function.server.ServerResponse.*;
 @RequiredArgsConstructor
 public class DataServiceRegistrationHandler {
 
-    private final DataServiceRegistrationService dataServiceRegistrationService;
+    private final DataServiceService dataServiceService;
 
     public Mono<ServerResponse> all(ServerRequest serverRequest) {
-        return ok().body(dataServiceRegistrationService.getAllDataServices(serverRequest.pathVariable("catalogId")), DataService.class);
+        return ok().body(dataServiceService.getAllDataServices(serverRequest.pathVariable("catalogId")), DataService.class);
     }
 
     public Mono<ServerResponse> create(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(DataService.class)
-                .flatMap(dataService -> dataServiceRegistrationService.create(dataService, serverRequest.pathVariable("catalogId")))
+                .flatMap(dataService -> dataServiceService.create(dataService, serverRequest.pathVariable("catalogId")))
                 .flatMap(c -> created(URI.create(format("%s/%s", serverRequest.path(), c.getId()))).build());
     }
 
     public Mono<ServerResponse> get(ServerRequest serverRequest) {
-        return dataServiceRegistrationService.findById(serverRequest.pathVariable("dataServiceId"), serverRequest.pathVariable("catalogId"))
+        return dataServiceService.findById(serverRequest.pathVariable("dataServiceId"), serverRequest.pathVariable("catalogId"))
                 .flatMap(dataService -> ok().body(Mono.just(dataService), DataService.class))
                 .switchIfEmpty(notFound().build());
     }
@@ -45,7 +45,7 @@ public class DataServiceRegistrationHandler {
     public Mono<ServerResponse> delete(ServerRequest serverRequest) {
         var dataServiceId = serverRequest.pathVariable("dataServiceId");
         var catalogId = serverRequest.pathVariable("catalogId");
-        return dataServiceRegistrationService.deleteById(dataServiceId, catalogId)
+        return dataServiceService.deleteById(dataServiceId, catalogId)
                 .flatMap(deleted -> {
                     var isDeleted = JsonNodeFactory.instance.objectNode().put("success", deleted);
                     return ok().body(Mono.just(isDeleted), ObjectNode.class);
@@ -57,19 +57,19 @@ public class DataServiceRegistrationHandler {
         var catalogId = serverRequest.pathVariable("catalogId");
         return serverRequest.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
         })
-                .flatMap(fields -> ok().body(dataServiceRegistrationService.patch(dataServiceId, catalogId, fields), DataService.class));
+                .flatMap(fields -> ok().body(dataServiceService.patch(dataServiceId, catalogId, fields), DataService.class));
     }
 
     public Mono<ServerResponse> importByUrl(ServerRequest serverRequest) {
         var catalogId = serverRequest.pathVariable("catalogId");
         return serverRequest.bodyToMono(ApiSpecificationSource.class)
-                .flatMap(apiSpecificationSource -> ok().body(dataServiceRegistrationService.importFromSpecification(apiSpecificationSource, catalogId), DataService.class));
+                .flatMap(apiSpecificationSource -> ok().body(dataServiceService.importFromSpecification(apiSpecificationSource, catalogId), DataService.class));
     }
 
     public Mono<ServerResponse> editByUrl(ServerRequest serverRequest) {
         var dataServiceId = serverRequest.pathVariable("dataServiceId");
         var catalogId = serverRequest.pathVariable("catalogId");
         return serverRequest.bodyToMono(ApiSpecificationSource.class)
-                .flatMap(source -> ok().body(dataServiceRegistrationService.importFromSpecification(dataServiceId, catalogId, source), DataService.class));
+                .flatMap(source -> ok().body(dataServiceService.importFromSpecification(dataServiceId, catalogId, source), DataService.class));
     }
 }
