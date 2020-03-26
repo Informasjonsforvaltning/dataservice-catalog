@@ -33,11 +33,9 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
             String authToken = authHeader.replace(TOKEN_PREFIX, "").trim();
             return this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authToken, authToken))
                     .map(SecurityContextImpl::new);
-        } else {
-            log.warn("couldn't find bearer string, will ignore the header.");
-            return Mono.empty();
         }
 
+        return Mono.empty();
     }
 
 }
