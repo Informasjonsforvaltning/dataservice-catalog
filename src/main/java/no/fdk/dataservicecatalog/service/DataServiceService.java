@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class DataServiceRegistrationService {
+public class DataServiceService {
 
     private final ApiHarvesterReactiveClient apiHarvesterReactiveClient;
     private final DataServiceMongoRepository dataServiceMongoRepository;
