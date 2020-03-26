@@ -132,6 +132,7 @@ public class DcatApNoModelService {
             dataServiceResource.addProperty(DCAT.contactPoint, contactPointResource);
         }
 
-        model.getProperty(URIref.encode(getCatalogUri(dataService.getCatalogId()))).addProperty(DCAT.service, dataServiceResource);
+        model.getProperty(URIref.encode(getCatalogUri(dataService.getCatalogId())))
+                .addProperty(DCAT.service, dataServiceResource);
     }
 }
