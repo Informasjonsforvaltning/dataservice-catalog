@@ -104,8 +104,8 @@ public class DcatApNoModelService {
             dataService.getDescription().forEach((key, value) -> dataServiceResource.addProperty(DCTerms.description, ResourceFactory.createLangLiteral(value, key)));
         }
 
-        if (dataService.getEndpointDescription() != null) {
-            dataServiceResource.addProperty(DCAT.endpointDescription, ResourceFactory.createResource(URIref.encode(dataService.getEndpointDescription())));
+        if (dataService.getEndpointDescriptions() != null) {
+            dataService.getEndpointDescriptions().forEach(value -> dataServiceResource.addProperty(DCAT.endpointDescription, ResourceFactory.createResource(URIref.encode(value))));
         }
 
         if (dataService.getEndpointUrl() != null) {

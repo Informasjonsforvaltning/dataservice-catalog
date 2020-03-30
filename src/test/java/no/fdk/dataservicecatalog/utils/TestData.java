@@ -84,7 +84,7 @@ public class TestData {
                                         Map.entry("nb", "id-6-description-nb")
                                 )
                         )
-                        .endpointDescription("http://endpoint-description-6")
+                        .endpointDescriptions(List.of("http://endpoint-description-6"))
                         .build(),
                 DataService
                         .builder()
@@ -102,7 +102,7 @@ public class TestData {
                                         Map.entry("nb", "id-7-description-nb")
                                 )
                         )
-                        .endpointDescription("http://endpoint-description-7")
+                        .endpointDescriptions(List.of("http://endpoint-description-7"))
                         .endpointUrl("http://endpoint-url-7")
                         .build(),
                 DataService
@@ -121,7 +121,7 @@ public class TestData {
                                         Map.entry("nb", "id-8-description-nb")
                                 )
                         )
-                        .endpointDescription("http://endpoint-description-8")
+                        .endpointDescriptions(List.of("http://endpoint-description-8"))
                         .endpointUrl("http://endpoint-url-8")
                         .contact(
                                 Contact
@@ -146,7 +146,7 @@ public class TestData {
                                         Map.entry("nb", "id-9-description-nb")
                                 )
                         )
-                        .endpointDescription("http://endpoint-description-9")
+                        .endpointDescriptions(List.of("http://endpoint-description-9-1", "http://endpoint-description-9-2", "http://endpoint-description-9-3"))
                         .endpointUrl("http://endpoint-url-9")
                         .contact(
                                 Contact
@@ -172,7 +172,7 @@ public class TestData {
                                         Map.entry("nb", "id-10-description-nb")
                                 )
                         )
-                        .endpointDescription("http://endpoint-description-10")
+                        .endpointDescriptions(List.of("http://endpoint-description-10"))
                         .endpointUrl("http://endpoint-url-10")
                         .contact(
                                 Contact

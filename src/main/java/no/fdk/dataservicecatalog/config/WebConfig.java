@@ -16,7 +16,7 @@ public class WebConfig {
     @Bean
     public RouterFunction<ServerResponse> dataServiceRegistrationRouter(DataServiceRegistrationHandler dataServiceRegistrationHandler) {
         return route(GET("/catalogs/{catalogId}/dataservices"), dataServiceRegistrationHandler::all)
-                .andRoute(POST("/catalogs/{catalogId}/dataservices"), dataServiceRegistrationHandler::create)
+                .andRoute(PATCH("/catalogs/{catalogId}/dataservices"), dataServiceRegistrationHandler::create)
                 .andRoute(GET("/catalogs/{catalogId}/dataservices/{dataServiceId}"), dataServiceRegistrationHandler::get)
                 .andRoute(PATCH("/catalogs/{catalogId}/dataservices/{dataServiceId}"), dataServiceRegistrationHandler::patch)
                 .andRoute(DELETE("/catalogs/{catalogId}/dataservices/{dataServiceId}"), dataServiceRegistrationHandler::delete)

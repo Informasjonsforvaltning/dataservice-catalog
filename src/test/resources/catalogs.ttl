@@ -42,7 +42,7 @@
                                     vcard:hasEmail             <mailto:email-9@email.email> ;
                                     vcard:hasOrganizationName  "organisation-name-9"@nb
                                   ] ;
-        dcat:endpointDescription  <http://endpoint-description-9> ;
+        dcat:endpointDescription  <http://endpoint-description-9-1>, <http://endpoint-description-9-2>, <http://endpoint-description-9-3> ;
         dcat:endpointURL          <http://endpoint-url-9> .
 
 <http://localhost/data-services/catalog-id-2/id-3>
@@ -57,7 +57,7 @@
                                     vcard:hasEmail             <mailto:email-9@email.email> ;
                                     vcard:hasOrganizationName  "organisation-name-9"@nb
                                   ] ;
-        dcat:endpointDescription  <http://endpoint-description-9> ;
+        dcat:endpointDescription  <http://endpoint-description-9-1>, <http://endpoint-description-9-2>, <http://endpoint-description-9-3> ;
         dcat:endpointURL          <http://endpoint-url-9> .
 
 <http://localhost/data-services/catalog-id-1/id-2>

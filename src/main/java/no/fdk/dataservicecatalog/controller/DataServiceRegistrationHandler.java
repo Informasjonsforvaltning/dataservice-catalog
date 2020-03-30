@@ -55,8 +55,7 @@ public class DataServiceRegistrationHandler {
     public Mono<ServerResponse> patch(ServerRequest serverRequest) {
         var dataServiceId = serverRequest.pathVariable("dataServiceId");
         var catalogId = serverRequest.pathVariable("catalogId");
-        return serverRequest.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
-        })
+        return serverRequest.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                 .flatMap(fields -> ok().body(dataServiceService.patch(dataServiceId, catalogId, fields), DataService.class));
     }
 
