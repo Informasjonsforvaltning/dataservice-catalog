@@ -24,6 +24,7 @@ security:
   jwks-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
 
 application:
+  data-service-catalog-gui-url: ${DATASERVICE_CATALOG_GUI_URL}
   catalog-base-uri: ${CATALOG_BASE_URI:http://localhost}
   external:
     api-harvester:
@@ -56,6 +57,7 @@ server:
   port: 9080
 
 application:
+  data-service-catalog-gui-url: http://localhost:8141
   external:
     api-harvester:
       url: http://localhost:8103

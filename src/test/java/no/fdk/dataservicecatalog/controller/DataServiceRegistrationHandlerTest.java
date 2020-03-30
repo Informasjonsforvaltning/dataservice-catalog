@@ -70,7 +70,7 @@ class DataServiceRegistrationHandlerTest {
 
         when(dataServiceMongoRepository.save(any())).thenReturn(Mono.just(withUUID(expected)));
 
-        webTestClient.post().uri("/catalogs/910258028/dataservices")
+        webTestClient.patch().uri("/catalogs/910258028/dataservices")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(expected)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ")

@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public class DataService {
     private String endpointUrl;
     private MediaType format;
     private Map<String, String> description;
-    private String endpointDescription;
+    private List<String> endpointDescriptions;
     private License license;
     private Access access;
     private TermsAndConditions termsAndConditions;
