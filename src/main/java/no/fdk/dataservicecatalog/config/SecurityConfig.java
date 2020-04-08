@@ -33,9 +33,10 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfiguration() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.applyPermitDefaultValues();
+        corsConfig.addAllowedMethod(HttpMethod.POST);
         corsConfig.addAllowedMethod(HttpMethod.PATCH);
         corsConfig.addAllowedMethod(HttpMethod.DELETE);
-        corsConfig.setAllowedOrigins(Collections.singletonList(applicationProperties.getCatalogBaseUri()));
+        corsConfig.setAllowedOrigins(Collections.singletonList(applicationProperties.getDataServiceCatalogGuiUrl()));
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
@@ -46,6 +47,7 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
+//                .cors().configurationSource(corsConfiguration()).and()
                 .httpBasic().disable()
                 .anonymous().and()
                 .exceptionHandling()

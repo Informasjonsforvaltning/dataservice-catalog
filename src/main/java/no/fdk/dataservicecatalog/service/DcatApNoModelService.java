@@ -39,7 +39,7 @@ public class DcatApNoModelService {
 
     public Mono<Model> buildCatalogModel(String catalogId) {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
-                .findAllByCatalogId(catalogId)
+                .findAllByOrganizationId(catalogId)
                 .doOnError(error -> log.error("Failed to load data services for catalog with ID {}", catalogId, error));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services for catalog with ID {}", count, catalogId));
         return buildCatalogsModel(dataServicesFlux);
@@ -77,7 +77,7 @@ public class DcatApNoModelService {
     private Mono<Model> buildCatalogsModel(Flux<DataService> dataServicesFlux) {
         Model model = createModel();
         return dataServicesFlux
-                .groupBy(DataService::getCatalogId)
+                .groupBy(DataService::getOrganizationId)
                 .doOnNext(entry -> addCatalogToModel(model, Catalog.builder().id(entry.key()).build()))
                 .flatMap(Flux::collectList)
                 .doOnNext(dataServices -> dataServices.forEach(dataService -> addDataServiceToModel(model, dataService)))
@@ -132,7 +132,7 @@ public class DcatApNoModelService {
             dataServiceResource.addProperty(DCAT.contactPoint, contactPointResource);
         }
 
-        model.getProperty(URIref.encode(getCatalogUri(dataService.getCatalogId())))
+        model.getProperty(URIref.encode(getCatalogUri(dataService.getOrganizationId())))
                 .addProperty(DCAT.service, dataServiceResource);
     }
 }

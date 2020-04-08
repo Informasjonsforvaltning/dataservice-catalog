@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class Access {
 
 //    @ApiModelProperty("Indication if the api is from an authoritative source (a National Component)")
-    private Boolean nationalComponent;
+    private Boolean isAuthoritativeSource;
 
 //    @ApiModelProperty("Indication if the api has open access")
     private Boolean isOpenAccess;

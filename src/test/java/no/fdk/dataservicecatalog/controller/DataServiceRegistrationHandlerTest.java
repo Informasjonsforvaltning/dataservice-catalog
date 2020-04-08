@@ -53,7 +53,7 @@ class DataServiceRegistrationHandlerTest {
         var first = DataService.builder().title(Collections.singletonMap(DataService.DEFAULT_LANGUAGE, "first")).build();
         var second = DataService.builder().title(Collections.singletonMap(DataService.DEFAULT_LANGUAGE, "second")).build();
 
-        when(dataServiceMongoRepository.findAllByCatalogId(any())).thenReturn(Flux.just(first, second));
+        when(dataServiceMongoRepository.findAllByOrganizationId(any())).thenReturn(Flux.just(first, second));
 
         webTestClient.get().uri("/catalogs/910258028/dataservices")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ")

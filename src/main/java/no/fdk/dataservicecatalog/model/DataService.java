@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.fdk.dataservicecatalog.dto.acat.Access;
-import no.fdk.dataservicecatalog.dto.acat.Status;
+import no.fdk.dataservicecatalog.dto.acat.DataServiceStatus;
 import no.fdk.dataservicecatalog.dto.acat.TermsAndConditions;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Contact;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.License;
@@ -15,7 +15,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.http.MediaType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -32,7 +31,7 @@ import java.util.Set;
 @Document(collection = "dataservices")
 public class DataService {
 
-    public static final String DEFAULT_LANGUAGE = "no";
+    public static final String DEFAULT_LANGUAGE = "nb";
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -42,7 +41,7 @@ public class DataService {
     public LocalDateTime modified;
     @Id
     private String id;
-    private String catalogId;
+    private String organizationId;
     @NotEmpty
     private Map<String, String> title;
     private String version;
@@ -50,14 +49,15 @@ public class DataService {
     private Contact contact;
     @NotBlank
     private String endpointUrl;
-    private MediaType format;
+    private List<String> mediaTypes;
     private Map<String, String> description;
     private List<String> endpointDescriptions;
     private License license;
     private Access access;
     private TermsAndConditions termsAndConditions;
-    private Status status;
+    private DataServiceStatus dataServiceStatus;
     private String serviceType;
     private Set<String> servesDataset;
+    private String status;
 
 }
