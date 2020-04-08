@@ -12,12 +12,12 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-1", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .build(),
                 DataService
                         .builder()
                         .id(String.format("%s/id-2", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-2-title-en")
@@ -27,7 +27,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-3", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-3-title-en"),
@@ -38,7 +38,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-4", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-4-title-en"),
@@ -54,7 +54,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-5", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-5-title-en"),
@@ -71,7 +71,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-6", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-6-title-en"),
@@ -89,7 +89,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-7", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-7-title-en"),
@@ -108,7 +108,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-8", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-8-title-en"),
@@ -133,7 +133,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-9", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-9-title-en"),
@@ -159,7 +159,7 @@ public class TestData {
                 DataService
                         .builder()
                         .id(String.format("%s/id-10", catalogId))
-                        .catalogId(catalogId)
+                        .organizationId(catalogId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-10-title-en"),

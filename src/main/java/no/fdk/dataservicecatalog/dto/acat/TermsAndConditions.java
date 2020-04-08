@@ -4,17 +4,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TermsAndConditions {
 
-    private String cost;
+    private String price;
 
-    private String usageLimitation;
+    private Map<String, String> usageLimitation;
 
-    private String performance;
+    private String capacityAndPerformance;
 
-    private String availability;
+    private String reliability;
 
 }

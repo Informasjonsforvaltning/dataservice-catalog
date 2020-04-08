@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -42,13 +43,26 @@ public class DataServiceService {
 
     }
 
-    private DataService applyPatch(DataService dataService, Map<String, Object> partialUpdate) {
+    private Mono<DataService> applyPatch(DataService dataService, Map<String, Object> partialUpdate) {
+        partialUpdate.entrySet().removeIf(entry -> {
+                    var field = entry.getValue();
+                    if (field != null) {
+                        if (field instanceof Collection) {
+                            return ((Collection)field).isEmpty();
+                        } else if (field instanceof Map) {
+                            return ((Map)field).isEmpty();
+                        }
+                    }
+                    return false;
+                }
+        );
         try {
             BeanUtils.copyProperties(dataService, partialUpdate);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
+            return Mono.error(e);
         }
-        return dataService;
+        return Mono.just(dataService);
     }
 
     public Mono<DataService> importFromSpecification(ApiSpecificationSource source, String catalogId) {
@@ -57,7 +71,7 @@ public class DataServiceService {
                 .doOnSuccess(dataService -> log.debug("dataservice loaded from specification"))
                 .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
         return dataServiceMono.flatMap(dataService -> {
-            dataService.setCatalogId(catalogId);
+            dataService.setOrganizationId(catalogId);
             return dataServiceMongoRepository.save(dataService);
         });
     }
@@ -69,27 +83,27 @@ public class DataServiceService {
                 .doOnError(error -> log.error("dataservice with id {} failed mapping {}", dataServiceId, error.getMessage()));
         return dataServiceMono.flatMap(dataService -> {
             dataService.setId(dataServiceId);
-            dataService.setCatalogId(catalogId);
+            dataService.setOrganizationId(catalogId);
             return dataServiceMongoRepository.save(dataService);
         });
     }
 
     public Flux<DataService> getAllDataServices(String catalogId) {
-        var all = dataServiceMongoRepository.findAllByCatalogId(catalogId)
+        var all = dataServiceMongoRepository.findAllByOrganizationId(catalogId)
                 .doOnError(error -> log.error("error retrieving all dataservices from mongo: {}", error.getMessage()));
         all.count().subscribe(count -> log.debug("found {} dataservices", count));
         return all;
     }
 
     public Mono<DataService> create(DataService dataService, String catalogId) {
-        dataService.setCatalogId(catalogId);
+        dataService.setOrganizationId(catalogId);
         return dataServiceMongoRepository.save(dataService)
                 .doOnSuccess(saved -> log.debug("dataservice {} saved", saved.getId()))
                 .doOnError(error -> log.error("error saving dataservice to database: {}", error.getMessage()));
     }
 
     public Mono<DataService> findById(String dataServiceId, String catalogId) {
-        return dataServiceMongoRepository.findByIdAndCatalogId(dataServiceId, catalogId)
+        return dataServiceMongoRepository.findByIdAndOrganizationId(dataServiceId, catalogId)
                 .doOnSuccess(dataService -> {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved", dataService.getId());
@@ -101,14 +115,14 @@ public class DataServiceService {
     }
 
     public Mono<Boolean> deleteById(String dataServiceId, String catalogId) {
-        return dataServiceMongoRepository.deleteByIdAndCatalogId(dataServiceId, catalogId)
+        return dataServiceMongoRepository.deleteByIdAndOrganizationId(dataServiceId, catalogId)
                 .doOnError(error -> log.error("error deleting dataservice {}: {}", dataServiceId, error.getMessage()))
                 .map(deletedCount -> deletedCount > 0)
                 .doOnSuccess(deleted -> log.debug("dataset {} deleted: {}", dataServiceId, deleted));
     }
 
     public Mono<DataService> patch(String dataServiceId, String catalogId, Map<String, Object> fields) {
-        return dataServiceMongoRepository.findByIdAndCatalogId(dataServiceId, catalogId)
+        return dataServiceMongoRepository.findByIdAndOrganizationId(dataServiceId, catalogId)
                 .doOnSuccess(dataService -> {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
@@ -117,7 +131,7 @@ public class DataServiceService {
                     }
                 })
                 .doOnError(error -> log.error("error retrieving dataservice {}: {}", dataServiceId, error.getMessage()))
-                .map(dataService -> this.applyPatch(dataService, fields))
+                .flatMap(dataService -> this.applyPatch(dataService, fields))
                 .flatMap(dataServiceMongoRepository::save);
     }
 }

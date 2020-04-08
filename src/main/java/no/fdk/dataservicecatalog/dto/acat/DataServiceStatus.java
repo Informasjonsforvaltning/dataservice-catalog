@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Status {
+public class DataServiceStatus {
 
     private String statusText;
 

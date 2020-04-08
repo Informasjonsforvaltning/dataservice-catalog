@@ -63,7 +63,7 @@ public class DcatApNoModelServiceTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.just();
 
-        when(dataServiceMongoRepository.findAllByCatalogId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
 
         Model model = dcatApNoModelService.buildCatalogModel(catalogId).block();
         Model expectedModel = ModelFactory.createDefaultModel();
@@ -78,7 +78,7 @@ public class DcatApNoModelServiceTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.fromIterable(TestData.createDataServices(catalogId));
 
-        when(dataServiceMongoRepository.findAllByCatalogId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
 
         Model model = dcatApNoModelService.buildCatalogModel(catalogId).block();
         Model expectedModel = RDFDataMgr.loadModel("catalog.ttl");
@@ -113,7 +113,7 @@ public class DcatApNoModelServiceTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.fromIterable(TestData.createDataServices(catalogId));
 
-        when(dataServiceMongoRepository.findAllByCatalogId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
 
         Model model = dcatApNoModelService.buildCatalogModel(catalogId).block();
         String serialisedModel = dcatApNoModelService.serialise(Objects.requireNonNull(model));

@@ -21,7 +21,7 @@ public class WebConfig {
                 .andRoute(PATCH("/catalogs/{catalogId}/dataservices/{dataServiceId}"), dataServiceRegistrationHandler::patch)
                 .andRoute(DELETE("/catalogs/{catalogId}/dataservices/{dataServiceId}"), dataServiceRegistrationHandler::delete)
 
-                .andRoute(POST("/catalogs/{catalogId}/dataservices/import"), dataServiceRegistrationHandler::importByUrl)
+                .andRoute(POST("/catalogs/{catalogId}/dataservices"), dataServiceRegistrationHandler::importByUrl)
                 .andRoute(POST("/catalogs/{catalogId}/dataservices/{dataServiceId}/import"), dataServiceRegistrationHandler::editByUrl);
     }
 

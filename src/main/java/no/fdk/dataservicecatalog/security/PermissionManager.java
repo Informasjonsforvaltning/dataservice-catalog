@@ -2,7 +2,6 @@ package no.fdk.dataservicecatalog.security;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.http.server.RequestPath;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -14,12 +13,15 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class PermissionManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
+    private final Pattern catalogIdPattern = Pattern.compile("/catalogs/(.+?)/");
     private String resourceId;
     private String permission;
 
@@ -35,18 +37,18 @@ public class PermissionManager implements ReactiveAuthorizationManager<Authoriza
                 .collect(Collectors.toList());
     }
 
-    private String extractCatalogIdFromPath(RequestPath pathContainer) {
-        var path = pathContainer.pathWithinApplication().value();
-        return path.substring(path.indexOf("/catalogs/"), path.indexOf("/dataservices")).replace("/catalogs/", "");
-    }
-
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {
         return mono.cast(OpenIDAuthenticationToken.class).map(auth -> {
             if (auth.isAuthenticated() && auth.getStatus().equals(OpenIDAuthenticationStatus.SUCCESS)) {
-                var catalogId = extractCatalogIdFromPath(authorizationContext.getExchange().getRequest().getPath());
-                var allowed = getResourceRoles(auth.getAuthorities()).stream().anyMatch(rr -> rr.matchPermission(resourceId, catalogId, permission));
-                return new AuthorizationDecision(allowed);
+                var path = authorizationContext.getExchange().getRequest().getPath().pathWithinApplication().value();
+                if (path.startsWith("/catalogs/")) {
+                    Matcher matcher = catalogIdPattern.matcher(path);
+                    if (matcher.find()) {
+                        var catalogId = matcher.group(1);
+                        return new AuthorizationDecision(getResourceRoles(auth.getAuthorities()).stream().anyMatch(rr -> rr.matchPermission(resourceId, catalogId, permission)));
+                    }
+                }
             }
             return new AuthorizationDecision(false);
         });

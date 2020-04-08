@@ -86,7 +86,7 @@ public class CatalogHandlerTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.just();
 
-        when(dataServiceMongoRepository.findAllByCatalogId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
 
         Model expectedModel = ModelFactory.createDefaultModel();
 
@@ -111,7 +111,7 @@ public class CatalogHandlerTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.fromIterable(TestData.createDataServices(catalogId));
 
-        when(dataServiceMongoRepository.findAllByCatalogId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
 
         Model expectedModel = RDFDataMgr.loadModel("catalog.ttl");
 
