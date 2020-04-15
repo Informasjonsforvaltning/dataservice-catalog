@@ -11,12 +11,12 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TermsAndConditions {
 
-    private String price;
+    private Map<String, String> price;
 
     private Map<String, String> usageLimitation;
 
-    private String capacityAndPerformance;
+    private Map<String, String> capacityAndPerformance;
 
-    private String reliability;
+    private Map<String, String> reliability;
 
 }

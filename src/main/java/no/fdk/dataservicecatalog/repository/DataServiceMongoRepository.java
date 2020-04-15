@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface DataServiceMongoRepository extends ReactiveMongoRepository<DataService, String> {
-    Mono<DataService> findByIdAndOrganizationId(String dataServiceId, String catalogId);
-    Mono<Long> deleteByIdAndOrganizationId(String dataServiceId, String catalogId);
-    Flux<DataService> findAllByOrganizationId(String catalogId);
+    Mono<DataService> findByIdAndOrganizationId(String dataServiceId, String organizationId);
+    Mono<Long> deleteByIdAndOrganizationId(String dataServiceId, String organizationId);
+    Flux<DataService> findAllByOrganizationId(String organizationId);
 }

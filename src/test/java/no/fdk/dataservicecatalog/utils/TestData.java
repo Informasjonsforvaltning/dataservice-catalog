@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 public class TestData {
-    public static List<DataService> createDataServices(String catalogId) {
+    public static List<DataService> createDataServices(String organizationId) {
         return List.of(
                 DataService
                         .builder()
-                        .id(String.format("%s/id-1", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-1", organizationId))
+                        .organizationId(organizationId)
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-2", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-2", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-2-title-en")
@@ -26,8 +26,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-3", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-3", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-3-title-en"),
@@ -37,8 +37,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-4", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-4", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-4-title-en"),
@@ -53,8 +53,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-5", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-5", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-5-title-en"),
@@ -70,8 +70,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-6", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-6", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-6-title-en"),
@@ -88,8 +88,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-7", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-7", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-7-title-en"),
@@ -107,8 +107,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-8", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-8", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-8-title-en"),
@@ -132,8 +132,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-9", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-9", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-9-title-en"),
@@ -158,8 +158,8 @@ public class TestData {
                         .build(),
                 DataService
                         .builder()
-                        .id(String.format("%s/id-10", catalogId))
-                        .organizationId(catalogId)
+                        .id(String.format("%s/id-10", organizationId))
+                        .organizationId(organizationId)
                         .title(
                                 Map.ofEntries(
                                         Map.entry("en", "id-10-title-en"),

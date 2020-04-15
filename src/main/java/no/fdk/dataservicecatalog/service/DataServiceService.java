@@ -4,15 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
+import no.fdk.dataservicecatalog.exceptions.NotFoundException;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -43,28 +41,6 @@ public class DataServiceService {
 
     }
 
-    private Mono<DataService> applyPatch(DataService dataService, Map<String, Object> partialUpdate) {
-        partialUpdate.entrySet().removeIf(entry -> {
-                    var field = entry.getValue();
-                    if (field != null) {
-                        if (field instanceof Collection) {
-                            return ((Collection)field).isEmpty();
-                        } else if (field instanceof Map) {
-                            return ((Map)field).isEmpty();
-                        }
-                    }
-                    return false;
-                }
-        );
-        try {
-            BeanUtils.copyProperties(dataService, partialUpdate);
-        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return Mono.error(e);
-        }
-        return Mono.just(dataService);
-    }
-
     public Mono<DataService> importFromSpecification(ApiSpecificationSource source, String catalogId) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
         Mono<DataService> dataServiceMono = apiSpecification.map(this::parseApiSpecification)
@@ -72,6 +48,7 @@ public class DataServiceService {
                 .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
         return dataServiceMono.flatMap(dataService -> {
             dataService.setOrganizationId(catalogId);
+            dataService.setStatus("DRAFT");
             return dataServiceMongoRepository.save(dataService);
         });
     }
@@ -121,17 +98,17 @@ public class DataServiceService {
                 .doOnSuccess(deleted -> log.debug("dataset {} deleted: {}", dataServiceId, deleted));
     }
 
-    public Mono<DataService> patch(String dataServiceId, String catalogId, Map<String, Object> fields) {
+    public Mono<DataService> update(String dataServiceId, String catalogId, DataService updated) {
         return dataServiceMongoRepository.findByIdAndOrganizationId(dataServiceId, catalogId)
-                .doOnSuccess(dataService -> {
+                .doOnError(error -> log.error("error retrieving dataservice {}: {}", dataServiceId, error.getMessage()))
+                .flatMap(dataService -> {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
-                    } else {
-                        log.error("no dataservice with id {} exists for catalog {}", dataServiceId, catalogId);
+                        updated.setId(dataServiceId);
+                        return dataServiceMongoRepository.save(updated);
                     }
-                })
-                .doOnError(error -> log.error("error retrieving dataservice {}: {}", dataServiceId, error.getMessage()))
-                .flatMap(dataService -> this.applyPatch(dataService, fields))
-                .flatMap(dataServiceMongoRepository::save);
+                    log.error("no dataservice with id {} exists for catalog {}", dataServiceId, catalogId);
+                    return Mono.error(new NotFoundException("no dataservice found"));
+                });
     }
 }
