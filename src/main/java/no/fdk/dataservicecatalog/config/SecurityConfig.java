@@ -47,7 +47,7 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-//                .cors().configurationSource(corsConfiguration()).and()
+                .cors().configurationSource(corsConfiguration()).and()
                 .httpBasic().disable()
                 .anonymous().and()
                 .exceptionHandling()
