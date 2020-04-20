@@ -1,5 +1,8 @@
 package no.fdk.dataservicecatalog.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
@@ -10,6 +13,8 @@ import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.rabbitmq.OutboundMessage;
+import reactor.rabbitmq.Sender;
 
 import java.util.Collections;
 import java.util.Map;
@@ -19,6 +24,10 @@ import java.util.Map;
 @Service
 public class DataServiceService {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectWriter objectWriter = objectMapper.writer();
+
+    private final Sender sender;
     private final ApiHarvesterReactiveClient apiHarvesterReactiveClient;
     private final DataServiceMongoRepository dataServiceMongoRepository;
 
@@ -72,10 +81,36 @@ public class DataServiceService {
         return all;
     }
 
+    private void triggerHarvest(DataService dataService) {
+        sender.sendWithPublishConfirms(Flux.just(objectMapper.createObjectNode()).map(payload ->
+                {
+                    byte[] message = null;
+                    payload.put("publisherId", dataService.getOrganizationId());
+                    payload.put("dataType", "dataService");
+                    try {
+                        message = objectWriter.writeValueAsBytes(payload);
+                    } catch (JsonProcessingException e) {
+                        log.error(e.getMessage());
+                    }
+
+                    return new OutboundMessage(
+                            "harvests",
+                            "dataservice.publisher.HarvestTrigger",
+                            message
+                            );
+                }
+        )).subscribe(result -> log.debug(result.toString()));
+    }
+
     public Mono<DataService> create(DataService dataService, String catalogId) {
         dataService.setOrganizationId(catalogId);
         return dataServiceMongoRepository.save(dataService)
-                .doOnSuccess(saved -> log.debug("dataservice {} saved", saved.getId()))
+                .doOnSuccess(saved -> {
+                    log.debug("dataservice {} saved", saved.getId());
+                    if (saved.getStatus() != null && saved.getStatus().equals("PUBLISHED")) {
+                        triggerHarvest(saved);
+                    }
+                })
                 .doOnError(error -> log.error("error saving dataservice to database: {}", error.getMessage()));
     }
 
@@ -105,7 +140,11 @@ public class DataServiceService {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
                         updated.setId(dataServiceId);
-                        return dataServiceMongoRepository.save(updated);
+                        return dataServiceMongoRepository.save(updated).doOnSuccess(saved -> {
+                            if (dataService.getStatus() != null && !dataService.getStatus().equals(updated.getStatus())) {
+                                triggerHarvest(saved);
+                            }
+                        });
                     }
                     log.error("no dataservice with id {} exists for catalog {}", dataServiceId, catalogId);
                     return Mono.error(new NotFoundException("no dataservice found"));

@@ -21,12 +21,12 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public Mono save(ServerWebExchange swe, SecurityContext sc) {
+    public Mono<Void> save(ServerWebExchange swe, SecurityContext sc) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Mono load(ServerWebExchange swe) {
+    public Mono<SecurityContext> load(ServerWebExchange swe) {
         String authHeader = swe.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
         if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
