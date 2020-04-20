@@ -1,7 +1,5 @@
 package no.fdk.dataservicecatalog.controller;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
@@ -12,9 +10,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
-import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
+import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @Slf4j
 @Component
@@ -44,7 +40,7 @@ public class DataServiceRegistrationHandler {
         var dataServiceId = serverRequest.pathVariable("dataServiceId");
         var catalogId = serverRequest.pathVariable("catalogId");
         return dataServiceService.deleteById(dataServiceId, catalogId)
-                .flatMap(isDeleted -> isDeleted ? noContent().build(): notFound().build());
+                .flatMap(isDeleted -> isDeleted ? noContent().build() : notFound().build());
     }
 
     public Mono<ServerResponse> patch(ServerRequest serverRequest) {

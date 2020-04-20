@@ -24,7 +24,7 @@ security:
   jwks-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
 
 application:
-  data-service-catalog-gui-url: ${DATASERVICE_CATALOG_GUI_URL}
+  data-service-catalog-gui-url: ${DATA_SERVICE_CATALOG_GUI_URL}
   catalog-base-uri: ${CATALOG_BASE_URI:http://localhost}
   external:
     api-harvester:
