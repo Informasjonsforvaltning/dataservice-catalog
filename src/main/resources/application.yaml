@@ -57,7 +57,7 @@ server:
   port: 9080
 
 application:
-  data-service-catalog-gui-url: http://localhost:8141
+  data-service-catalog-gui-url: http://localhost:8171
   external:
     api-harvester:
       url: http://localhost:8103
