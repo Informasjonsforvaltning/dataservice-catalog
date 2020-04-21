@@ -25,6 +25,7 @@ import java.util.Collections;
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
 
+
     private final ApplicationProperties applicationProperties;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
@@ -66,4 +67,5 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
 }
