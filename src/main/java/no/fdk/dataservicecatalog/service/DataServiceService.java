@@ -9,6 +9,7 @@ import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
 import no.fdk.dataservicecatalog.exceptions.NotFoundException;
 import no.fdk.dataservicecatalog.model.DataService;
+import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -57,7 +58,7 @@ public class DataServiceService {
                 .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
         return dataServiceMono.flatMap(dataService -> {
             dataService.setOrganizationId(catalogId);
-            dataService.setStatus("DRAFT");
+            dataService.setStatus(Status.DRAFT);
             return dataServiceMongoRepository.save(dataService);
         });
     }
@@ -107,7 +108,7 @@ public class DataServiceService {
         return dataServiceMongoRepository.save(dataService)
                 .doOnSuccess(saved -> {
                     log.debug("dataservice {} saved", saved.getId());
-                    if (saved.getStatus() != null && saved.getStatus().equals("PUBLISHED")) {
+                    if (saved.getStatus() != null && saved.getStatus().equals(Status.PUBLISHED)) {
                         triggerHarvest(saved);
                     }
                 })
