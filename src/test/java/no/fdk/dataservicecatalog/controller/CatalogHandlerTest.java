@@ -1,6 +1,7 @@
 package no.fdk.dataservicecatalog.controller;
 
 import no.fdk.dataservicecatalog.model.DataService;
+import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
 import no.fdk.dataservicecatalog.utils.TestData;
 import org.apache.jena.rdf.model.Model;
@@ -34,7 +35,7 @@ public class CatalogHandlerTest {
     void mustCorrectlyListCatalogsInRdfFormatWhenCatalogsDoNotExist() {
         Flux<DataService> dataServices = Flux.just();
 
-        when(dataServiceMongoRepository.findAll()).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByStatus(Status.PUBLISHED)).thenReturn(dataServices);
 
         Model expectedModel = ModelFactory.createDefaultModel();
 
@@ -61,7 +62,7 @@ public class CatalogHandlerTest {
                 Flux.fromIterable(TestData.createDataServices("catalog-id-2"))
         );
 
-        when(dataServiceMongoRepository.findAll()).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByStatus(Status.PUBLISHED)).thenReturn(dataServices);
 
         Model expectedModel = RDFDataMgr.loadModel("catalogs.ttl");
 
@@ -86,7 +87,7 @@ public class CatalogHandlerTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.just();
 
-        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)).thenReturn(dataServices);
 
         Model expectedModel = ModelFactory.createDefaultModel();
 
@@ -111,7 +112,7 @@ public class CatalogHandlerTest {
         String catalogId = "catalog-id-1";
         Flux<DataService> dataServices = Flux.fromIterable(TestData.createDataServices(catalogId));
 
-        when(dataServiceMongoRepository.findAllByOrganizationId(catalogId)).thenReturn(dataServices);
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)).thenReturn(dataServices);
 
         Model expectedModel = RDFDataMgr.loadModel("catalog.ttl");
 

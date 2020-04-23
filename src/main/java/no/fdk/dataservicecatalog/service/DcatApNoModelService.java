@@ -6,6 +6,7 @@ import no.fdk.dataservicecatalog.config.ApplicationProperties;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Contact;
 import no.fdk.dataservicecatalog.model.Catalog;
 import no.fdk.dataservicecatalog.model.DataService;
+import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -31,7 +32,7 @@ public class DcatApNoModelService {
 
     public Mono<Model> buildCatalogsModel() {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
-                .findAll()
+                .findAllByStatus(Status.PUBLISHED)
                 .doOnError(error -> log.error("Failed to load data services", error));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services", count));
         return buildCatalogsModel(dataServicesFlux);
@@ -39,7 +40,7 @@ public class DcatApNoModelService {
 
     public Mono<Model> buildCatalogModel(String catalogId) {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
-                .findAllByOrganizationId(catalogId)
+                .findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
                 .doOnError(error -> log.error("Failed to load data services for catalog with ID {}", catalogId, error));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services for catalog with ID {}", count, catalogId));
         return buildCatalogsModel(dataServicesFlux);

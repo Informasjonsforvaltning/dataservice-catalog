@@ -58,7 +58,6 @@ public class DataService {
     private DataServiceStatus dataServiceStatus;
     private String serviceType;
     private Set<String> servesDataset;
-
-    private String status;
+    private Status status;
 
 }
