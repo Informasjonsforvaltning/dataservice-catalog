@@ -18,6 +18,7 @@ import reactor.rabbitmq.OutboundMessage;
 import reactor.rabbitmq.Sender;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -36,43 +37,38 @@ public class DataServiceService {
         return Collections.singletonMap(DataService.DEFAULT_LANGUAGE, value);
     }
 
-    private DataService parseApiSpecification(ApiSpecification apiSpecification) {
+    private DataService parseApiSpecification(ApiSpecification apiSpecification, String organizationId, String dataServiceId) {
         var apiInfo = apiSpecification.getInfo();
         var paths = apiSpecification.getPaths();
 
         return DataService.builder()
+                .id(dataServiceId)
+                .organizationId(organizationId)
                 .license(apiInfo.getLicense())
                 .title(setDefaultLanguageValue(apiInfo.getTitle()))
                 .description(setDefaultLanguageValue(apiInfo.getDescription()))
                 .version(apiInfo.getVersion())
                 .operationCount(paths.size())
                 .contact(apiInfo.getContact())
+                .status(Status.DRAFT)
                 .build();
 
     }
 
     public Mono<DataService> importFromSpecification(ApiSpecificationSource source, String catalogId) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
-        Mono<DataService> dataServiceMono = apiSpecification.map(this::parseApiSpecification)
+        Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, catalogId, null))
                 .doOnSuccess(dataService -> log.debug("dataservice loaded from specification"))
                 .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
-        return dataServiceMono.flatMap(dataService -> {
-            dataService.setOrganizationId(catalogId);
-            dataService.setStatus(Status.DRAFT);
-            return dataServiceMongoRepository.save(dataService);
-        });
+        return dataServiceMono.flatMap(dataServiceMongoRepository::save);
     }
 
     public Mono<DataService> importFromSpecification(String dataServiceId, String catalogId, ApiSpecificationSource source) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
-        Mono<DataService> dataServiceMono = apiSpecification.map(this::parseApiSpecification)
+        Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, catalogId, dataServiceId))
                 .doOnSuccess(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
                 .doOnError(error -> log.error("dataservice with id {} failed mapping {}", dataServiceId, error.getMessage()));
-        return dataServiceMono.flatMap(dataService -> {
-            dataService.setId(dataServiceId);
-            dataService.setOrganizationId(catalogId);
-            return dataServiceMongoRepository.save(dataService);
-        });
+        return dataServiceMono.flatMap(dataServiceMongoRepository::save);
     }
 
     public Flux<DataService> getAllDataServices(String catalogId) {
@@ -105,6 +101,9 @@ public class DataServiceService {
 
     public Mono<DataService> create(DataService dataService, String catalogId) {
         dataService.setOrganizationId(catalogId);
+        if (dataService.getStatus() == null || !List.of(Status.DRAFT, Status.PUBLISHED).contains(dataService.getStatus())) {
+            dataService.setStatus(Status.DRAFT);
+        }
         return dataServiceMongoRepository.save(dataService)
                 .doOnSuccess(saved -> {
                     log.debug("dataservice {} saved", saved.getId());
