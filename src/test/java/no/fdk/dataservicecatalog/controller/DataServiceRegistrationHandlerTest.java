@@ -1,6 +1,7 @@
 package no.fdk.dataservicecatalog.controller;
 
 import no.fdk.dataservicecatalog.model.DataService;
+import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
 import no.fdk.dataservicecatalog.security.AuthenticationManager;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ class DataServiceRegistrationHandlerTest {
     void createNewDataService() {
         mockAuthority("organization:910258028:admin");
 
-        var expected = DataService.builder().title(Collections.singletonMap(DataService.DEFAULT_LANGUAGE, "expected")).build();
+        var expected = DataService.builder().status(Status.DRAFT).title(Collections.singletonMap(DataService.DEFAULT_LANGUAGE, "expected")).build();
 
         when(dataServiceMongoRepository.save(any())).thenReturn(Mono.just(withUUID(expected)));
 
