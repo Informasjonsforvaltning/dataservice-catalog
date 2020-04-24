@@ -59,5 +59,6 @@ public class DataService {
     private String serviceType;
     private Set<String> servesDataset;
     private Status status;
+    private boolean imported = false;
 
 }
