@@ -53,6 +53,7 @@ public class DataServiceService {
                 .operationCount(paths.size())
                 .contact(apiInfo.getContact())
                 .status(Status.DRAFT)
+                .imported(true)
                 .build();
 
     }
@@ -109,7 +110,7 @@ public class DataServiceService {
         return dataServiceMongoRepository.save(dataService)
                 .doOnSuccess(saved -> {
                     log.debug("dataservice {} saved", saved.getId());
-                    if (saved.getStatus().equals(Status.PUBLISHED)) {
+                    if (saved.getStatus() == Status.PUBLISHED) {
                         triggerHarvest(saved);
                     }
                 })
@@ -144,7 +145,7 @@ public class DataServiceService {
                         updated.setId(dataServiceId);
                         return dataServiceMongoRepository.save(updated).doOnSuccess(saved -> {
                             var updatedStatus = updated.getStatus();
-                            if (updatedStatus.equals(Status.PUBLISHED) || !dataService.getStatus().equals(updatedStatus)) {
+                            if (updatedStatus == Status.PUBLISHED || dataService.getStatus() != updatedStatus) {
                                 triggerHarvest(saved);
                             }
                         });
