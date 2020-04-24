@@ -11,6 +11,7 @@ import no.fdk.dataservicecatalog.exceptions.NotFoundException;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,6 +33,7 @@ public class DataServiceService {
     private final Sender sender;
     private final ApiHarvesterReactiveClient apiHarvesterReactiveClient;
     private final DataServiceMongoRepository dataServiceMongoRepository;
+    private final RabbitProperties rabbitProperties;
 
     private static Map<String, String> setDefaultLanguageValue(String value) {
         return Collections.singletonMap(DataService.DEFAULT_LANGUAGE, value);
@@ -79,8 +81,7 @@ public class DataServiceService {
     }
 
     private void triggerHarvest(DataService dataService) {
-        sender.sendWithPublishConfirms(Flux.just(objectMapper.createObjectNode()).map(payload ->
-                {
+        sender.sendWithPublishConfirms(Flux.just(objectMapper.createObjectNode()).map(payload -> {
                     byte[] message = null;
                     payload.put("publisherId", dataService.getOrganizationId());
                     payload.put("dataType", "dataService");
@@ -90,11 +91,12 @@ public class DataServiceService {
                         log.error(e.getMessage());
                     }
 
+                    var rabbitTemplate = rabbitProperties.getTemplate();
                     return new OutboundMessage(
-                            "harvests",
-                            "dataservice.publisher.HarvestTrigger",
+                            rabbitTemplate.getExchange(),
+                            rabbitTemplate.getRoutingKey(),
                             message
-                            );
+                    );
                 }
         )).subscribe(result -> log.debug(result.toString()));
     }
@@ -107,7 +109,7 @@ public class DataServiceService {
         return dataServiceMongoRepository.save(dataService)
                 .doOnSuccess(saved -> {
                     log.debug("dataservice {} saved", saved.getId());
-                    if (saved.getStatus() != null && saved.getStatus().equals(Status.PUBLISHED)) {
+                    if (saved.getStatus().equals(Status.PUBLISHED)) {
                         triggerHarvest(saved);
                     }
                 })
@@ -141,7 +143,8 @@ public class DataServiceService {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
                         updated.setId(dataServiceId);
                         return dataServiceMongoRepository.save(updated).doOnSuccess(saved -> {
-                            if (dataService.getStatus() != null && !dataService.getStatus().equals(updated.getStatus())) {
+                            var updatedStatus = updated.getStatus();
+                            if (updatedStatus.equals(Status.PUBLISHED) || !dataService.getStatus().equals(updatedStatus)) {
                                 triggerHarvest(saved);
                             }
                         });
