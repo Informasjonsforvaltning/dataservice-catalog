@@ -20,7 +20,7 @@
                                     vcard:hasOrganizationName  "organisation-name-8"@nb
                                   ] ;
         dcat:endpointDescription  <http://endpoint-description-8> ;
-        dcat:endpointURL          <http://endpoint-url-8> .
+        dcat:endpointURL          <http://endpoint-url-8-1> , <http://endpoint-url-8-2> .
 
 <http://localhost/data-services/catalog-id-1/id-10>
         a                         dcat:DataService ;
@@ -32,7 +32,7 @@
                                     vcard:hasURL               <http://organisation-url-10>
                                   ] ;
         dcat:endpointDescription  <http://endpoint-description-10> ;
-        dcat:endpointURL          <http://endpoint-url-10> .
+        dcat:endpointURL          <http://endpoint-url-10-1> , <http://endpoint-url-10-2> .
 
 <http://localhost/data-services/catalog-id-1/id-1>
         a       dcat:DataService .
@@ -63,7 +63,7 @@
                                     vcard:hasOrganizationName  "organisation-name-9"@nb
                                   ] ;
         dcat:endpointDescription  <http://endpoint-description-9-1>, <http://endpoint-description-9-2>, <http://endpoint-description-9-3> ;
-        dcat:endpointURL          <http://endpoint-url-9> .
+        dcat:endpointURL          <http://endpoint-url-9-1> , <http://endpoint-url-9-2> .
 
 <http://localhost/data-services/catalog-id-1/id-2>
         a          dcat:DataService ;
@@ -74,4 +74,4 @@
         dct:description           "id-7-description-nb"@nb , "id-7-description-en"@en ;
         dct:title                 "id-7-title-nb"@nb , "id-7-title-en"@en ;
         dcat:endpointDescription  <http://endpoint-description-7> ;
-        dcat:endpointURL          <http://endpoint-url-7> .
+        dcat:endpointURL          <http://endpoint-url-7-1> , <http://endpoint-url-7-2> .

@@ -26,7 +26,6 @@ import java.util.Collections;
 public class SecurityConfig {
 
 
-    private final ApplicationProperties applicationProperties;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
@@ -37,7 +36,7 @@ public class SecurityConfig {
         corsConfig.addAllowedMethod(HttpMethod.POST);
         corsConfig.addAllowedMethod(HttpMethod.PATCH);
         corsConfig.addAllowedMethod(HttpMethod.DELETE);
-        corsConfig.setAllowedOrigins(Collections.singletonList(applicationProperties.getDataServiceCatalogGuiUrl()));
+        corsConfig.setAllowedOrigins(Collections.singletonList("*"));
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();

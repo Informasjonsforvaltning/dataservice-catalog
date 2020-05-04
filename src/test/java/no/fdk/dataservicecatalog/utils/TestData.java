@@ -3,6 +3,7 @@ package no.fdk.dataservicecatalog.utils;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Contact;
 import no.fdk.dataservicecatalog.model.DataService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +104,7 @@ public class TestData {
                                 )
                         )
                         .endpointDescriptions(List.of("http://endpoint-description-7"))
-                        .endpointUrl("http://endpoint-url-7")
+                        .endpointUrls(List.of("http://endpoint-url-7-1", "http://endpoint-url-7-2"))
                         .build(),
                 DataService
                         .builder()
@@ -122,7 +123,7 @@ public class TestData {
                                 )
                         )
                         .endpointDescriptions(List.of("http://endpoint-description-8"))
-                        .endpointUrl("http://endpoint-url-8")
+                        .endpointUrls(List.of("http://endpoint-url-8-1", "http://endpoint-url-8-2"))
                         .contact(
                                 Contact
                                         .builder()
@@ -147,7 +148,7 @@ public class TestData {
                                 )
                         )
                         .endpointDescriptions(List.of("http://endpoint-description-9-1", "http://endpoint-description-9-2", "http://endpoint-description-9-3"))
-                        .endpointUrl("http://endpoint-url-9")
+                        .endpointUrls(List.of("http://endpoint-url-9-1", "http://endpoint-url-9-2"))
                         .contact(
                                 Contact
                                         .builder()
@@ -173,7 +174,7 @@ public class TestData {
                                 )
                         )
                         .endpointDescriptions(List.of("http://endpoint-description-10"))
-                        .endpointUrl("http://endpoint-url-10")
+                        .endpointUrls(List.of("http://endpoint-url-10-1", "http://endpoint-url-10-2"))
                         .contact(
                                 Contact
                                         .builder()
