@@ -47,8 +47,7 @@ public class DataService {
     private String version;
     private Integer operationCount;
     private Contact contact;
-    @NotBlank
-    private String endpointUrl;
+    private List<String> endpointUrls;
     private List<String> mediaTypes;
     private Map<String, String> description;
     private List<String> endpointDescriptions;

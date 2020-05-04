@@ -109,8 +109,8 @@ public class DcatApNoModelService {
             dataService.getEndpointDescriptions().forEach(value -> dataServiceResource.addProperty(DCAT.endpointDescription, ResourceFactory.createResource(URIref.encode(value))));
         }
 
-        if (dataService.getEndpointUrl() != null) {
-            dataServiceResource.addProperty(DCAT.endpointURL, ResourceFactory.createResource(URIref.encode(dataService.getEndpointUrl())));
+        if (dataService.getEndpointUrls() != null) {
+            dataService.getEndpointUrls().forEach(value -> dataServiceResource.addProperty(DCAT.endpointURL, ResourceFactory.createResource(URIref.encode(value))));
         }
 
         if (dataService.getContact() != null) {
