@@ -5,6 +5,7 @@ import no.fdk.dataservicecatalog.model.DataService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static java.util.Map.entry;
@@ -242,6 +243,36 @@ public class TestData {
                                         .build()
                         )
                         .mediaTypes(List.of("application/json", "text/xml"))
+                        .build(),
+                DataService
+                        .builder()
+                        .id(format("%s/id-13", organizationId))
+                        .organizationId(organizationId)
+                        .title(
+                                Map.ofEntries(
+                                        entry("en", "id-13-title-en"),
+                                        entry("nb", "id-13-title-nb")
+                                )
+                        )
+                        .description(
+                                Map.ofEntries(
+                                        entry("en", "id-13-description-en"),
+                                        entry("nb", "id-13-description-nb")
+                                )
+                        )
+                        .endpointDescriptions(List.of("http://endpoint-description-13"))
+                        .endpointUrls(List.of("http://endpoint-url-13-1", "http://endpoint-url-13-2"))
+                        .contact(
+                                Contact
+                                        .builder()
+                                        .name("organisation-name-13")
+                                        .email("email-13@email.email")
+                                        .url("http://organisation-url-13")
+                                        .phone("phone-13")
+                                        .build()
+                        )
+                        .mediaTypes(List.of("application/json", "text/xml"))
+                        .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
                         .build()
         );
     }
