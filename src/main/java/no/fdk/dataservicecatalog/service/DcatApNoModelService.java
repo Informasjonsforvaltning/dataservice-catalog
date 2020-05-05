@@ -13,10 +13,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.util.URIref;
-import org.apache.jena.vocabulary.DCAT;
-import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VCARD4;
+import org.apache.jena.vocabulary.*;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -64,7 +61,8 @@ public class DcatApNoModelService {
                                 entry("dcat", DCAT.NS),
                                 entry("dct", DCTerms.NS),
                                 entry("rdf", RDF.uri),
-                                entry("vcard", VCARD4.NS)
+                                entry("vcard", VCARD4.NS),
+                                entry("rdfs", RDFS.uri)
                         )
                 );
     }
@@ -146,6 +144,15 @@ public class DcatApNoModelService {
             }
 
             dataServiceResource.addProperty(DCAT.contactPoint, contactPointResource);
+        }
+
+        if (dataService.getMediaTypes() != null) {
+            dataService.getMediaTypes().forEach(mediaType ->
+                    dataServiceResource.addProperty(
+                            DCAT.mediaType,
+                            ResourceFactory.createResource(URIref.encode(format("https://www.iana.org/assignments/media-types/%s", mediaType)))
+                    )
+            );
         }
 
         model.getProperty(URIref.encode(getCatalogUri(dataService.getOrganizationId())))

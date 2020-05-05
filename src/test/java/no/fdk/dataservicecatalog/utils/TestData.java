@@ -213,6 +213,35 @@ public class TestData {
                                         .phone("phone-11")
                                         .build()
                         )
+                        .build(),
+                DataService
+                        .builder()
+                        .id(format("%s/id-12", organizationId))
+                        .organizationId(organizationId)
+                        .title(
+                                Map.ofEntries(
+                                        entry("en", "id-12-title-en"),
+                                        entry("nb", "id-12-title-nb")
+                                )
+                        )
+                        .description(
+                                Map.ofEntries(
+                                        entry("en", "id-12-description-en"),
+                                        entry("nb", "id-12-description-nb")
+                                )
+                        )
+                        .endpointDescriptions(List.of("http://endpoint-description-12"))
+                        .endpointUrls(List.of("http://endpoint-url-12-1", "http://endpoint-url-12-2"))
+                        .contact(
+                                Contact
+                                        .builder()
+                                        .name("organisation-name-12")
+                                        .email("email-12@email.email")
+                                        .url("http://organisation-url-12")
+                                        .phone("phone-12")
+                                        .build()
+                        )
+                        .mediaTypes(List.of("application/json", "text/xml"))
                         .build()
         );
     }

@@ -1,189 +1,223 @@
 @prefix dct:   <http://purl.org/dc/terms/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix dcat:  <http://www.w3.org/ns/dcat#> .
 
-<http://localhost/data-services/catalog-id-2/id-11>
-        a                         dcat:DataService ;
-        dct:description           "id-11-description-nb"@nb , "id-11-description-en"@en ;
-        dct:title                 "id-11-title-nb"@nb , "id-11-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-2)" ;
-                                    vcard:hasEmail             <mailto:email-11@email.email> ;
-                                    vcard:hasOrganizationName  "organisation-name-11"@nb ;
-                                    vcard:hasTelephone         [ a               vcard:TelephoneType ;
-                                                                 vcard:hasValue  <tel:phone-11>
-                                                               ] ;
-                                    vcard:hasURL               <http://organisation-url-11>
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-11> ;
-        dcat:endpointURL          <http://endpoint-url-11-2> , <http://endpoint-url-11-1> .
-
-<http://localhost/data-services/catalog-id-2/id-5>
-        a                dcat:DataService ;
-        dct:description  "id-5-description-nb"@nb , "id-5-description-en"@en ;
-        dct:title        "id-5-title-nb"@nb , "id-5-title-en"@en .
-
-<http://localhost/data-services/catalog-id-1/id-4>
-        a                dcat:DataService ;
-        dct:description  "id-4-description-en"@en ;
-        dct:title        "id-4-title-nb"@nb , "id-4-title-en"@en .
-
-<http://localhost/data-services/catalog-id-2/id-10>
-        a                         dcat:DataService ;
-        dct:description           "id-10-description-nb"@nb , "id-10-description-en"@en ;
-        dct:title                 "id-10-title-nb"@nb , "id-10-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-2)" ;
-                                    vcard:hasEmail             <mailto:email-10@email.email> ;
-                                    vcard:hasOrganizationName  "organisation-name-10"@nb ;
-                                    vcard:hasURL               <http://organisation-url-10>
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-10> ;
-        dcat:endpointURL          <http://endpoint-url-10-2> , <http://endpoint-url-10-1> .
-
-<http://localhost/data-services/catalog-id-2/id-4>
-        a                dcat:DataService ;
-        dct:description  "id-4-description-en"@en ;
-        dct:title        "id-4-title-nb"@nb , "id-4-title-en"@en .
-
-<http://localhost/data-services/catalog-id-1/id-3>
-        a          dcat:DataService ;
-        dct:title  "id-3-title-nb"@nb , "id-3-title-en"@en .
-
-<http://localhost/data-services/catalog-id-1/id-9>
-        a                         dcat:DataService ;
-        dct:description           "id-9-description-nb"@nb , "id-9-description-en"@en ;
-        dct:title                 "id-9-title-nb"@nb , "id-9-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-1)" ;
-                                    vcard:hasEmail             <mailto:email-9@email.email> ;
-                                    vcard:hasOrganizationName  "organisation-name-9"@nb
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-9-2> , <http://endpoint-description-9-3> , <http://endpoint-description-9-1> ;
-        dcat:endpointURL          <http://endpoint-url-9-2> , <http://endpoint-url-9-1> .
-
-<http://localhost/data-services/catalog-id-2/id-3>
-        a          dcat:DataService ;
-        dct:title  "id-3-title-nb"@nb , "id-3-title-en"@en .
-
-<http://localhost/data-services/catalog-id-2/id-9>
-        a                         dcat:DataService ;
-        dct:description           "id-9-description-nb"@nb , "id-9-description-en"@en ;
-        dct:title                 "id-9-title-nb"@nb , "id-9-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-2)" ;
-                                    vcard:hasEmail             <mailto:email-9@email.email> ;
-                                    vcard:hasOrganizationName  "organisation-name-9"@nb
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-9-1> , <http://endpoint-description-9-3> , <http://endpoint-description-9-2> ;
-        dcat:endpointURL          <http://endpoint-url-9-1> , <http://endpoint-url-9-2> .
-
-<http://localhost/data-services/catalog-id-1/id-11>
-        a                         dcat:DataService ;
-        dct:description           "id-11-description-nb"@nb , "id-11-description-en"@en ;
-        dct:title                 "id-11-title-nb"@nb , "id-11-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-1)" ;
-                                    vcard:hasEmail             <mailto:email-11@email.email> ;
-                                    vcard:hasOrganizationName  "organisation-name-11"@nb ;
-                                    vcard:hasTelephone         [ a               vcard:TelephoneType ;
-                                                                 vcard:hasValue  <tel:phone-11>
-                                                               ] ;
-                                    vcard:hasURL               <http://organisation-url-11>
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-11> ;
-        dcat:endpointURL          <http://endpoint-url-11-2> , <http://endpoint-url-11-1> .
-
-<http://localhost/data-services/catalog-id-1/id-2>
-        a          dcat:DataService ;
-        dct:title  "id-2-title-en"@en .
-
-<http://localhost/data-services/catalog-id-1/id-8>
-        a                         dcat:DataService ;
-        dct:description           "id-8-description-nb"@nb , "id-8-description-en"@en ;
-        dct:title                 "id-8-title-nb"@nb , "id-8-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-1)" ;
-                                    vcard:hasOrganizationName  "organisation-name-8"@nb
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-8> ;
-        dcat:endpointURL          <http://endpoint-url-8-2> , <http://endpoint-url-8-1> .
-
-<http://localhost/catalogs/catalog-id-2>
-        a              dcat:Catalog ;
-        dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-2> ;
-        dct:title      "Data service catalog (catalog-id-2)"@en ;
-        dcat:service   <http://localhost/data-services/catalog-id-2/id-3> , <http://localhost/data-services/catalog-id-2/id-10> , <http://localhost/data-services/catalog-id-2/id-8> , <http://localhost/data-services/catalog-id-2/id-7> , <http://localhost/data-services/catalog-id-2/id-2> , <http://localhost/data-services/catalog-id-2/id-5> , <http://localhost/data-services/catalog-id-2/id-11> , <http://localhost/data-services/catalog-id-2/id-6> , <http://localhost/data-services/catalog-id-2/id-9> , <http://localhost/data-services/catalog-id-2/id-1> , <http://localhost/data-services/catalog-id-2/id-4> .
-
-<http://localhost/data-services/catalog-id-2/id-2>
-        a          dcat:DataService ;
-        dct:title  "id-2-title-en"@en .
+<http://localhost/data-services/catalog-id-1/id-7>
+    a                         dcat:DataService ;
+    dct:description           "id-7-description-nb"@nb , "id-7-description-en"@en ;
+    dct:title                 "id-7-title-nb"@nb , "id-7-title-en"@en ;
+    dcat:endpointDescription  <http://endpoint-description-7> ;
+    dcat:endpointURL          <http://endpoint-url-7-2> , <http://endpoint-url-7-1> .
 
 <http://localhost/data-services/catalog-id-2/id-8>
-        a                         dcat:DataService ;
-        dct:description           "id-8-description-nb"@nb , "id-8-description-en"@en ;
-        dct:title                 "id-8-title-nb"@nb , "id-8-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-2)" ;
-                                    vcard:hasOrganizationName  "organisation-name-8"@nb
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-8> ;
-        dcat:endpointURL          <http://endpoint-url-8-2> , <http://endpoint-url-8-1> .
-
-<http://localhost/data-services/catalog-id-1/id-10>
-        a                         dcat:DataService ;
-        dct:description           "id-10-description-nb"@nb , "id-10-description-en"@en ;
-        dct:title                 "id-10-title-nb"@nb , "id-10-title-en"@en ;
-        dcat:contactPoint         [ a                          vcard:Organization ;
-                                    vcard:fn                   "Contact information | (catalog-id-1)" ;
-                                    vcard:hasEmail             <mailto:email-10@email.email> ;
-                                    vcard:hasOrganizationName  "organisation-name-10"@nb ;
-                                    vcard:hasURL               <http://organisation-url-10>
-                                  ] ;
-        dcat:endpointDescription  <http://endpoint-description-10> ;
-        dcat:endpointURL          <http://endpoint-url-10-2> , <http://endpoint-url-10-1> .
+    a                         dcat:DataService ;
+    dct:description           "id-8-description-nb"@nb , "id-8-description-en"@en ;
+    dct:title                 "id-8-title-nb"@nb , "id-8-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-2)" ;
+                                vcard:hasOrganizationName  "organisation-name-8"@nb
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-8> ;
+    dcat:endpointURL          <http://endpoint-url-8-2> , <http://endpoint-url-8-1> .
 
 <http://localhost/data-services/catalog-id-1/id-1>
-        a       dcat:DataService .
+    a       dcat:DataService .
 
-<http://localhost/data-services/catalog-id-1/id-7>
-        a                         dcat:DataService ;
-        dct:description           "id-7-description-nb"@nb , "id-7-description-en"@en ;
-        dct:title                 "id-7-title-nb"@nb , "id-7-title-en"@en ;
-        dcat:endpointDescription  <http://endpoint-description-7> ;
-        dcat:endpointURL          <http://endpoint-url-7-2> , <http://endpoint-url-7-1> .
+<http://localhost/data-services/catalog-id-2/id-2>
+    a          dcat:DataService ;
+    dct:title  "id-2-title-en"@en .
 
-<http://localhost/catalogs/catalog-id-1>
-        a              dcat:Catalog ;
-        dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-1> ;
-        dct:title      "Data service catalog (catalog-id-1)"@en ;
-        dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-4> .
-
-<http://localhost/data-services/catalog-id-2/id-1>
-        a       dcat:DataService .
-
-<http://localhost/data-services/catalog-id-2/id-7>
-        a                         dcat:DataService ;
-        dct:description           "id-7-description-nb"@nb , "id-7-description-en"@en ;
-        dct:title                 "id-7-title-nb"@nb , "id-7-title-en"@en ;
-        dcat:endpointDescription  <http://endpoint-description-7> ;
-        dcat:endpointURL          <http://endpoint-url-7-2> , <http://endpoint-url-7-1> .
+<http://localhost/data-services/catalog-id-1/id-11>
+    a                         dcat:DataService ;
+    dct:description           "id-11-description-nb"@nb , "id-11-description-en"@en ;
+    dct:title                 "id-11-title-nb"@nb , "id-11-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasEmail             <mailto:email-11@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-11"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone-11>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url-11>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-11> ;
+    dcat:endpointURL          <http://endpoint-url-11-2> , <http://endpoint-url-11-1> .
 
 <http://localhost/data-services/catalog-id-1/id-6>
-        a                         dcat:DataService ;
-        dct:description           "id-6-description-nb"@nb , "id-6-description-en"@en ;
-        dct:title                 "id-6-title-nb"@nb , "id-6-title-en"@en ;
-        dcat:endpointDescription  <http://endpoint-description-6> .
+    a                         dcat:DataService ;
+    dct:description           "id-6-description-nb"@nb , "id-6-description-en"@en ;
+    dct:title                 "id-6-title-nb"@nb , "id-6-title-en"@en ;
+    dcat:endpointDescription  <http://endpoint-description-6> .
 
-<http://localhost/data-services/catalog-id-2/id-6>
-        a                         dcat:DataService ;
-        dct:description           "id-6-description-nb"@nb , "id-6-description-en"@en ;
-        dct:title                 "id-6-title-nb"@nb , "id-6-title-en"@en ;
-        dcat:endpointDescription  <http://endpoint-description-6> .
+<http://localhost/data-services/catalog-id-2/id-7>
+    a                         dcat:DataService ;
+    dct:description           "id-7-description-nb"@nb , "id-7-description-en"@en ;
+    dct:title                 "id-7-title-nb"@nb , "id-7-title-en"@en ;
+    dcat:endpointDescription  <http://endpoint-description-7> ;
+    dcat:endpointURL          <http://endpoint-url-7-2> , <http://endpoint-url-7-1> .
+
+<http://localhost/data-services/catalog-id-2/id-12>
+    a                         dcat:DataService ;
+    dct:description           "id-12-description-en"@en , "id-12-description-nb"@nb ;
+    dct:title                 "id-12-title-en"@en , "id-12-title-nb"@nb ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-2)" ;
+                                vcard:hasEmail             <mailto:email-12@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-12"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone-12>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url-12>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-12> ;
+    dcat:endpointURL          <http://endpoint-url-12-1> , <http://endpoint-url-12-2> ;
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> .
+
+<http://localhost/data-services/catalog-id-2/id-1>
+    a       dcat:DataService .
+
+<http://localhost/data-services/catalog-id-1/id-10>
+    a                         dcat:DataService ;
+    dct:description           "id-10-description-nb"@nb , "id-10-description-en"@en ;
+    dct:title                 "id-10-title-nb"@nb , "id-10-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasEmail             <mailto:email-10@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-10"@nb ;
+                                vcard:hasURL               <http://organisation-url-10>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-10> ;
+    dcat:endpointURL          <http://endpoint-url-10-2> , <http://endpoint-url-10-1> .
 
 <http://localhost/data-services/catalog-id-1/id-5>
-        a                dcat:DataService ;
-        dct:description  "id-5-description-nb"@nb , "id-5-description-en"@en ;
-        dct:title        "id-5-title-nb"@nb , "id-5-title-en"@en .
+    a                dcat:DataService ;
+    dct:description  "id-5-description-nb"@nb , "id-5-description-en"@en ;
+    dct:title        "id-5-title-nb"@nb , "id-5-title-en"@en .
 
+<http://localhost/data-services/catalog-id-2/id-6>
+    a                         dcat:DataService ;
+    dct:description           "id-6-description-nb"@nb , "id-6-description-en"@en ;
+    dct:title                 "id-6-title-nb"@nb , "id-6-title-en"@en ;
+    dcat:endpointDescription  <http://endpoint-description-6> .
+
+<http://localhost/data-services/catalog-id-2/id-11>
+    a                         dcat:DataService ;
+    dct:description           "id-11-description-nb"@nb , "id-11-description-en"@en ;
+    dct:title                 "id-11-title-nb"@nb , "id-11-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-2)" ;
+                                vcard:hasEmail             <mailto:email-11@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-11"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone-11>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url-11>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-11> ;
+    dcat:endpointURL          <http://endpoint-url-11-2> , <http://endpoint-url-11-1> .
+
+<http://localhost/data-services/catalog-id-1/id-4>
+    a                dcat:DataService ;
+    dct:description  "id-4-description-en"@en ;
+    dct:title        "id-4-title-nb"@nb , "id-4-title-en"@en .
+
+<http://localhost/data-services/catalog-id-2/id-5>
+    a                dcat:DataService ;
+    dct:description  "id-5-description-nb"@nb , "id-5-description-en"@en ;
+    dct:title        "id-5-title-nb"@nb , "id-5-title-en"@en .
+
+<http://localhost/data-services/catalog-id-2/id-10>
+    a                         dcat:DataService ;
+    dct:description           "id-10-description-nb"@nb , "id-10-description-en"@en ;
+    dct:title                 "id-10-title-nb"@nb , "id-10-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-2)" ;
+                                vcard:hasEmail             <mailto:email-10@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-10"@nb ;
+                                vcard:hasURL               <http://organisation-url-10>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-10> ;
+    dcat:endpointURL          <http://endpoint-url-10-2> , <http://endpoint-url-10-1> .
+
+<http://localhost/catalogs/catalog-id-2>
+    a              dcat:Catalog ;
+    dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-2> ;
+    dct:title      "Data service catalog (catalog-id-2)"@en ;
+    dcat:service   <http://localhost/data-services/catalog-id-2/id-3> , <http://localhost/data-services/catalog-id-2/id-10> , <http://localhost/data-services/catalog-id-2/id-8> , <http://localhost/data-services/catalog-id-2/id-12> , <http://localhost/data-services/catalog-id-2/id-7> , <http://localhost/data-services/catalog-id-2/id-2> , <http://localhost/data-services/catalog-id-2/id-5> , <http://localhost/data-services/catalog-id-2/id-11> , <http://localhost/data-services/catalog-id-2/id-6> , <http://localhost/data-services/catalog-id-2/id-9> , <http://localhost/data-services/catalog-id-2/id-1> , <http://localhost/data-services/catalog-id-2/id-4> .
+
+<http://localhost/data-services/catalog-id-1/id-9>
+    a                         dcat:DataService ;
+    dct:description           "id-9-description-nb"@nb , "id-9-description-en"@en ;
+    dct:title                 "id-9-title-nb"@nb , "id-9-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasEmail             <mailto:email-9@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-9"@nb
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-9-2> , <http://endpoint-description-9-3> , <http://endpoint-description-9-1> ;
+    dcat:endpointURL          <http://endpoint-url-9-2> , <http://endpoint-url-9-1> .
+
+<http://localhost/data-services/catalog-id-1/id-3>
+    a          dcat:DataService ;
+    dct:title  "id-3-title-nb"@nb , "id-3-title-en"@en .
+
+<http://localhost/data-services/catalog-id-2/id-4>
+    a                dcat:DataService ;
+    dct:description  "id-4-description-en"@en ;
+    dct:title        "id-4-title-nb"@nb , "id-4-title-en"@en .
+
+<http://localhost/catalogs/catalog-id-1>
+    a              dcat:Catalog ;
+    dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-1> ;
+    dct:title      "Data service catalog (catalog-id-1)"@en ;
+    dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-12> , <http://localhost/data-services/catalog-id-1/id-4> .
+
+<http://localhost/data-services/catalog-id-1/id-8>
+    a                         dcat:DataService ;
+    dct:description           "id-8-description-nb"@nb , "id-8-description-en"@en ;
+    dct:title                 "id-8-title-nb"@nb , "id-8-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasOrganizationName  "organisation-name-8"@nb
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-8> ;
+    dcat:endpointURL          <http://endpoint-url-8-2> , <http://endpoint-url-8-1> .
+
+<http://localhost/data-services/catalog-id-2/id-9>
+    a                         dcat:DataService ;
+    dct:description           "id-9-description-nb"@nb , "id-9-description-en"@en ;
+    dct:title                 "id-9-title-nb"@nb , "id-9-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-2)" ;
+                                vcard:hasEmail             <mailto:email-9@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-9"@nb
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-9-1> , <http://endpoint-description-9-3> , <http://endpoint-description-9-2> ;
+    dcat:endpointURL          <http://endpoint-url-9-1> , <http://endpoint-url-9-2> .
+
+<http://localhost/data-services/catalog-id-1/id-2>
+    a          dcat:DataService ;
+    dct:title  "id-2-title-en"@en .
+
+<http://localhost/data-services/catalog-id-2/id-3>
+    a          dcat:DataService ;
+    dct:title  "id-3-title-nb"@nb , "id-3-title-en"@en .
+
+<http://localhost/data-services/catalog-id-1/id-12>
+    a                         dcat:DataService ;
+    dct:description           "id-12-description-nb"@nb , "id-12-description-en"@en ;
+    dct:title                 "id-12-title-nb"@nb , "id-12-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasEmail             <mailto:email-12@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-12"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone-12>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url-12>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-12> ;
+    dcat:endpointURL          <http://endpoint-url-12-2> , <http://endpoint-url-12-1> ;
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/application/json> , <https://www.iana.org/assignments/media-types/text/xml> .
