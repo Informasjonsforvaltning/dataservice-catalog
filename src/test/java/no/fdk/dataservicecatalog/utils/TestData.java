@@ -3,7 +3,6 @@ package no.fdk.dataservicecatalog.utils;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Contact;
 import no.fdk.dataservicecatalog.model.DataService;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -181,6 +180,34 @@ public class TestData {
                                         .name("organisation-name-10")
                                         .email("email-10@email.email")
                                         .url("http://organisation-url-10")
+                                        .build()
+                        )
+                        .build(),
+                DataService
+                        .builder()
+                        .id(String.format("%s/id-11", organizationId))
+                        .organizationId(organizationId)
+                        .title(
+                                Map.ofEntries(
+                                        Map.entry("en", "id-11-title-en"),
+                                        Map.entry("nb", "id-11-title-nb")
+                                )
+                        )
+                        .description(
+                                Map.ofEntries(
+                                        Map.entry("en", "id-11-description-en"),
+                                        Map.entry("nb", "id-11-description-nb")
+                                )
+                        )
+                        .endpointDescriptions(List.of("http://endpoint-description-11"))
+                        .endpointUrls(List.of("http://endpoint-url-11-1", "http://endpoint-url-11-2"))
+                        .contact(
+                                Contact
+                                        .builder()
+                                        .name("organisation-name-11")
+                                        .email("email-11@email.email")
+                                        .url("http://organisation-url-11")
+                                        .phone("phone-11")
                                         .build()
                         )
                         .build()

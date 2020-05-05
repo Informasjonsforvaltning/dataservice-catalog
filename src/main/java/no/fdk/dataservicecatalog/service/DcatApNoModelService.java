@@ -116,7 +116,8 @@ public class DcatApNoModelService {
         if (dataService.getContact() != null) {
             Contact contact = dataService.getContact();
             Resource contactPointResource = model.createResource()
-                    .addProperty(RDF.type, VCARD4.Organization);
+                    .addProperty(RDF.type, VCARD4.Organization)
+                    .addProperty(VCARD4.fn, format("Contact information | (%s)", dataService.getOrganizationId()));
 
             if (contact.getName() != null) {
                 contactPointResource.addProperty(VCARD4.hasOrganizationName, ResourceFactory.createLangLiteral(contact.getName(), "nb"));
@@ -128,6 +129,14 @@ public class DcatApNoModelService {
 
             if (contact.getUrl() != null) {
                 contactPointResource.addProperty(VCARD4.hasURL, ResourceFactory.createResource(URIref.encode(contact.getUrl())));
+            }
+
+            if (contact.getPhone() != null) {
+                Resource telephoneResource = model.createResource()
+                        .addProperty(RDF.type, VCARD4.TelephoneType)
+                        .addProperty(VCARD4.hasValue, ResourceFactory.createResource(URIref.encode(format("tel:%s", contact.getPhone()))));
+
+                contactPointResource.addProperty(VCARD4.hasTelephone, telephoneResource);
             }
 
             dataServiceResource.addProperty(DCAT.contactPoint, contactPointResource);
