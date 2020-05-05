@@ -22,6 +22,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.StringWriter;
+import java.util.Map;
+
+import static java.lang.String.format;
+import static java.util.Map.entry;
 
 @Slf4j
 @Service
@@ -53,26 +57,28 @@ public class DcatApNoModelService {
     }
 
     private Model createModel() {
-        Model model = ModelFactory.createDefaultModel();
-
-        model.setNsPrefix("dcat", "http://www.w3.org/ns/dcat#");
-        model.setNsPrefix("dct", "http://purl.org/dc/terms/");
-        model.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        model.setNsPrefix("vcard", "http://www.w3.org/2006/vcard/ns#");
-
-        return model;
+        return ModelFactory
+                .createDefaultModel()
+                .setNsPrefixes(
+                        Map.ofEntries(
+                                entry("dcat", DCAT.NS),
+                                entry("dct", DCTerms.NS),
+                                entry("rdf", RDF.uri),
+                                entry("vcard", VCARD4.NS)
+                        )
+                );
     }
 
     private String getCatalogUri(String catalogId) {
-        return String.format("%s/catalogs/%s", applicationProperties.getCatalogBaseUri(), catalogId);
+        return format("%s/catalogs/%s", applicationProperties.getCatalogBaseUri(), catalogId);
     }
 
     private String getDataServiceUri(String dataServiceId) {
-        return String.format("%s/data-services/%s", applicationProperties.getCatalogBaseUri(), dataServiceId);
+        return format("%s/data-services/%s", applicationProperties.getCatalogBaseUri(), dataServiceId);
     }
 
     private String getPublisherUri(String publisherId) {
-        return String.format("https://data.brreg.no/enhetsregisteret/api/enheter/%s", publisherId);
+        return format("https://data.brreg.no/enhetsregisteret/api/enheter/%s", publisherId);
     }
 
     private Mono<Model> buildCatalogsModel(Flux<DataService> dataServicesFlux) {
@@ -90,7 +96,7 @@ public class DcatApNoModelService {
         model.createResource(URIref.encode(getCatalogUri(catalog.getId())))
                 .addProperty(RDF.type, DCAT.Catalog)
                 .addProperty(DCTerms.publisher, ResourceFactory.createResource(URIref.encode(getPublisherUri(catalog.getId()))))
-                .addProperty(DCTerms.title, ResourceFactory.createLangLiteral(String.format("Data service catalog (%s)", catalog.getId()), "en"));
+                .addProperty(DCTerms.title, ResourceFactory.createLangLiteral(format("Data service catalog (%s)", catalog.getId()), "en"));
     }
 
     private void addDataServiceToModel(Model model, DataService dataService) {
@@ -124,7 +130,7 @@ public class DcatApNoModelService {
             }
 
             if (contact.getEmail() != null) {
-                contactPointResource.addProperty(VCARD4.hasEmail, ResourceFactory.createResource(URIref.encode(String.format("mailto:%s", contact.getEmail()))));
+                contactPointResource.addProperty(VCARD4.hasEmail, ResourceFactory.createResource(URIref.encode(format("mailto:%s", contact.getEmail()))));
             }
 
             if (contact.getUrl() != null) {
