@@ -18,6 +18,8 @@ import reactor.core.publisher.Flux;
 import java.io.StringReader;
 import java.util.Objects;
 
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -47,7 +49,7 @@ public class CatalogHandlerTest {
                 .isOk()
                 .expectBody()
                 .consumeWith(response -> {
-                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(Objects.requireNonNull(response.getResponseBody()))), null, "TURTLE");
+                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(requireNonNull(response.getResponseBody()))), null, "TURTLE");
 
                     assertNotNull(model);
                     assertNotNull(expectedModel);
@@ -74,7 +76,7 @@ public class CatalogHandlerTest {
                 .isOk()
                 .expectBody()
                 .consumeWith(response -> {
-                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(Objects.requireNonNull(response.getResponseBody()))), null, "TURTLE");
+                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(requireNonNull(response.getResponseBody()))), null, "TURTLE");
 
                     assertNotNull(model);
                     assertNotNull(expectedModel);
@@ -93,13 +95,13 @@ public class CatalogHandlerTest {
 
         webTestClient
                 .get()
-                .uri(String.format("/catalogs/%s", catalogId))
+                .uri(format("/catalogs/%s", catalogId))
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody()
                 .consumeWith(response -> {
-                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(Objects.requireNonNull(response.getResponseBody()))), null, "TURTLE");
+                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(requireNonNull(response.getResponseBody()))), null, "TURTLE");
 
                     assertNotNull(model);
                     assertNotNull(expectedModel);
@@ -118,13 +120,13 @@ public class CatalogHandlerTest {
 
         webTestClient
                 .get()
-                .uri(String.format("/catalogs/%s", catalogId))
+                .uri(format("/catalogs/%s", catalogId))
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody()
                 .consumeWith(response -> {
-                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(Objects.requireNonNull(response.getResponseBody()))), null, "TURTLE");
+                    Model model = ModelFactory.createDefaultModel().read(new StringReader(new String(requireNonNull(response.getResponseBody()))), null, "TURTLE");
 
                     assertNotNull(model);
                     assertNotNull(expectedModel);
