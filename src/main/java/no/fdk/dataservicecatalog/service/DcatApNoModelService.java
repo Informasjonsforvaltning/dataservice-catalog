@@ -61,8 +61,7 @@ public class DcatApNoModelService {
                                 entry("dcat", DCAT.NS),
                                 entry("dct", DCTerms.NS),
                                 entry("rdf", RDF.uri),
-                                entry("vcard", VCARD4.NS),
-                                entry("rdfs", RDFS.uri)
+                                entry("vcard", VCARD4.NS)
                         )
                 );
     }
@@ -152,6 +151,16 @@ public class DcatApNoModelService {
                             DCAT.mediaType,
                             ResourceFactory.createResource(URIref.encode(format("https://www.iana.org/assignments/media-types/%s", mediaType)))
                     )
+            );
+        }
+
+        if (dataService.getServesDataset() != null) {
+            dataService.getServesDataset().forEach(dataset ->
+                    dataServiceResource
+                            .addProperty(
+                                    DCAT.servesDataset,
+                                    ResourceFactory.createResource(URIref.encode(dataset))
+                            )
             );
         }
 

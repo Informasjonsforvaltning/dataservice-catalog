@@ -1,6 +1,5 @@
 @prefix dct:   <http://purl.org/dc/terms/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix dcat:  <http://www.w3.org/ns/dcat#> .
 
@@ -24,6 +23,24 @@
 
 <http://localhost/data-services/catalog-id-1/id-1>
     a       dcat:DataService .
+
+<http://localhost/data-services/catalog-id-2/id-13>
+    a                         dcat:DataService ;
+    dct:description           "id-13-description-nb"@nb , "id-13-description-en"@en ;
+    dct:title                 "id-13-title-nb"@nb , "id-13-title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-2)" ;
+                                vcard:hasEmail             <mailto:email-13@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-13"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone-13>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url-13>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-13> ;
+    dcat:endpointURL          <http://endpoint-url-13-2> , <http://endpoint-url-13-1> ;
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> ;
+    dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
 
 <http://localhost/data-services/catalog-id-2/id-2>
     a          dcat:DataService ;
@@ -145,7 +162,7 @@
     a              dcat:Catalog ;
     dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-2> ;
     dct:title      "Data service catalog (catalog-id-2)"@en ;
-    dcat:service   <http://localhost/data-services/catalog-id-2/id-3> , <http://localhost/data-services/catalog-id-2/id-10> , <http://localhost/data-services/catalog-id-2/id-8> , <http://localhost/data-services/catalog-id-2/id-12> , <http://localhost/data-services/catalog-id-2/id-7> , <http://localhost/data-services/catalog-id-2/id-2> , <http://localhost/data-services/catalog-id-2/id-5> , <http://localhost/data-services/catalog-id-2/id-11> , <http://localhost/data-services/catalog-id-2/id-6> , <http://localhost/data-services/catalog-id-2/id-9> , <http://localhost/data-services/catalog-id-2/id-1> , <http://localhost/data-services/catalog-id-2/id-4> .
+    dcat:service   <http://localhost/data-services/catalog-id-2/id-3> , <http://localhost/data-services/catalog-id-2/id-10> , <http://localhost/data-services/catalog-id-2/id-13> , <http://localhost/data-services/catalog-id-2/id-8> , <http://localhost/data-services/catalog-id-2/id-12> , <http://localhost/data-services/catalog-id-2/id-7> , <http://localhost/data-services/catalog-id-2/id-2> , <http://localhost/data-services/catalog-id-2/id-5> , <http://localhost/data-services/catalog-id-2/id-11> , <http://localhost/data-services/catalog-id-2/id-6> , <http://localhost/data-services/catalog-id-2/id-9> , <http://localhost/data-services/catalog-id-2/id-1> , <http://localhost/data-services/catalog-id-2/id-4> .
 
 <http://localhost/data-services/catalog-id-1/id-9>
     a                         dcat:DataService ;
@@ -168,11 +185,29 @@
     dct:description  "id-4-description-en"@en ;
     dct:title        "id-4-title-nb"@nb , "id-4-title-en"@en .
 
+<http://localhost/data-services/catalog-id-1/id-13>
+    a                         dcat:DataService ;
+    dct:description           "id-13-description-en"@en , "id-13-description-nb"@nb ;
+    dct:title                 "id-13-title-en"@en , "id-13-title-nb"@nb ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasEmail             <mailto:email-13@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name-13"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone-13>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url-13>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description-13> ;
+    dcat:endpointURL          <http://endpoint-url-13-2> , <http://endpoint-url-13-1> ;
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> ;
+    dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
+
 <http://localhost/catalogs/catalog-id-1>
     a              dcat:Catalog ;
     dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-1> ;
     dct:title      "Data service catalog (catalog-id-1)"@en ;
-    dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-12> , <http://localhost/data-services/catalog-id-1/id-4> .
+    dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-13> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-12> , <http://localhost/data-services/catalog-id-1/id-4> .
 
 <http://localhost/data-services/catalog-id-1/id-8>
     a                         dcat:DataService ;
