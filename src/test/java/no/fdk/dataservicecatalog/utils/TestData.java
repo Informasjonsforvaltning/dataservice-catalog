@@ -273,6 +273,37 @@ public class TestData {
                         )
                         .mediaTypes(List.of("application/json", "text/xml"))
                         .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
+                        .build(),
+                DataService
+                        .builder()
+                        .id(format("%s/id-14", organizationId))
+                        .organizationId(organizationId)
+                        .title(
+                                Map.ofEntries(
+                                        entry("en", "id-14-title-en"),
+                                        entry("nb", "id-14-title-nb")
+                                )
+                        )
+                        .description(
+                                Map.ofEntries(
+                                        entry("en", "id-14-description-en"),
+                                        entry("nb", "id-14-description-nb")
+                                )
+                        )
+                        .endpointDescriptions(List.of("http://endpoint-description-14"))
+                        .endpointUrls(List.of("http://endpoint-url-14-1", "http://endpoint-url-14-2"))
+                        .contact(
+                                Contact
+                                        .builder()
+                                        .name("organisation-name-14")
+                                        .email("email-14@email.email")
+                                        .url("http://organisation-url-14")
+                                        .phone("phone-14")
+                                        .build()
+                        )
+                        .mediaTypes(List.of("application/json", "text/xml"))
+                        .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
+                        .serviceType("CUSTOMER_RELATIONS")
                         .build()
         );
     }

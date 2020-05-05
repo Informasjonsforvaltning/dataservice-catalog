@@ -164,6 +164,13 @@ public class DcatApNoModelService {
             );
         }
 
+        if (dataService.getServiceType() != null) {
+            dataServiceResource.addProperty(
+                    DCTerms.conformsTo,
+                    ResourceFactory.createResource(URIref.encode(format("https://data.norge.no/def/serviceType#%s", dataService.getServiceType())))
+            );
+        }
+
         model.getProperty(URIref.encode(getCatalogUri(dataService.getOrganizationId())))
                 .addProperty(DCAT.service, dataServiceResource);
     }
