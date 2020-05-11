@@ -143,6 +143,7 @@ public class DataServiceService {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
                         updated.setId(dataServiceId);
+                        updated.setCreated(dataService.getCreated());
                         return dataServiceMongoRepository.save(updated).doOnSuccess(saved -> {
                             var updatedStatus = updated.getStatus();
                             if (updatedStatus == Status.PUBLISHED || dataService.getStatus() != updatedStatus) {
