@@ -75,7 +75,7 @@ public class DataServiceService {
     }
 
     public Flux<DataService> getAllDataServices(String catalogId) {
-        var all = dataServiceMongoRepository.findAllByOrganizationId(catalogId)
+        var all = dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(catalogId)
                 .doOnError(error -> log.error("error retrieving all dataservices from mongo: {}", error.getMessage()));
         all.count().subscribe(count -> log.debug("found {} dataservices", count));
         return all;
