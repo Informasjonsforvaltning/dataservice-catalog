@@ -51,7 +51,7 @@ jobs:
             helm init --client-only
             helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
             helm fetch --untar --untardir ./helm fdk/dataservice-catalog
-            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA" -f ./helm/dataservice-catalog/values/staging-digdir.yaml ./helm/dataservice-catalog/ > ./kubectlapply.yaml
+            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA" -f ./helm/dataservice-catalog/values/staging.yaml ./helm/dataservice-catalog/ > ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
 
@@ -75,4 +75,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: dataservice-catalog deployed to digdir-staging\"}'
+          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: dataservice-catalog deployed to staging\"}'
