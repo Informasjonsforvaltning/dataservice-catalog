@@ -8,4 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
     private String catalogBaseUri;
     private String dataServiceCatalogGuiUrl;
+    private String orgCatalogUri;
 }
