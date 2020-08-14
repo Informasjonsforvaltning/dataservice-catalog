@@ -179,9 +179,15 @@
 
 <http://localhost/catalogs/catalog-id-2>
     a              dcat:Catalog ;
-    dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-2> ;
+    dct:publisher  <https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations/catalog-id-2> ;
     dct:title      "Data service catalog (catalog-id-2)"@en ;
     dcat:service   <http://localhost/data-services/catalog-id-2/id-3> , <http://localhost/data-services/catalog-id-2/id-10> , <http://localhost/data-services/catalog-id-2/id-13> , <http://localhost/data-services/catalog-id-2/id-8> , <http://localhost/data-services/catalog-id-2/id-12> , <http://localhost/data-services/catalog-id-2/id-7> , <http://localhost/data-services/catalog-id-2/id-2> , <http://localhost/data-services/catalog-id-2/id-5> , <http://localhost/data-services/catalog-id-2/id-11> , <http://localhost/data-services/catalog-id-2/id-6> , <http://localhost/data-services/catalog-id-2/id-14> , <http://localhost/data-services/catalog-id-2/id-9> , <http://localhost/data-services/catalog-id-2/id-1> , <http://localhost/data-services/catalog-id-2/id-4> .
+
+<https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations/catalog-id-2>
+        a               <http://xmlns.com/foaf/0.1/Agent> ;
+        dct:identifier  "catalog-id-2" ;
+        <http://www.w3.org/2002/07/owl#sameAs>
+                "https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-2" .
 
 <http://localhost/data-services/catalog-id-1/id-9>
     a                         dcat:DataService ;
@@ -224,9 +230,15 @@
 
 <http://localhost/catalogs/catalog-id-1>
     a              dcat:Catalog ;
-    dct:publisher  <https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-1> ;
+    dct:publisher  <https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations/catalog-id-1> ;
     dct:title      "Data service catalog (catalog-id-1)"@en ;
     dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-13> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-14> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-12> , <http://localhost/data-services/catalog-id-1/id-4> .
+
+<https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations/catalog-id-1>
+        a               <http://xmlns.com/foaf/0.1/Agent> ;
+        dct:identifier  "catalog-id-1" ;
+        <http://www.w3.org/2002/07/owl#sameAs>
+                "https://data.brreg.no/enhetsregisteret/api/enheter/catalog-id-1" .
 
 <http://localhost/data-services/catalog-id-1/id-8>
     a                         dcat:DataService ;

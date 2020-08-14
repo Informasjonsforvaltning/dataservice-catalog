@@ -12,6 +12,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.util.URIref;
 import org.apache.jena.vocabulary.*;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,10 @@ public class DcatApNoModelService {
         return format("https://data.brreg.no/enhetsregisteret/api/enheter/%s", publisherId);
     }
 
+    private String getOrganizationsCatalogUri(String publisherId) {
+        return format("%s/organizations/%s", applicationProperties.getOrgCatalogUri(), publisherId);
+    }
+
     private Mono<Model> buildCatalogsModel(Flux<DataService> dataServicesFlux) {
         Model model = createModel();
         return dataServicesFlux
@@ -92,8 +97,13 @@ public class DcatApNoModelService {
     private void addCatalogToModel(Model model, Catalog catalog) {
         model.createResource(URIref.encode(getCatalogUri(catalog.getId())))
                 .addProperty(RDF.type, DCAT.Catalog)
-                .addProperty(DCTerms.publisher, ResourceFactory.createResource(URIref.encode(getPublisherUri(catalog.getId()))))
+                .addProperty(DCTerms.publisher, ResourceFactory.createResource(URIref.encode(getOrganizationsCatalogUri(catalog.getId()))))
                 .addProperty(DCTerms.title, ResourceFactory.createLangLiteral(format("Data service catalog (%s)", catalog.getId()), "en"));
+
+        model.createResource(URIref.encode(getOrganizationsCatalogUri(catalog.getId())))
+            .addProperty(RDF.type, FOAF.Agent)
+            .addProperty(DCTerms.identifier, catalog.getId())
+            .addProperty(OWL.sameAs, URIref.encode(getPublisherUri(catalog.getId())));
     }
 
     private void addDataServiceToModel(Model model, DataService dataService) {
