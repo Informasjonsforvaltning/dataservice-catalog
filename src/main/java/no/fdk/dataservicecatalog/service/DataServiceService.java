@@ -85,7 +85,7 @@ public class DataServiceService {
         sender.sendWithPublishConfirms(Flux.just(objectMapper.createObjectNode()).map(payload -> {
                     byte[] message = null;
                     payload.put("publisherId", dataService.getOrganizationId());
-                    payload.put("dataType", "dataService");
+                    payload.put("dataType", "dataservice");
                     try {
                         message = objectWriter.writeValueAsBytes(payload);
                     } catch (JsonProcessingException e) {
