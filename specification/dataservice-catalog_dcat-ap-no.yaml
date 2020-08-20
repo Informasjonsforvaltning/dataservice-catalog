@@ -1,0 +1,128 @@
+  openapi: 3.0.2
+  info:
+    description: Tilgjengeliggjør dataservice-beskrivelser fra en dataservice-katalog ihht DCAT-AP-NO v2.0
+    version: '1.0'
+    title: Dataservice-katalogens DCAT-AP-NO v2 endepunkt
+    contact:
+      name: Digitaliseringsdirektoratet
+      url: 'https://fellesdatakatalog.digdir.no'
+      email: fellesdatakatalog@digdir.no
+    license:
+      name: License of API
+      url: 'http://data.norge.no/nlod/no/2.0'
+  tags:
+    - name: dcat-ap-no-catalogs
+      description: DCAT-AP-NO catalogs
+    - name: dcat-ap-no-dataservices
+      description: DCAT-AP-NO dataservices
+  servers:
+    - url: 'https://dataservice-catalog.fellesdatakatalog.digdir.no/'
+      description: Produksjonsmiljø
+    - url: 'https://dataservice-catalog.staging.fellesdatakatalog.digdir.no/'
+      description: Testmiljø
+    - url: 'https://dataservice-catalog.demo.fellesdatakatalog.digdir.no/'
+      description: Demomiljø
+  paths:
+    /catalogs:
+      get:
+        tags:
+          - dcat-ap-no-catalogs
+        description: Returnerer samlinger av kataloger
+        operationId: getCatalogs
+        responses:
+          '200':
+            description: OK
+            content:
+              text/turtle:
+                schema:
+                  type: string
+              application/rdf+json:
+                schema:
+                  type: string
+              application/ld+json:
+                schema:
+                  type: string
+              application/rdf+xml:
+                schema:
+                  type: string
+    /catalogs/{id}:
+      get:
+        tags:
+          - dcat-ap-no-catalogs
+        description: Returnerer en katalog
+        operationId: getCatalogById
+        parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
+        responses:
+          '200':
+            description: OK
+            content:
+              text/turtle:
+                schema:
+                  type: string
+              application/rdf+json:
+                schema:
+                  type: string
+              application/ld+json:
+                schema:
+                  type: string
+              application/rdf+xml:
+                schema:
+                  type: string
+    /dataservices:
+      get:
+        tags:
+          - dcat-ap-no-dataservices
+        description: Returnerer samlinger av dataservicer
+        operationId: getDataServices
+        responses:
+          '200':
+            description: OK
+            content:
+              text/turtle:
+                schema:
+                  type: string
+              application/rdf+json:
+                schema:
+                  type: string
+              application/ld+json:
+                schema:
+                  type: string
+              application/rdf+xml:
+                schema:
+                  type: string
+    /dataservices/{id}:
+      get:
+        tags:
+          - dcat-ap-no-dataservice
+        description: Returnerer en dataservice
+        operationId: getDataServiceById
+        parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
+
+        responses:
+          '200':
+            description: OK
+            content:
+              text/turtle:
+                schema:
+                  type: string
+              application/rdf+json:
+                schema:
+                  type: string
+              application/ld+json:
+                schema:
+                  type: string
+              application/rdf+xml:
+                schema:
+                  type: string
