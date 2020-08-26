@@ -36,15 +36,6 @@
               text/turtle:
                 schema:
                   type: string
-              application/rdf+json:
-                schema:
-                  type: string
-              application/ld+json:
-                schema:
-                  type: string
-              application/rdf+xml:
-                schema:
-                  type: string
     /catalogs/{id}:
       get:
         tags:
@@ -63,66 +54,5 @@
             description: OK
             content:
               text/turtle:
-                schema:
-                  type: string
-              application/rdf+json:
-                schema:
-                  type: string
-              application/ld+json:
-                schema:
-                  type: string
-              application/rdf+xml:
-                schema:
-                  type: string
-    /dataservices:
-      get:
-        tags:
-          - dcat-ap-no-dataservices
-        description: Returnerer samlinger av dataservicer
-        operationId: getDataServices
-        responses:
-          '200':
-            description: OK
-            content:
-              text/turtle:
-                schema:
-                  type: string
-              application/rdf+json:
-                schema:
-                  type: string
-              application/ld+json:
-                schema:
-                  type: string
-              application/rdf+xml:
-                schema:
-                  type: string
-    /dataservices/{id}:
-      get:
-        tags:
-          - dcat-ap-no-dataservice
-        description: Returnerer en dataservice
-        operationId: getDataServiceById
-        parameters:
-        - name: id
-          in: path
-          description: id
-          required: true
-          schema:
-            type: string
-
-        responses:
-          '200':
-            description: OK
-            content:
-              text/turtle:
-                schema:
-                  type: string
-              application/rdf+json:
-                schema:
-                  type: string
-              application/ld+json:
-                schema:
-                  type: string
-              application/rdf+xml:
                 schema:
                   type: string

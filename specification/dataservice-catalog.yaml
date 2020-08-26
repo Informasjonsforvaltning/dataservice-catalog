@@ -11,12 +11,8 @@ info:
     name: License of API
     url: 'http://data.norge.no/nlod/no/2.0'
 tags:
-  - name: catalogs
-    description: Catalogs as a collection
   - name: dataservices
     description: Dataservices as a colleciont
-  - name: catalog
-    description: Catalog details
   - name: dataservice
     description: Dataservice details
 servers:
@@ -27,47 +23,19 @@ servers:
   - url: 'https://dataservice-catalog.demo.fellesdatakatalog.digdir.no/'
     description: Demomiljø
 paths:
-  /catalogs:
-    get:
-      tags:
-        - catalogs
-      description: Returnerer samlinger av kataloger
-      operationId: getCatalogs
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                    $ref: '#/components/schemas/Catalog'
-  /catalogs/{id}:
-    get:
-      tags:
-        - dcat-ap-no-catalogs
-      description: Returnerer en katalog
-      operationId: getCatalogById
-      parameters:
-      - name: id
-        in: path
-        description: id
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Catalog'
-  /dataservices:
+  /catalogs/{catalogId}/dataservices:
     get:
       tags:
         - dataservices
       description: Returnerer samlinger av dataservicer
-      operationId: getDataServices
+      operationId: all
+      parameters:
+        - name: catalogId
+          in: path
+          description: catalog id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -77,16 +45,78 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DataService'
-  /dataservices/{id}:
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - dataservice
+      summary: Create a new data service
+      description: Create new data service
+      operationId: create
+      parameters:
+          - name: catalogId
+            in: path
+            description: catalog id
+            required: true
+            schema:
+              type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataService'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataService'
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - dataservice
+      summary: Import new data service
+      description: Import new data service
+      operationId: importByUrl
+      parameters:
+        - name: catalogId
+          in: path
+          description: catalog id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiSpecificationSource'
+      responses:
+        '200':
+          description: Created by import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataService'
+  /catalogs/{catalogId}/dataservices/{id}:
     get:
       tags:
         - dataservice
       description: Returnerer en dataservice
       operationId: getDataServiceById
       parameters:
+      - name: catalogId
+        in: path
+        description: catalog id
+        required: true
+        schema:
+          type: string
       - name: id
         in: path
-        description: id
+        description: data service id
         required: true
         schema:
           type: string
@@ -97,41 +127,160 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataService'
+    patch:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - dataservice
+      summary: Update data service
+      description: Update data service
+      operationId: patch
+      parameters:
+        - name: catalogId
+          in: path
+          description: catalog id
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: data service id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataService'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataService'
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - dataservice
+      summary: Update data service by import
+      description: Update data service by import
+      operationId: editByUrl
+      parameters:
+        - name: catalogId
+          in: path
+          description: catalog id
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: data service id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiSpecificationSource'
+      responses:
+        '200':
+          description: Updated by import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataService'
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - dataservice
+      summary: Delete data service
+      description: Delete data service
+      operationId: delete
+      parameters:
+        - name: catalogId
+          in: path
+          description: catalog id
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: data service id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
 components:
   schemas:
-    Catalog:
-      properties:
-        id:
-          type: string
-        publisherUrl:
-          type: string
-          format: uri
-        title:
-          type: string
-        description:
-          type: string
-        dataservices:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataService'
     DataService:
       properties:
+        created:
+          type: string
+          format: date
+        modified:
+          type: string
+          format: date
         id:
           type: string
+        organizationId:
+          type: string
         title:
+          type: object
+          additionalProperties:
+            type: string
+        version:
           type: string
-        description:
-          type: string
-        endpointURL:
-          type: string
-          format: uri
-        endpointDescription:
-          type: string
-          format: uri
-        mediaType:
-          format: string
-        contactpoint:
+        operationCount:
+          type: integer
+        contact:
           $ref: '#/components/schemas/Contact'
+        endpointUrls:
+          type: array
+          items:
+            type: string
+        mediaTypes:
+          type: array
+          items:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        endpointDescriptions:
+          type: array
+          items:
+            type: string
+        license:
+          $ref: '#/components/schemas/License'
+        access:
+          $ref: '#/components/schemas/Access'
+        termsAndConditions:
+          $ref: '#/components/schemas/TermsAndConditions'
+        dataServiceStatus:
+          $ref: '#/components/schemas/DataServiceStatus'
+        serviceType:
+          type: string
+        servesDataset:
+          type: array
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/Status'
+        externalDocs:
+          $ref: '#/components/schemas/ExternalDocumentation'
+        termsOfServiceUrl:
+          type: string
+        imported:
+          type: boolean
     Contact:
       properties:
         name:
@@ -142,6 +291,66 @@ components:
           type: string
           format: uri
         telephone:
+          type: string
+    License:
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+    Access:
+      properties:
+        isAuthoritativeSource:
+          type: boolean
+        isOpenAccess:
+          type: boolean
+        isOpenLicense:
+          type: boolean
+        isFree:
+          type: boolean
+    TermsAndConditions:
+      properties:
+        price:
+          type: object
+          additionalProperties:
+            type: string
+        usageLimitation:
+          type: object
+          additionalProperties:
+            type: string
+        capacityAndPerformance:
+          type: object
+          additionalProperties:
+            type: string
+        reliability:
+          type: object
+          additionalProperties:
+            type: string
+    DataServiceStatus:
+      properties:
+        statusText:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        comment:
+          type: string
+        supersededByUrl:
+          type: string
+    Status:
+      type: string
+      enum:
+        - DRAFT
+        - PUBLISHED
+    ExternalDocumentation:
+      properties:
+        description:
+          type: string
+        url:
+          type: string
+    ApiSpecificationSource:
+      properties:
+        apiSpecUrl:
           type: string
   securitySchemes:
     bearerAuth:
