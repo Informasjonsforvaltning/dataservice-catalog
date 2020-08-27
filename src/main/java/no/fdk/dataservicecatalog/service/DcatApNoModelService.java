@@ -111,19 +111,35 @@ public class DcatApNoModelService {
                 .addProperty(RDF.type, DCAT.DataService);
 
         if (dataService.getTitle() != null) {
-            dataService.getTitle().forEach((key, value) -> dataServiceResource.addProperty(DCTerms.title, ResourceFactory.createLangLiteral(value, key)));
+            dataService.getTitle().forEach((key, value) -> {
+                if (key != null && value != null) {
+                    dataServiceResource.addProperty(DCTerms.title, ResourceFactory.createLangLiteral(value, key));
+                }
+            });
         }
 
         if (dataService.getDescription() != null) {
-            dataService.getDescription().forEach((key, value) -> dataServiceResource.addProperty(DCTerms.description, ResourceFactory.createLangLiteral(value, key)));
+            dataService.getDescription().forEach((key, value) -> {
+                if (key != null && value != null) {
+                    dataServiceResource.addProperty(DCTerms.description, ResourceFactory.createLangLiteral(value, key));
+                }
+            });
         }
 
         if (dataService.getEndpointDescriptions() != null) {
-            dataService.getEndpointDescriptions().forEach(value -> dataServiceResource.addProperty(DCAT.endpointDescription, ResourceFactory.createResource(URIref.encode(value))));
+            dataService.getEndpointDescriptions().forEach(value -> {
+                if (value != null) {
+                    dataServiceResource.addProperty(DCAT.endpointDescription, ResourceFactory.createResource(URIref.encode(value)));
+                }
+            });
         }
 
         if (dataService.getEndpointUrls() != null) {
-            dataService.getEndpointUrls().forEach(value -> dataServiceResource.addProperty(DCAT.endpointURL, ResourceFactory.createResource(URIref.encode(value))));
+            dataService.getEndpointUrls().forEach(value -> {
+                if (value != null) {
+                    dataServiceResource.addProperty(DCAT.endpointURL, ResourceFactory.createResource(URIref.encode(value)));
+                }
+            });
         }
 
         if (dataService.getContact() != null) {
@@ -156,22 +172,26 @@ public class DcatApNoModelService {
         }
 
         if (dataService.getMediaTypes() != null) {
-            dataService.getMediaTypes().forEach(mediaType ->
+            dataService.getMediaTypes().forEach(mediaType -> {
+                if (mediaType != null) {
                     dataServiceResource.addProperty(
-                            DCAT.mediaType,
-                            ResourceFactory.createResource(URIref.encode(format("https://www.iana.org/assignments/media-types/%s", mediaType)))
-                    )
-            );
+                        DCAT.mediaType,
+                        ResourceFactory.createResource(URIref.encode(format("https://www.iana.org/assignments/media-types/%s", mediaType)))
+                    );
+                }
+            });
         }
 
         if (dataService.getServesDataset() != null) {
-            dataService.getServesDataset().forEach(dataset ->
+            dataService.getServesDataset().forEach(dataset -> {
+                if (dataset != null) {
                     dataServiceResource
-                            .addProperty(
-                                    DCAT.servesDataset,
-                                    ResourceFactory.createResource(URIref.encode(dataset))
-                            )
-            );
+                        .addProperty(
+                            DCAT.servesDataset,
+                            ResourceFactory.createResource(URIref.encode(dataset))
+                        );
+                }
+            });
         }
 
         if (dataService.getServiceType() != null) {
