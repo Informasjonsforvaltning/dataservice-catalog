@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
+import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Info;
+import no.fdk.dataservicecatalog.dto.shared.apispecification.servers.Server;
 import no.fdk.dataservicecatalog.exceptions.NotFoundException;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.model.Status;
@@ -21,6 +23,7 @@ import reactor.rabbitmq.Sender;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,9 +42,21 @@ public class DataServiceService {
         return Collections.singletonMap(DataService.DEFAULT_LANGUAGE, value);
     }
 
-    private DataService parseApiSpecification(ApiSpecification apiSpecification, String organizationId, String dataServiceId) {
+    private DataService parseApiSpecification(ApiSpecification apiSpecification, ApiSpecificationSource source, String organizationId, String dataServiceId) {
         var apiInfo = apiSpecification.getInfo();
+        if (apiInfo == null) {
+            apiInfo = new Info();
+        }
+
         var paths = apiSpecification.getPaths();
+        if (paths == null) {
+            paths = Collections.emptyMap();
+        }
+
+        var servers = apiSpecification.getServers();
+        if (servers == null) {
+            servers = Collections.emptyList();
+        }
 
         return DataService.builder()
                 .id(dataServiceId)
@@ -52,6 +67,10 @@ public class DataServiceService {
                 .version(apiInfo.getVersion())
                 .operationCount(paths.size())
                 .contact(apiInfo.getContact())
+                .endpointUrls(servers.stream().map(Server::getUrl).collect(Collectors.toList()))
+                .externalDocs(apiSpecification.getExternalDocs())
+                .endpointDescriptions(List.of(source.getApiSpecUrl()))
+                .termsOfServiceUrl(apiInfo.getTermsOfService())
                 .status(Status.DRAFT)
                 .imported(true)
                 .build();
@@ -60,7 +79,7 @@ public class DataServiceService {
 
     public Mono<DataService> importFromSpecification(ApiSpecificationSource source, String catalogId) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
-        Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, catalogId, null))
+        Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, source, catalogId, null))
                 .doOnSuccess(dataService -> log.debug("dataservice loaded from specification"))
                 .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
         return dataServiceMono.flatMap(dataServiceMongoRepository::save);
@@ -68,7 +87,7 @@ public class DataServiceService {
 
     public Mono<DataService> importFromSpecification(String dataServiceId, String catalogId, ApiSpecificationSource source) {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
-        Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, catalogId, dataServiceId))
+        Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, source, catalogId, dataServiceId))
                 .doOnSuccess(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
                 .doOnError(error -> log.error("dataservice with id {} failed mapping {}", dataServiceId, error.getMessage()));
         return dataServiceMono.flatMap(dataServiceMongoRepository::save);
