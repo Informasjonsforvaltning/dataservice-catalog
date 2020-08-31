@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static java.lang.String.format;
 import static java.util.Map.entry;
+import static org.apache.jena.util.FileUtils.isURI;
 
 @Slf4j
 @Service
@@ -112,7 +113,7 @@ public class DcatApNoModelService {
 
         if (dataService.getTitle() != null) {
             dataService.getTitle().forEach((key, value) -> {
-                if (key != null && value != null) {
+                if (key != null && value != null && !value.isBlank()) {
                     dataServiceResource.addProperty(DCTerms.title, ResourceFactory.createLangLiteral(value, key));
                 }
             });
@@ -120,7 +121,7 @@ public class DcatApNoModelService {
 
         if (dataService.getDescription() != null) {
             dataService.getDescription().forEach((key, value) -> {
-                if (key != null && value != null) {
+                if (key != null && value != null && !value.isBlank()) {
                     dataServiceResource.addProperty(DCTerms.description, ResourceFactory.createLangLiteral(value, key));
                 }
             });
@@ -128,7 +129,7 @@ public class DcatApNoModelService {
 
         if (dataService.getEndpointDescriptions() != null) {
             dataService.getEndpointDescriptions().forEach(value -> {
-                if (value != null) {
+                if (value != null && isURI(value)) {
                     dataServiceResource.addProperty(DCAT.endpointDescription, ResourceFactory.createResource(URIref.encode(value)));
                 }
             });
@@ -136,7 +137,7 @@ public class DcatApNoModelService {
 
         if (dataService.getEndpointUrls() != null) {
             dataService.getEndpointUrls().forEach(value -> {
-                if (value != null) {
+                if (value != null && isURI(value)) {
                     dataServiceResource.addProperty(DCAT.endpointURL, ResourceFactory.createResource(URIref.encode(value)));
                 }
             });
@@ -148,19 +149,19 @@ public class DcatApNoModelService {
                     .addProperty(RDF.type, VCARD4.Organization)
                     .addProperty(VCARD4.fn, format("Contact information | (%s)", dataService.getOrganizationId()));
 
-            if (contact.getName() != null) {
+            if (contact.getName() != null && !contact.getName().isBlank()) {
                 contactPointResource.addProperty(VCARD4.hasOrganizationName, ResourceFactory.createLangLiteral(contact.getName(), "nb"));
             }
 
-            if (contact.getEmail() != null) {
+            if (contact.getEmail() != null && !contact.getEmail().isBlank()) {
                 contactPointResource.addProperty(VCARD4.hasEmail, ResourceFactory.createResource(URIref.encode(format("mailto:%s", contact.getEmail()))));
             }
 
-            if (contact.getUrl() != null) {
+            if (contact.getUrl() != null && isURI(contact.getUrl())) {
                 contactPointResource.addProperty(VCARD4.hasURL, ResourceFactory.createResource(URIref.encode(contact.getUrl())));
             }
 
-            if (contact.getPhone() != null) {
+            if (contact.getPhone() != null && !contact.getPhone().isBlank()) {
                 Resource telephoneResource = model.createResource()
                         .addProperty(RDF.type, VCARD4.TelephoneType)
                         .addProperty(VCARD4.hasValue, ResourceFactory.createResource(URIref.encode(format("tel:%s", contact.getPhone()))));
@@ -173,7 +174,7 @@ public class DcatApNoModelService {
 
         if (dataService.getMediaTypes() != null) {
             dataService.getMediaTypes().forEach(mediaType -> {
-                if (mediaType != null) {
+                if (mediaType != null && !mediaType.isBlank()) {
                     dataServiceResource.addProperty(
                         DCAT.mediaType,
                         ResourceFactory.createResource(URIref.encode(format("https://www.iana.org/assignments/media-types/%s", mediaType)))
@@ -184,7 +185,7 @@ public class DcatApNoModelService {
 
         if (dataService.getServesDataset() != null) {
             dataService.getServesDataset().forEach(dataset -> {
-                if (dataset != null) {
+                if (dataset != null && isURI(dataset)) {
                     dataServiceResource
                         .addProperty(
                             DCAT.servesDataset,
@@ -194,7 +195,7 @@ public class DcatApNoModelService {
             });
         }
 
-        if (dataService.getServiceType() != null) {
+        if (dataService.getServiceType() != null && !dataService.getServiceType().isBlank()) {
             dataServiceResource.addProperty(
                     DCTerms.conformsTo,
                     ResourceFactory.createResource(URIref.encode(format("https://data.norge.no/def/serviceType#%s", dataService.getServiceType())))
