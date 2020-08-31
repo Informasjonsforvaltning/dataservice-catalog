@@ -202,6 +202,13 @@ public class DcatApNoModelService {
             );
         }
 
+        if (dataService.getExternalDocs() != null && dataService.getExternalDocs().getUrl() != null && isURI(dataService.getExternalDocs().getUrl())) {
+            dataServiceResource.addProperty(
+                DCAT.landingPage,
+                ResourceFactory.createResource(URIref.encode(dataService.getExternalDocs().getUrl()))
+            );
+        }
+
         model.getProperty(URIref.encode(getCatalogUri(dataService.getOrganizationId())))
                 .addProperty(DCAT.service, dataServiceResource);
     }
