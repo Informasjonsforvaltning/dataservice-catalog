@@ -1,7 +1,6 @@
 package no.fdk.dataservicecatalog.service;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fdk.dataservicecatalog.config.ApiHarvesterProperties;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
@@ -17,8 +16,9 @@ public class ApiHarvesterReactiveClient {
 
     private final WebClient webClient;
 
-    ApiHarvesterReactiveClient(ApiHarvesterProperties properties) {
-        webClient = WebClient.builder().defaultHeader("accept", MediaType.APPLICATION_JSON_VALUE).build();
+    public ApiHarvesterReactiveClient() {
+        webClient = WebClient.builder()
+                .defaultHeader("accept", MediaType.APPLICATION_JSON_VALUE).build();
     }
 
     Mono<ApiSpecification> convertApiSpecification(ApiSpecificationSource source) {
