@@ -27,9 +27,6 @@ application:
   data-service-catalog-gui-url: ${DATA_SERVICE_CATALOG_GUI_URL}
   catalog-base-uri: ${CATALOG_BASE_URI:http://localhost}
   org-catalog-uri: ${ORGANIZATION_CATALOGUE_BASE_URI:https://organization-catalogue.staging.fellesdatakatalog.digdir.no}
-  external:
-    api-harvester:
-      url: http://fdk-nginx-search:8080/api
 ---
 
 security:
@@ -59,6 +56,3 @@ server:
 
 application:
   data-service-catalog-gui-url: http://localhost:8171
-  external:
-    api-harvester:
-      url: http://localhost:8103
