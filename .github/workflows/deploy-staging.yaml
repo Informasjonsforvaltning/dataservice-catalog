@@ -1,4 +1,4 @@
-name: Build and deploy to staging when pull request is created
+name: Deploy to staging
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Deploy to staging environment
+    name: Build, test and deploy to staging when pull request is created
     runs-on: ubuntu-latest
 
     steps:
@@ -74,8 +74,8 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: 'Deploy dataservice-catalog to staging'
-          fields: repo,message,commit,author,ref,workflow
+          author_name: 'Application: dataservice-catalog | Environment: staging'
+          fields: commit,author,workflow
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
