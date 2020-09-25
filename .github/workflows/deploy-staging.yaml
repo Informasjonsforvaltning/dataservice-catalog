@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Deploy to staging environment
+    name: Deploy to staging
     runs-on: ubuntu-latest
 
     steps:
@@ -74,9 +74,10 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: 'Deploy dataservice-catalog to staging'
-          fields: repo,message,commit,author,ref,workflow
+          author_name: 'Application: dataservice-catalog | Environment: staging'
+          fields: commit,author,workflow
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          AS_AUTHOR: $GITHUB_ACTOR
         if: always()
