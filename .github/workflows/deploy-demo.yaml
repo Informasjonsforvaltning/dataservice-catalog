@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy-demo:
-    name: Deploy to demo
+    name: Deploy to demo on repository dispatch
     runs-on: ubuntu-latest
 
     steps:

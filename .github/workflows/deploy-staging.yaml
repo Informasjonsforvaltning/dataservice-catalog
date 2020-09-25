@@ -1,4 +1,4 @@
-name: Build and deploy to staging when pull request is created
+name: Deploy to staging
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Deploy to staging
+    name: Build, test and deploy to staging when pull request is created
     runs-on: ubuntu-latest
 
     steps:

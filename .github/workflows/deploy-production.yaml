@@ -1,4 +1,4 @@
-name: Build, test and deploy to production on merge to master branch
+name: Deploy to prod
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-test-and-deploy-production:
-    name: Deploy to prod
+    name: Build, test and deploy to production on merge to master branch
     runs-on: ubuntu-latest
 
     steps:
