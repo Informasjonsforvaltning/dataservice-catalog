@@ -48,7 +48,7 @@ public class DataService {
     private Integer operationCount;
     private Contact contact;
     private List<String> endpointUrls;
-    private List<String> mediaTypes;
+    private Set<String> mediaTypes;
     private Map<String, String> description;
     private List<String> endpointDescriptions;
     private License license;

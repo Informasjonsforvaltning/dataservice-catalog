@@ -2,18 +2,22 @@ package no.fdk.dataservicecatalog.service.parser;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OpenApiV3JsonParser implements Parser {
 
@@ -30,32 +34,18 @@ public class OpenApiV3JsonParser implements Parser {
     }
 
     Set<String> extractFormatsFromOpenAPI(OpenAPI openAPI) {
-        Set<String> formats = new HashSet<>();
-        Paths paths = openAPI.getPaths();
-        paths.forEach((path, pathItem) -> {
-            List<Operation> operations = pathItem.readOperations();
-            operations.forEach((operation -> {
-                if (operation == null) return;
-
-                /*as of now, request body formats are not included, due to the fact that the team decided that the focus here is on the output formats.
-                RequestBody requestBody = operation.getRequestBody();
-                if (requestBody == null) return;
-                Content requestBodyContent = requestBody.getContent();
-                if (requestBodyContent==null) return;
-                formats.addAll(requestBodyContent.keySet());
-                */
-
-                ApiResponses apiResponses = operation.getResponses();
-                if (apiResponses == null) return;
-                List<ApiResponse> apiResponseList = new ArrayList<>(apiResponses.values());
-                apiResponseList.forEach(apiResponse -> {
-                    Content responseContent = apiResponse.getContent();
-                    if (responseContent == null) return;
-                    formats.addAll(responseContent.keySet());
-                });
-            }));
-        });
-        return formats;
+        return Stream.ofNullable(openAPI.getPaths())
+                .map(Paths::values).flatMap(Collection::stream)
+                .map(PathItem::readOperations)
+                .filter(Objects::nonNull)
+                .flatMap(List::stream)
+                .map(Operation::getResponses)
+                .map(ApiResponses::values).flatMap(Collection::stream)
+                .filter(Objects::nonNull)
+                .map(ApiResponse::getContent)
+                .filter(Objects::nonNull)
+                .map(Content::keySet).flatMap(Set::stream)
+                .collect(Collectors.toSet());
     }
 
     public ApiSpecification parse(String spec) throws ParseException {
