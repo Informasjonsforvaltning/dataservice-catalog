@@ -67,6 +67,7 @@ public class DataServiceService {
                 .version(apiInfo.getVersion())
                 .operationCount(paths.size())
                 .contact(apiInfo.getContact())
+                .mediaTypes(apiSpecification.getFormats())
                 .endpointUrls(servers.stream().map(Server::getUrl).collect(Collectors.toList()))
                 .externalDocs(apiSpecification.getExternalDocs())
                 .endpointDescriptions(List.of(source.getApiSpecUrl()))
