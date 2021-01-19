@@ -5,9 +5,12 @@ import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
 import no.fdk.dataservicecatalog.service.parser.UniversalParser;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.Exceptions;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -28,9 +31,8 @@ public class ApiHarvesterReactiveClient {
                     try {
                         return new UniversalParser().parse(spec);
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
                     }
-                    return new ApiSpecification();
                 });
     }
 

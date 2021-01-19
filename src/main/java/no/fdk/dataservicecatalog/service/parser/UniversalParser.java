@@ -20,7 +20,7 @@ public class UniversalParser implements Parser {
         Parser selectedParser = Arrays.stream(parsers)
             .filter(parser -> parser.canParse(spec))
             .findFirst()
-            .orElseThrow(() -> new ParseException("No suitable parsers found"));
+            .orElseThrow(() -> new ParseException("Source specification is not valid"));
 
         return selectedParser.parse(spec);
     }
