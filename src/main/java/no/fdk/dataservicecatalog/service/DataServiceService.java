@@ -3,8 +3,10 @@ package no.fdk.dataservicecatalog.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.fdk.dataservicecatalog.config.ApplicationProperties;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Info;
@@ -36,6 +38,7 @@ public class DataServiceService {
     private final Sender sender;
     private final ApiHarvesterReactiveClient apiHarvesterReactiveClient;
     private final DataServiceMongoRepository dataServiceMongoRepository;
+    private final ApplicationProperties applicationProperties;
     private final RabbitProperties rabbitProperties;
 
     private static Map<String, String> setDefaultLanguageValue(String value) {
@@ -101,25 +104,60 @@ public class DataServiceService {
         return all;
     }
 
-    private void triggerHarvest(DataService dataService) {
-        sender.sendWithPublishConfirms(Flux.just(objectMapper.createObjectNode()).map(payload -> {
-                    byte[] message = null;
-                    payload.put("publisherId", dataService.getOrganizationId());
-                    payload.put("dataType", "dataservice");
-                    try {
-                        message = objectWriter.writeValueAsBytes(payload);
-                    } catch (JsonProcessingException e) {
-                        log.error(e.getMessage());
-                    }
+    private OutboundMessage getOutboundMessage(ObjectNode payload) {
+      return getOutboundMessage(payload, null);
+    }
 
-                    var rabbitTemplate = rabbitProperties.getTemplate();
-                    return new OutboundMessage(
-                            rabbitTemplate.getExchange(),
-                            rabbitTemplate.getRoutingKey(),
-                            message
-                    );
-                }
-        )).subscribe(result -> log.debug(result.toString()));
+    private OutboundMessage getOutboundMessage(ObjectNode payload, final String routingKey) {
+        try {
+            final byte[] message = objectWriter.writeValueAsBytes(payload);
+            final var rabbitTemplate = rabbitProperties.getTemplate();
+            return new OutboundMessage(
+                    rabbitTemplate.getExchange(),
+                    routingKey != null ? routingKey : rabbitTemplate.getRoutingKey(),
+                    message
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void triggerHarvest(final DataService dataService) {
+        try {
+            sender.sendWithPublishConfirms(Flux
+                    .just(objectMapper.createObjectNode())
+                    .map(payload -> {
+                        payload.put("publisherId", dataService.getOrganizationId());
+                        payload.put("dataType", "dataservice");
+                        return getOutboundMessage(payload);
+                    })
+                    .onErrorResume(Mono::error)
+            ).subscribe(result -> log.debug(result.toString()));
+        } catch(RuntimeException e) {
+            log.error("Unable to trigger dataservice harvest", e);
+        }
+    }
+
+    private void createNewDataSource(final DataService dataService, final String harvestUrl) {
+        try {
+            sender.sendWithPublishConfirms(Flux
+                    .just(objectMapper.createObjectNode())
+                    .map(payload -> {
+                        payload.put("publisherId", dataService.getOrganizationId());
+                        payload.put("url", harvestUrl);
+                        payload.put("dataSourceType", "DCAT-AP-NO");
+                        payload.put("acceptHeaderValue", "text/turtle");
+                        payload.put("description",
+                                String.format("Automatically generated data source for %s",
+                                        dataService.getOrganizationId()));
+
+                        return getOutboundMessage(payload, "dataservice.publisher.NewDataSource");
+                    })
+                    .onErrorResume(Mono::error)
+            ).subscribe(result -> log.debug(result.toString()));
+        } catch(RuntimeException e) {
+            log.error("Unable to create new datasource", e);
+        }
     }
 
     public Mono<DataService> create(DataService dataService, String catalogId) {
@@ -127,11 +165,20 @@ public class DataServiceService {
         if (dataService.getStatus() == null || !List.of(Status.DRAFT, Status.PUBLISHED).contains(dataService.getStatus())) {
             dataService.setStatus(Status.DRAFT);
         }
+
         return dataServiceMongoRepository.save(dataService)
                 .doOnSuccess(saved -> {
                     log.debug("dataservice {} saved", saved.getId());
                     if (saved.getStatus() == Status.PUBLISHED) {
                         triggerHarvest(saved);
+
+                        dataServiceMongoRepository.findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
+                            .count()
+                            .filter(count -> count == 1)
+                            .doOnNext(count -> createNewDataSource(saved, String.format("%s/%s",
+                                    applicationProperties.getCatalogBaseUri(),
+                                    catalogId)))
+                            .subscribe();
                     }
                 })
                 .doOnError(error -> log.error("error saving dataservice to database: {}", error.getMessage()));
