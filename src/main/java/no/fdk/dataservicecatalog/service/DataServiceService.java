@@ -130,9 +130,9 @@ public class DataServiceService {
                         payload.put("publisherId", dataService.getOrganizationId());
                         payload.put("dataType", "dataservice");
                         return getOutboundMessage(payload);
-                    })
+                    }))
                     .onErrorResume(Mono::error)
-            ).subscribe(result -> log.debug(result.toString()));
+                    .subscribe(result -> log.debug(result.toString()));
         } catch(RuntimeException e) {
             log.error("Unable to trigger dataservice harvest", e);
         }
@@ -145,6 +145,7 @@ public class DataServiceService {
                     .map(payload -> {
                         payload.put("publisherId", dataService.getOrganizationId());
                         payload.put("url", harvestUrl);
+                        payload.put("dataType", "dataservice");
                         payload.put("dataSourceType", "DCAT-AP-NO");
                         payload.put("acceptHeaderValue", "text/turtle");
                         payload.put("description",
@@ -152,9 +153,9 @@ public class DataServiceService {
                                         dataService.getOrganizationId()));
 
                         return getOutboundMessage(payload, "dataservice.publisher.NewDataSource");
-                    })
+                    }))
                     .onErrorResume(Mono::error)
-            ).subscribe(result -> log.debug(result.toString()));
+                    .subscribe(result -> log.debug(result.toString()));
         } catch(RuntimeException e) {
             log.error("Unable to create new datasource", e);
         }
@@ -172,7 +173,7 @@ public class DataServiceService {
                     if (saved.getStatus() == Status.PUBLISHED) {
                         triggerHarvest(saved);
 
-                        dataServiceMongoRepository.findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
+                        dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(catalogId)
                             .count()
                             .filter(count -> count == 1)
                             .doOnNext(count -> createNewDataSource(saved, String.format("%s/%s",
