@@ -25,6 +25,7 @@ import reactor.rabbitmq.Sender;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -124,6 +125,7 @@ public class DataServiceService {
 
     private void triggerHarvest(final DataService dataService) {
         try {
+            log.debug("Trigger harvest for dataservice {}", dataService.getId());
             sender.sendWithPublishConfirms(Flux
                     .just(objectMapper.createObjectNode())
                     .map(payload -> {
@@ -140,6 +142,7 @@ public class DataServiceService {
 
     private void createNewDataSource(final DataService dataService, final String harvestUrl) {
         try {
+            log.debug("Create new data source for dataservice {}", dataService.getId());
             sender.sendWithPublishConfirms(Flux
                     .just(objectMapper.createObjectNode())
                     .map(payload -> {
@@ -175,6 +178,8 @@ public class DataServiceService {
 
                         dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(catalogId)
                             .count()
+                            .doOnNext(count -> log.debug("Total count of dataservices for katalog {}: {}",
+                                    catalogId, count))
                             .filter(count -> count == 1)
                             .doOnNext(count -> createNewDataSource(saved, String.format("%s/%s",
                                     applicationProperties.getCatalogBaseUri(),
