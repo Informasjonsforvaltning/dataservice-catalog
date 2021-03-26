@@ -18,10 +18,6 @@ tags:
 servers:
   - url: 'https://dataservice-catalog.fellesdatakatalog.digdir.no/'
     description: Produksjonsmiljø
-  - url: 'https://dataservice-catalog.staging.fellesdatakatalog.digdir.no/'
-    description: Testmiljø
-  - url: 'https://dataservice-catalog.demo.fellesdatakatalog.digdir.no/'
-    description: Demomiljø
 paths:
   /catalogs/{catalogId}/dataservices:
     get:
