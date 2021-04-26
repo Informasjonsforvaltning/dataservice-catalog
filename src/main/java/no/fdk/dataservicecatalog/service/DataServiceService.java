@@ -227,7 +227,7 @@ public class DataServiceService {
                                         .doOnNext(count -> log.debug("total count of dataservices for katalog {}: {}",
                                                 catalogId, count))
                                         .filter(count -> count == 1)
-                                        .doOnNext(count -> createNewDataSource(saved, String.format("%s/%s",
+                                        .doOnNext(count -> createNewDataSource(saved, String.format("%s/catalogs/%s",
                                                 applicationProperties.getCatalogBaseUri(),
                                                 catalogId)))
                                         .subscribe();
