@@ -3,6 +3,9 @@ logging:
   level.no: ${LOG_LEVEL:DEBUG}
 
 spring:
+  security.oauth2.resourceserver.jwt:
+    jwk-set-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk/protocol/openid-connect/certs
+    issuer-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk
   data:
     mongodb:
       authentication-database: admin
@@ -20,20 +23,14 @@ spring:
       routing-key: 'dataservice.publisher.HarvestTrigger'
       exchange: 'harvests'
 
-security:
-  jwks-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
-
 application:
   data-service-catalog-gui-url: ${DATA_SERVICE_CATALOG_GUI_URL}
   catalog-base-uri: ${CATALOG_BASE_URI:http://localhost}
   org-catalog-uri: ${ORGANIZATION_CATALOGUE_BASE_URI:https://organization-catalogue.staging.fellesdatakatalog.digdir.no}
 ---
 
-security:
-  jwks-uri: https://sso.staging.fellesdatakatalog.digdir.no/auth/realms/fdk/protocol/openid-connect/certs
-
 spring:
-  profiles: develop,test,unit-integration
+  config.activate.on-profile: develop,test,unit-integration
 
   rabbitmq:
     host: 127.0.0.1
