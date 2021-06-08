@@ -36,8 +36,8 @@ public class PermissionManager implements ReactiveAuthorizationManager<Authoriza
     }
 
     @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {
-        return mono.cast(JwtAuthenticationToken.class).map(auth -> {
+    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext authorizationContext) {
+        return authentication.cast(JwtAuthenticationToken.class).map(auth -> {
             if (auth.isAuthenticated()) {
                 var path = authorizationContext.getExchange().getRequest().getPath().pathWithinApplication().value();
                 if (path.startsWith("/catalogs/")) {
