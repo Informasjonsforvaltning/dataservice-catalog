@@ -15,7 +15,7 @@ public final class OrganizationResourceRole implements ResourceRole {
 
     @NonNull
     private OrganizationRole organizationRole;
-
+    @Override
     public String getResourceType() {
         return resourceType;
     }
@@ -33,7 +33,7 @@ public final class OrganizationResourceRole implements ResourceRole {
         }
         return false;
     }
-
+    @Override
     public Boolean matchPermission(String resourceType, String resourceId, String permission) {
         return matchResource(resourceType, resourceId) && matchPermission(OrganizationPermission.valueOf(permission));
     }

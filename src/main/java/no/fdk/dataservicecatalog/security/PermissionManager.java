@@ -5,12 +5,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.openid.OpenIDAuthenticationStatus;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -29,24 +28,26 @@ public class PermissionManager implements ReactiveAuthorizationManager<Authoriza
         return new PermissionManager(resourceId, permission);
     }
 
-    private Collection<ResourceRole> getResourceRoles(Collection<GrantedAuthority> authorities) {
-        return authorities.stream()
-                .map(Object::toString)
+    private Collection<ResourceRole> getResourceRoles(String authorities) {
+        return Arrays.stream(authorities.split(","))
                 .map(ResourceRoleFactory::deserialize)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {
-        return mono.cast(OpenIDAuthenticationToken.class).map(auth -> {
-            if (auth.isAuthenticated() && auth.getStatus().equals(OpenIDAuthenticationStatus.SUCCESS)) {
+    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext authorizationContext) {
+        return authentication.cast(JwtAuthenticationToken.class).map(auth -> {
+            if (auth.isAuthenticated()) {
                 var path = authorizationContext.getExchange().getRequest().getPath().pathWithinApplication().value();
                 if (path.startsWith("/catalogs/")) {
                     Matcher matcher = catalogIdPattern.matcher(path);
                     if (matcher.find()) {
                         var catalogId = matcher.group(1);
-                        return new AuthorizationDecision(getResourceRoles(auth.getAuthorities()).stream().anyMatch(rr -> rr.matchPermission(resourceId, catalogId, permission)));
+                        return new AuthorizationDecision(
+                                getResourceRoles((String) auth.getTokenAttributes().get("authorities"))
+                                        .stream()
+                                        .anyMatch(rr -> rr.matchPermission(resourceId, catalogId, permission) || rr instanceof SystemRootAdminRole));
                     }
                 }
             }

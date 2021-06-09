@@ -12,8 +12,12 @@ class ResourceRoleFactory {
             String resourceId = parts[1];
             String resourceRole = parts[2];
 
+            SystemRootAdminRole sysAdmin = new SystemRootAdminRole();
+
             if (OrganizationResourceRole.resourceType.equals(resourceType)) {
                 return new OrganizationResourceRole(resourceId, OrganizationResourceRole.OrganizationRole.valueOf(resourceRole));
+            } else if (sysAdmin.matchPermission(resourceType, resourceId, resourceRole)) {
+                return sysAdmin;
             }
             throw new IllegalArgumentException("Unknown resourceType");
         } catch (Exception e) {

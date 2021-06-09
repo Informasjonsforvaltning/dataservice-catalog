@@ -1,33 +1,24 @@
 package no.fdk.dataservicecatalog.config;
 
-import lombok.RequiredArgsConstructor;
-import no.fdk.dataservicecatalog.security.AuthenticationManager;
 import no.fdk.dataservicecatalog.security.PermissionManager;
-import no.fdk.dataservicecatalog.security.SecurityContextRepository;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import reactor.core.publisher.Mono;
 
 import java.util.Collections;
+import java.util.List;
 
-@Configuration
-@RequiredArgsConstructor
 @EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
 public class SecurityConfig {
-
-
-    private final AuthenticationManager authenticationManager;
-    private final SecurityContextRepository securityContextRepository;
 
     @Bean
     CorsConfigurationSource corsConfiguration() {
@@ -45,26 +36,40 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http
-                .cors().configurationSource(corsConfiguration()).and()
-                .httpBasic().disable()
-                .anonymous().and()
-                .exceptionHandling()
-                .authenticationEntryPoint((swe, e) -> Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
-                .accessDeniedHandler((swe, e) -> Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN))).and()
-                .csrf().disable()
-                .authenticationManager(authenticationManager)
-                .securityContextRepository(securityContextRepository)
-                .authorizeExchange()
-                .pathMatchers(HttpMethod.GET, "/catalogs").permitAll()
-                .pathMatchers(HttpMethod.GET, "/catalogs/{*catalogId}").permitAll()
-                .pathMatchers(HttpMethod.GET, "/catalogs/**/dataservices").access((PermissionManager.of("organization", "read")))
-                .pathMatchers("/catalogs/**").access((PermissionManager.of("organization", "write")))
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http.csrf().disable();
+
+        http.cors()
+            .and().authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                .pathMatchers(HttpMethod.GET, "/ping").permitAll()
+                .pathMatchers(HttpMethod.GET, "/ready").permitAll()
+                .pathMatchers(HttpMethod.GET, "/catalogs").permitAll()
+                .pathMatchers(HttpMethod.GET, "/catalogs/{catalogId}").permitAll()
+                .pathMatchers(HttpMethod.GET, "/catalogs/{catalogId}/**")
+                    .access((PermissionManager.of("organization", "read")))
+                .pathMatchers(HttpMethod.DELETE)
+                    .access((PermissionManager.of("organization", "write")))
+                .pathMatchers(HttpMethod.PATCH)
+                    .access((PermissionManager.of("organization", "write")))
+                .pathMatchers(HttpMethod.POST)
+                    .access((PermissionManager.of("organization", "write")))
                 .anyExchange().authenticated()
-                .and()
-                .build();
+            .and().oauth2ResourceServer().jwt();
+
+        return http.build();
     }
 
+    @Bean
+    public ReactiveJwtDecoder jwtDecoder(OAuth2ResourceServerProperties properties) {
+        NimbusReactiveJwtDecoder jwtDecoder = NimbusReactiveJwtDecoder.withJwkSetUri(properties.getJwt().getJwkSetUri()).build();
+
+        OAuth2TokenValidator<Jwt> audienceValidator = new JwtClaimValidator<List<String>>(
+                JwtClaimNames.AUD, aud -> aud.contains("dataservice-catalog"));
+        DelegatingOAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
+                new JwtTimestampValidator(), new JwtIssuerValidator(properties.getJwt().getIssuerUri()), audienceValidator);
+
+        jwtDecoder.setJwtValidator(validator);
+        return jwtDecoder;
+    }
 }
