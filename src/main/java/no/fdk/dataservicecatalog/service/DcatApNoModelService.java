@@ -12,14 +12,19 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.util.URIref;
 import org.apache.jena.vocabulary.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -49,9 +54,25 @@ public class DcatApNoModelService {
         return buildCatalogsModel(dataServicesFlux);
     }
 
-    public String serialise(Model model) {
+    public Lang jenaLangFromAcceptHeader(List<MediaType> accept) {
+        if (accept == null) return Lang.TURTLE;
+        if (accept.isEmpty()) return Lang.TURTLE;
+        if (accept.contains(MediaType.valueOf(Lang.TURTLE.getHeaderString()))) return Lang.TURTLE;
+        else if (accept.contains(MediaType.valueOf("text/n3"))) return Lang.N3;
+        else if (accept.contains(MediaType.valueOf(Lang.RDFXML.getHeaderString()))) return Lang.RDFXML;
+        else if (accept.contains(MediaType.valueOf(Lang.RDFJSON.getHeaderString()))) return Lang.RDFJSON;
+        else if (accept.contains(MediaType.valueOf(Lang.JSONLD.getHeaderString()))) return Lang.JSONLD;
+        else if (accept.contains(MediaType.valueOf(Lang.NTRIPLES.getHeaderString()))) return Lang.NTRIPLES;
+        else if (accept.contains(MediaType.valueOf(Lang.NQUADS.getHeaderString()))) return Lang.NQUADS;
+        else if (accept.contains(MediaType.valueOf(Lang.TRIG.getHeaderString()))) return Lang.TRIG;
+        else if (accept.contains(MediaType.valueOf(Lang.TRIX.getHeaderString()))) return Lang.TRIX;
+        else if (accept.contains(MediaType.valueOf("*/*"))) return Lang.TURTLE;
+        else throw new HttpServerErrorException(HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    public String serialise(Model model, Lang lang) {
         StringWriter stringWriter = new StringWriter();
-        model.write(stringWriter, "TURTLE");
+        model.write(stringWriter, lang.getName());
         return stringWriter.getBuffer().toString();
     }
 
