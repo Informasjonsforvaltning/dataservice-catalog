@@ -307,4 +307,38 @@ public class TestData {
                         .build()
         );
     }
+
+    public static DataService createDataService() {
+        return DataService
+                .builder()
+                .id(format("%s/id-1", "catalog-id-1"))
+                .organizationId("catalog-id-1")
+                .title(
+                        Map.ofEntries(
+                                entry("en", "title-en"),
+                                entry("nb", "title-nb")
+                        )
+                )
+                .description(
+                        Map.ofEntries(
+                                entry("en", "description-en"),
+                                entry("nb", "description-nb")
+                        )
+                )
+                .endpointDescriptions(List.of("http://endpoint-description"))
+                .endpointUrls(List.of("http://endpoint-url-1", "http://endpoint-url-2"))
+                .contact(
+                        Contact
+                                .builder()
+                                .name("organisation-name")
+                                .email("email@email.email")
+                                .url("http://organisation-url")
+                                .phone("phone")
+                                .build()
+                )
+                .mediaTypes(Set.of("application/json", "text/xml"))
+                .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
+                .serviceType("CUSTOMER_RELATIONS")
+                .build();
+    }
 }

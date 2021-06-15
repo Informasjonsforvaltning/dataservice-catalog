@@ -37,4 +37,15 @@ public class CatalogHandler {
                 .doOnError(error -> log.info("Failed to build catalog model for catalog with ID {}", catalogId, error))
                 .flatMap(model -> ok().bodyValue(dcatApNoModelService.serialise(model, jenaLang)));
     }
+
+    public Mono<ServerResponse> getDataService(ServerRequest serverRequest) {
+        String dataServiceId = serverRequest.pathVariable("dataServiceId");
+        Lang jenaLang = dcatApNoModelService.jenaLangFromAcceptHeader(serverRequest.headers().accept());
+        log.info("Starting to build model for data service with ID {}", dataServiceId);
+        return dcatApNoModelService
+                .buildDataServiceModel(dataServiceId)
+                .doOnSuccess(model -> log.info("Successfully built model for data service with ID {}", dataServiceId))
+                .doOnError(error -> log.info("Failed to build model for data service with ID {}", dataServiceId, error))
+                .flatMap(model -> ok().bodyValue(dcatApNoModelService.serialise(model, jenaLang)));
+    }
 }

@@ -1,0 +1,23 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://localhost/data-services/catalog-id-1/id-1>
+    a                         dcat:DataService ;
+    dct:conformsTo            <https://data.norge.no/def/serviceType#CUSTOMER_RELATIONS> ;
+    dct:description           "description-nb"@nb , "description-en"@en ;
+    dct:title                 "title-nb"@nb , "title-en"@en ;
+    dcat:contactPoint         [ a                          vcard:Organization ;
+                                vcard:fn                   "Contact information | (catalog-id-1)" ;
+                                vcard:hasEmail             <mailto:email@email.email> ;
+                                vcard:hasOrganizationName  "organisation-name"@nb ;
+                                vcard:hasTelephone         [ a               vcard:TelephoneType ;
+                                                             vcard:hasValue  <tel:phone>
+                                                           ] ;
+                                vcard:hasURL               <http://organisation-url>
+                              ] ;
+    dcat:endpointDescription  <http://endpoint-description> ;
+    dcat:endpointURL          <http://endpoint-url-1> , <http://endpoint-url-2> ;
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/application/json> , <https://www.iana.org/assignments/media-types/text/xml> ;
+    dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .

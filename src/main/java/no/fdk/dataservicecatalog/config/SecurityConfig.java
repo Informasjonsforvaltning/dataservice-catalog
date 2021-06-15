@@ -1,6 +1,7 @@
 package no.fdk.dataservicecatalog.config;
 
 import no.fdk.dataservicecatalog.security.PermissionManager;
+import no.fdk.dataservicecatalog.security.RDFMatcher;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -44,17 +45,14 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(HttpMethod.GET, "/ping").permitAll()
                 .pathMatchers(HttpMethod.GET, "/ready").permitAll()
-                .pathMatchers(HttpMethod.GET, "/catalogs").permitAll()
-                .pathMatchers(HttpMethod.GET, "/catalogs/{catalogId}").permitAll()
-                .pathMatchers(HttpMethod.GET, "/catalogs/{catalogId}/**")
-                    .access((PermissionManager.of("organization", "read")))
+                .matchers(new RDFMatcher()).permitAll()
                 .pathMatchers(HttpMethod.DELETE)
                     .access((PermissionManager.of("organization", "write")))
                 .pathMatchers(HttpMethod.PATCH)
                     .access((PermissionManager.of("organization", "write")))
                 .pathMatchers(HttpMethod.POST)
                     .access((PermissionManager.of("organization", "write")))
-                .anyExchange().authenticated()
+                .anyExchange().access((PermissionManager.of("organization", "read")))
             .and().oauth2ResourceServer().jwt();
 
         return http.build();
