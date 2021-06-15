@@ -54,6 +54,14 @@ public class DcatApNoModelService {
         return buildCatalogsModel(dataServicesFlux);
     }
 
+    public Mono<Model> buildDataServiceModel(String dataServiceId) {
+        Flux<DataService> dataServiceFlux = dataServiceMongoRepository
+                .findById(dataServiceId)
+                .doOnError(error -> log.error("Failed to load data service with ID {}", dataServiceId, error))
+                .flux();
+        return buildDataServiceModel(dataServiceFlux);
+    }
+
     public Lang jenaLangFromAcceptHeader(List<MediaType> accept) {
         if (accept == null) return Lang.TURTLE;
         if (accept.isEmpty()) return Lang.TURTLE;
@@ -105,13 +113,21 @@ public class DcatApNoModelService {
         return format("%s/organizations/%s", applicationProperties.getOrgCatalogUri(), publisherId);
     }
 
+    private Mono<Model> buildDataServiceModel(Flux<DataService> dataServiceFlux) {
+        Model model = createModel();
+        return dataServiceFlux
+                .doOnNext(dataService -> addDataServiceToModel(model, dataService))
+                .then()
+                .thenReturn(model);
+    }
+
     private Mono<Model> buildCatalogsModel(Flux<DataService> dataServicesFlux) {
         Model model = createModel();
         return dataServicesFlux
                 .groupBy(DataService::getOrganizationId)
                 .doOnNext(entry -> addCatalogToModel(model, Catalog.builder().id(entry.key()).build()))
                 .flatMap(Flux::collectList)
-                .doOnNext(dataServices -> dataServices.forEach(dataService -> addDataServiceToModel(model, dataService)))
+                .doOnNext(dataServices -> dataServices.forEach(dataService -> addDataServiceToCatalogModel(model, dataService)))
                 .then()
                 .thenReturn(model);
     }
@@ -126,6 +142,13 @@ public class DcatApNoModelService {
             .addProperty(RDF.type, FOAF.Agent)
             .addProperty(DCTerms.identifier, catalog.getId())
             .addProperty(OWL.sameAs, URIref.encode(getPublisherUri(catalog.getId())));
+    }
+
+    private void addDataServiceToCatalogModel(Model model, DataService dataService) {
+        model.getProperty(URIref.encode(getCatalogUri(dataService.getOrganizationId())))
+                .addProperty(DCAT.service, model.createResource(URIref.encode(getDataServiceUri(dataService.getId()))));
+
+        addDataServiceToModel(model, dataService);
     }
 
     private void addDataServiceToModel(Model model, DataService dataService) {
@@ -229,8 +252,5 @@ public class DcatApNoModelService {
                 ResourceFactory.createResource(URIref.encode(dataService.getExternalDocs().getUrl()))
             );
         }
-
-        model.getProperty(URIref.encode(getCatalogUri(dataService.getOrganizationId())))
-                .addProperty(DCAT.service, dataServiceResource);
     }
 }
