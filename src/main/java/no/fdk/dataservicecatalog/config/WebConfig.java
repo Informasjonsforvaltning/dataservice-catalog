@@ -1,5 +1,6 @@
 package no.fdk.dataservicecatalog.config;
 
+import no.fdk.dataservicecatalog.controller.ApplicationStatusHandler;
 import no.fdk.dataservicecatalog.controller.CatalogHandler;
 import no.fdk.dataservicecatalog.controller.DataServiceRegistrationHandler;
 import org.apache.jena.riot.Lang;
@@ -44,6 +45,12 @@ public class WebConfig implements WebFluxConfigurer {
                 MediaType.valueOf(Lang.RDFJSON.getHeaderString()), MediaType.valueOf(Lang.JSONLD.getHeaderString()),
                 MediaType.valueOf(Lang.TRIX.getHeaderString()), MediaType.valueOf(Lang.TRIG.getHeaderString()),
                 MediaType.valueOf(Lang.NQUADS.getHeaderString()), MediaType.valueOf(Lang.NTRIPLES.getHeaderString()));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> statusRouter(ApplicationStatusHandler statusHandler) {
+        return route(GET("/ping"), statusHandler::ping)
+                .andRoute(GET("/ready"), statusHandler::ready);
     }
 
 }
