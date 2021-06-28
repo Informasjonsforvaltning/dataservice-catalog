@@ -13,8 +13,10 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.reasoner.rulesys.impl.LPAgendaEntry;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.sparql.vocabulary.FOAF;
+import org.apache.jena.util.FileUtils;
 import org.apache.jena.util.URIref;
 import org.apache.jena.vocabulary.*;
 import org.springframework.http.HttpStatus;
@@ -93,7 +95,8 @@ public class DcatApNoModelService {
                                 entry("dcat", DCAT.NS),
                                 entry("dct", DCTerms.NS),
                                 entry("rdf", RDF.uri),
-                                entry("vcard", VCARD4.NS)
+                                entry("vcard", VCARD4.NS),
+                                entry("foaf", FOAF.NS)
                         )
                 );
     }
@@ -252,6 +255,58 @@ public class DcatApNoModelService {
                 DCAT.landingPage,
                 ResourceFactory.createResource(URIref.encode(dataService.getExternalDocs().getUrl()))
             );
+        }
+
+        if (dataService.getLicense() != null && dataService.getLicense().getUrl() != null && isURI(dataService.getLicense().getUrl())) {
+            dataServiceResource.addProperty(
+                    DCTerms.license,
+                    ResourceFactory.createResource(URIref.encode(dataService.getLicense().getUrl()))
+            );
+        }
+
+        if (dataService.getAccessRights() != null && isURI(dataService.getAccessRights())) {
+            dataServiceResource.addProperty(
+                    DCTerms.accessRights,
+                    ResourceFactory.createResource(URIref.encode(dataService.getAccessRights()))
+            );
+        }
+
+        if (dataService.getKeywords() != null) {
+            dataService.getKeywords().forEach(keyword -> {
+                if (keyword != null) {
+                    keyword.keySet().forEach(lang -> dataServiceResource.addProperty(
+                            DCAT.keyword,
+                            ResourceFactory.createLangLiteral(keyword.get(lang), lang)));
+                }
+            });
+        }
+
+        if (dataService.getType() != null && isURI(dataService.getType())) {
+            dataServiceResource.addProperty(
+                    DCTerms.type,
+                    ResourceFactory.createResource(URIref.encode(dataService.getType())));
+        }
+
+        if (dataService.getPages() != null) {
+            dataService.getPages().stream()
+                    .filter(FileUtils::isURI)
+                    .forEach(page -> dataServiceResource.addProperty(
+                        FOAF.page,
+                        ResourceFactory.createResource(URIref.encode(page))));
+        }
+
+        if (dataService.getLandingPage() != null && isURI(dataService.getLandingPage())) {
+            dataServiceResource.addProperty(
+                        DCAT.landingPage,
+                        ResourceFactory.createResource(URIref.encode(dataService.getLandingPage())));
+        }
+
+        if (dataService.getThemes() != null) {
+            dataService.getThemes().stream()
+                    .filter(FileUtils::isURI)
+                    .forEach(theme -> dataServiceResource.addProperty(
+                        DCAT.theme,
+                        ResourceFactory.createResource(URIref.encode(theme))));
         }
     }
 }

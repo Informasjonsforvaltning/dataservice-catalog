@@ -17,8 +17,7 @@ import reactor.core.publisher.Flux;
 import java.io.StringReader;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -40,7 +39,13 @@ public class DcatApNoModelServiceTest {
 
         assertNotNull(model);
         assertNotNull(expectedModel);
-        assertTrue(model.isIsomorphicWith(expectedModel));
+
+        boolean isomorphic = model.isIsomorphicWith(expectedModel);
+        if(!isomorphic) {
+            assertEquals(
+                    dcatApNoModelService.serialise(Objects.requireNonNull(expectedModel), Lang.TURTLE),
+                    dcatApNoModelService.serialise(Objects.requireNonNull(model), Lang.TURTLE));
+        }
     }
 
     @Test
@@ -57,7 +62,13 @@ public class DcatApNoModelServiceTest {
 
         assertNotNull(model);
         assertNotNull(expectedModel);
-        assertTrue(model.isIsomorphicWith(expectedModel));
+
+        boolean isomorphic = model.isIsomorphicWith(expectedModel);
+        if(!isomorphic) {
+            assertEquals(
+                    dcatApNoModelService.serialise(Objects.requireNonNull(expectedModel), Lang.TURTLE),
+                    dcatApNoModelService.serialise(Objects.requireNonNull(model), Lang.TURTLE));
+        }
     }
 
     @Test
@@ -72,7 +83,13 @@ public class DcatApNoModelServiceTest {
 
         assertNotNull(model);
         assertNotNull(expectedModel);
-        assertTrue(model.isIsomorphicWith(expectedModel));
+
+        boolean isomorphic = model.isIsomorphicWith(expectedModel);
+        if(!isomorphic) {
+            assertEquals(
+                    dcatApNoModelService.serialise(Objects.requireNonNull(expectedModel), Lang.TURTLE),
+                    dcatApNoModelService.serialise(Objects.requireNonNull(model), Lang.TURTLE));
+        }
     }
 
     @Test
@@ -87,7 +104,13 @@ public class DcatApNoModelServiceTest {
 
         assertNotNull(model);
         assertNotNull(expectedModel);
-        assertTrue(model.isIsomorphicWith(expectedModel));
+
+        boolean isomorphic = model.isIsomorphicWith(expectedModel);
+        if(!isomorphic) {
+            assertEquals(
+                    dcatApNoModelService.serialise(Objects.requireNonNull(expectedModel), Lang.TURTLE),
+                    dcatApNoModelService.serialise(Objects.requireNonNull(model), Lang.TURTLE));
+        }
     }
 
     @Test

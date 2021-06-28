@@ -304,6 +304,27 @@ public class TestData {
                         .mediaTypes(Set.of("application/json", "text/xml"))
                         .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
                         .serviceType("CUSTOMER_RELATIONS")
+                        .build(),
+                DataService
+                        .builder()
+                        .id(format("%s/id-15", organizationId))
+                        .organizationId(organizationId)
+                        .title(
+                                Map.ofEntries(
+                                        entry("en", "id-15-title-en"),
+                                        entry("nb", "id-15-title-nb")
+                                )
+                        )
+                        .accessRights("http://id-15-access-public")
+                        .keywords(List.of(
+                                Map.ofEntries(
+                                    entry("en", "id-15-keyword1-en"),
+                                    entry("nb", "id-15-keyword1-nb"))
+                        ))
+                        .pages(List.of("http://id-15-page1"))
+                        .landingPage("http://id-15-landingpage")
+                        .themes(List.of("http://id-15-theme1"))
+                        .type("http://id-15-type")
                         .build()
         );
     }
