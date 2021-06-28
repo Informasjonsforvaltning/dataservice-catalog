@@ -2,6 +2,7 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix dcat:  <http://www.w3.org/ns/dcat#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 
 <http://localhost/data-services/catalog-id-1/id-13>
     a                         dcat:DataService ;
@@ -117,7 +118,7 @@
     a              dcat:Catalog ;
     dct:publisher  <https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations/catalog-id-1> ;
     dct:title      "Data service catalog (catalog-id-1)"@en ;
-    dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-13> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-14> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-12> , <http://localhost/data-services/catalog-id-1/id-4> .
+    dcat:service   <http://localhost/data-services/catalog-id-1/id-11> , <http://localhost/data-services/catalog-id-1/id-2> , <http://localhost/data-services/catalog-id-1/id-6> , <http://localhost/data-services/catalog-id-1/id-7> , <http://localhost/data-services/catalog-id-1/id-13> , <http://localhost/data-services/catalog-id-1/id-1> , <http://localhost/data-services/catalog-id-1/id-14> , <http://localhost/data-services/catalog-id-1/id-9> , <http://localhost/data-services/catalog-id-1/id-8> , <http://localhost/data-services/catalog-id-1/id-3> , <http://localhost/data-services/catalog-id-1/id-10> , <http://localhost/data-services/catalog-id-1/id-5> , <http://localhost/data-services/catalog-id-1/id-12> , <http://localhost/data-services/catalog-id-1/id-4> , <http://localhost/data-services/catalog-id-1/id-15>.
 
 <https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations/catalog-id-1>
         a               <http://xmlns.com/foaf/0.1/Agent> ;
@@ -154,3 +155,13 @@
     a                dcat:DataService ;
     dct:description  "id-5-description-en"@en , "id-5-description-nb"@nb ;
     dct:title        "id-5-title-en"@en , "id-5-title-nb"@nb .
+
+<http://localhost/data-services/catalog-id-1/id-15>
+    a                         dcat:DataService ;
+    dct:title                 "id-15-title-nb"@nb , "id-15-title-en"@en ;
+    dct:accessRights          <http://id-15-access-public> ;
+    dcat:keyword              "id-15-keyword1-en"@en , "id-15-keyword1-nb"@nb ;
+    foaf:page                 <http://id-15-page1> ;
+    dcat:landingPage          <http://id-15-landingpage> ;
+    dcat:theme                <http://id-15-theme1> ;
+    dct:type                  <http://id-15-type> ;

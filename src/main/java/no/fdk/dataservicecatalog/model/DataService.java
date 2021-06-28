@@ -45,11 +45,11 @@ public class DataService {
     private String version;
     private Integer operationCount;
     private Contact contact;
+    private License license;
     private List<String> endpointUrls;
     private Set<String> mediaTypes;
     private Map<String, String> description;
     private List<String> endpointDescriptions;
-    private License license;
     private Access access;
     private TermsAndConditions termsAndConditions;
     private DataServiceStatus dataServiceStatus;
@@ -58,6 +58,31 @@ public class DataService {
     private Status status;
     private ExternalDocumentation externalDocs;
     private String termsOfServiceUrl;
+
+    //dct:accessRights
+    //Norwegian: tilgangsnivå
+    private String accessRights;
+
+    //dcat:keyword
+    //Norwegian: emneord
+    private List<Map<String, String>> keywords;
+
+    //dcat:landingPage
+    //Norwegian: landingsside
+    private String landingPage;
+
+    //foaf:page
+    //Norwegian: dokumentasjon
+    private List<String> pages;
+
+    //dcat:theme
+    //Norwegian: tema
+    private List<String> themes;
+
+    //dct:type
+    //Norwegian: type
+    private String type;
+
     private boolean imported = false;
 
 }
