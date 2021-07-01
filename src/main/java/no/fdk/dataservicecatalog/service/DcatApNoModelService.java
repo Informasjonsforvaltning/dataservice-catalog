@@ -8,6 +8,7 @@ import no.fdk.dataservicecatalog.model.Catalog;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -41,7 +42,7 @@ public class DcatApNoModelService {
     public Mono<Model> buildCatalogsModel() {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
                 .findAllByStatus(Status.PUBLISHED)
-                .doOnError(error -> log.error("Failed to load data services", error));
+                .doOnError(error -> log.error("{}: Failed to load data services", ExceptionUtils.getStackTrace(error)));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services", count));
         return buildCatalogsModel(dataServicesFlux);
     }
@@ -49,7 +50,7 @@ public class DcatApNoModelService {
     public Mono<Model> buildCatalogModel(String catalogId) {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
                 .findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
-                .doOnError(error -> log.error("Failed to load data services for catalog with ID {}", catalogId, error));
+                .doOnError(error -> log.error("{}: Failed to load data services for catalog with ID {}", ExceptionUtils.getStackTrace(error), catalogId));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services for catalog with ID {}", count, catalogId));
         return buildCatalogsModel(dataServicesFlux);
     }
@@ -57,7 +58,7 @@ public class DcatApNoModelService {
     public Mono<Model> buildDataServiceModel(String dataServiceId) {
         Flux<DataService> dataServiceFlux = dataServiceMongoRepository
                 .findById(dataServiceId)
-                .doOnError(error -> log.error("Failed to load data service with ID {}", dataServiceId, error))
+                .doOnError(error -> log.error("{}: Failed to load data service with ID {}", ExceptionUtils.getStackTrace(error), dataServiceId))
                 .flux();
         return buildDataServiceModel(dataServiceFlux);
     }

@@ -3,6 +3,7 @@ package no.fdk.dataservicecatalog.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.service.DcatApNoModelService;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jena.riot.Lang;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -23,7 +24,7 @@ public class CatalogHandler {
         return dcatApNoModelService
                 .buildCatalogsModel()
                 .doOnSuccess(model -> log.info("Successfully built catalogs model"))
-                .doOnError(error -> log.error("Failed to build catalogs model", error))
+                .doOnError(error -> log.error("{}: Failed to build catalogs model", ExceptionUtils.getStackTrace(error)))
                 .flatMap(model -> ok().bodyValue(dcatApNoModelService.serialise(model, jenaLang)));
     }
 
