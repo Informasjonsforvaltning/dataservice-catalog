@@ -15,6 +15,7 @@ import no.fdk.dataservicecatalog.exceptions.NotFoundException;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -86,7 +87,7 @@ public class DataServiceService {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
         Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, source, catalogId, null))
                 .doOnSuccess(dataService -> log.debug("dataservice loaded from specification"))
-                .doOnError(error -> log.error("new dataservice failed mapping: {}", error.getMessage()));
+                .doOnError(error -> log.error("{}: new dataservice failed mapping", ExceptionUtils.getStackTrace(error)));
         return dataServiceMono.flatMap(dataServiceMongoRepository::save);
     }
 
@@ -94,13 +95,13 @@ public class DataServiceService {
         Mono<ApiSpecification> apiSpecification = apiHarvesterReactiveClient.convertApiSpecification(source);
         Mono<DataService> dataServiceMono = apiSpecification.map(apiSpecification1 -> parseApiSpecification(apiSpecification1, source, catalogId, dataServiceId))
                 .doOnSuccess(dataService -> log.debug("dataservice {} loaded from specification", dataService.getId()))
-                .doOnError(error -> log.error("dataservice with id {} failed mapping {}", dataServiceId, error.getMessage()));
+                .doOnError(error -> log.error("{}: dataservice with id {} failed mapping", ExceptionUtils.getStackTrace(error), dataServiceId));
         return dataServiceMono.flatMap(dataServiceMongoRepository::save);
     }
 
     public Flux<DataService> getAllDataServices(String catalogId) {
         var all = dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(catalogId)
-                .doOnError(error -> log.error("error retrieving all dataservices from mongo: {}", error.getMessage()));
+                .doOnError(error -> log.error("{}: error retrieving all dataservices from mongo", ExceptionUtils.getStackTrace(error)));
         all.count().subscribe(count -> log.debug("found {} dataservices", count));
         return all;
     }
@@ -136,7 +137,7 @@ public class DataServiceService {
                     .onErrorResume(Mono::error)
                     .subscribe(result -> log.debug(result.toString()));
         } catch(RuntimeException e) {
-            log.error("Unable to trigger dataservice harvest", e);
+            log.error("{}: Unable to trigger dataservice harvest", ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -160,7 +161,7 @@ public class DataServiceService {
                     .onErrorResume(Mono::error)
                     .subscribe(result -> log.debug(result.toString()));
         } catch(RuntimeException e) {
-            log.error("Unable to create new datasource", e);
+            log.error("{}: Unable to create new datasource", ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -187,7 +188,7 @@ public class DataServiceService {
                             .subscribe();
                     }
                 })
-                .doOnError(error -> log.error("error saving dataservice to database: {}", error.getMessage()));
+                .doOnError(error -> log.error("{}: error saving dataservice to database", ExceptionUtils.getStackTrace(error)));
     }
 
     public Mono<DataService> findById(String dataServiceId, String catalogId) {
@@ -196,22 +197,22 @@ public class DataServiceService {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved", dataService.getId());
                     } else {
-                        log.error("no dataservice with id {} exists for catalog {}", dataServiceId, catalogId);
+                        log.error(ExceptionUtils.getStackTrace(new NotFoundException(String.format("no dataservice with id %s exists for catalog %s", dataServiceId, catalogId))));
                     }
                 })
-                .doOnError(error -> log.error("error retrieving dataservice {}: {}", dataServiceId, error.getMessage()));
+                .doOnError(error -> log.error("{}: error retrieving dataservice {}", ExceptionUtils.getStackTrace(error), dataServiceId));
     }
 
     public Mono<Boolean> deleteById(String dataServiceId, String catalogId) {
         return dataServiceMongoRepository.deleteByIdAndOrganizationId(dataServiceId, catalogId)
-                .doOnError(error -> log.error("error deleting dataservice {}: {}", dataServiceId, error.getMessage()))
+                .doOnError(error -> log.error("{}: error deleting dataservice {}", ExceptionUtils.getStackTrace(error), dataServiceId))
                 .map(deletedCount -> deletedCount > 0)
                 .doOnSuccess(deleted -> log.debug("dataset {} deleted: {}", dataServiceId, deleted));
     }
 
     public Mono<DataService> update(String dataServiceId, String catalogId, DataService updated) {
         return dataServiceMongoRepository.findByIdAndOrganizationId(dataServiceId, catalogId)
-                .doOnError(error -> log.error("error retrieving dataservice {}: {}", dataServiceId, error.getMessage()))
+                .doOnError(error -> log.error("{}: error retrieving dataservice {}", ExceptionUtils.getStackTrace(error), dataServiceId))
                 .flatMap(dataService -> {
                     if (dataService != null) {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
@@ -234,7 +235,7 @@ public class DataServiceService {
                             }
                         });
                     }
-                    log.error("no dataservice with id {} exists for catalog {}", dataServiceId, catalogId);
+                    log.error(ExceptionUtils.getStackTrace(new NotFoundException(String.format("no dataservice with id %s exists for catalog %s", dataServiceId, catalogId))));
                     return Mono.error(new NotFoundException("no dataservice found"));
                 });
     }

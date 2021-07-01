@@ -15,23 +15,14 @@
         <target>System.out</target>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
-                <timestamp>
-                    <fieldName>timestamp</fieldName>
-                </timestamp>
                 <loggerName/>
                 <logLevel>
                     <fieldName>severity</fieldName>
                 </logLevel>
                 <message/>
-                <stackHash/>
-                <stackTrace>
-                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-                        <maxDepthPerThrowable>30</maxDepthPerThrowable>
-                        <maxLength>2048</maxLength>
-                        <shortenedClassNameLength>20</shortenedClassNameLength>
-                        <rootCauseFirst>true</rootCauseFirst>
-                    </throwableConverter>
-                </stackTrace>
+                <pattern>
+                    <pattern>{ "serviceContext": { "service": "dataservice-catalog" } }</pattern>
+                </pattern>
             </providers>
         </encoder>
     </appender>
