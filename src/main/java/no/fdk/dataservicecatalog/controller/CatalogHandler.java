@@ -24,7 +24,7 @@ public class CatalogHandler {
         return dcatApNoModelService
                 .buildCatalogsModel()
                 .doOnSuccess(model -> log.info("Successfully built catalogs model"))
-                .doOnError(error -> log.error("{}: Failed to build catalogs model", ExceptionUtils.getStackTrace(error)))
+                .doOnError(error -> log.error("Failed to build catalogs model", error))
                 .flatMap(model -> ok().bodyValue(dcatApNoModelService.serialise(model, jenaLang)));
     }
 
