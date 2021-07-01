@@ -19,9 +19,11 @@
                 <logLevel>
                     <fieldName>severity</fieldName>
                 </logLevel>
-                <message/>
+                <message>
+                    <fieldName>shortMessage</fieldName>
+                </message>
                 <pattern>
-                    <pattern>{ "serviceContext": { "service": "dataservice-catalog" } }</pattern>
+                    <pattern>{ "message": "%exception%message", "serviceContext": { "service": "dataservice-catalog" } }</pattern>
                 </pattern>
             </providers>
         </encoder>

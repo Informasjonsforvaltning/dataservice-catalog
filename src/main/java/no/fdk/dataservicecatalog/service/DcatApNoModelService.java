@@ -42,7 +42,7 @@ public class DcatApNoModelService {
     public Mono<Model> buildCatalogsModel() {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
                 .findAllByStatus(Status.PUBLISHED)
-                .doOnError(error -> log.error("{}: Failed to load data services", ExceptionUtils.getStackTrace(error)));
+                .doOnError(error -> log.error("Failed to load data services", error));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services", count));
         return buildCatalogsModel(dataServicesFlux);
     }
@@ -50,7 +50,7 @@ public class DcatApNoModelService {
     public Mono<Model> buildCatalogModel(String catalogId) {
         Flux<DataService> dataServicesFlux = dataServiceMongoRepository
                 .findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
-                .doOnError(error -> log.error("{}: Failed to load data services for catalog with ID {}", ExceptionUtils.getStackTrace(error), catalogId));
+                .doOnError(error -> log.error("Failed to load data services for catalog with ID {}", catalogId, error));
         dataServicesFlux.count().subscribe(count -> log.info("Successfully loaded {} data services for catalog with ID {}", count, catalogId));
         return buildCatalogsModel(dataServicesFlux);
     }
@@ -58,7 +58,7 @@ public class DcatApNoModelService {
     public Mono<Model> buildDataServiceModel(String dataServiceId) {
         Flux<DataService> dataServiceFlux = dataServiceMongoRepository
                 .findById(dataServiceId)
-                .doOnError(error -> log.error("{}: Failed to load data service with ID {}", ExceptionUtils.getStackTrace(error), dataServiceId))
+                .doOnError(error -> log.error("Failed to load data service with ID {}", dataServiceId, error))
                 .flux();
         return buildDataServiceModel(dataServiceFlux);
     }
