@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
 import reactor.rabbitmq.OutboundMessage;
 import reactor.rabbitmq.Sender;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -166,6 +167,7 @@ public class DataServiceService {
     }
 
     public Mono<DataService> create(DataService dataService, String catalogId) {
+        dataService.setCreated(LocalDateTime.now());
         dataService.setOrganizationId(catalogId);
         if (dataService.getStatus() == null || !List.of(Status.DRAFT, Status.PUBLISHED).contains(dataService.getStatus())) {
             dataService.setStatus(Status.DRAFT);
@@ -218,6 +220,7 @@ public class DataServiceService {
                         log.debug("dataservice {} retrieved for patch", dataService.getId());
                         updated.setId(dataServiceId);
                         updated.setCreated(dataService.getCreated());
+                        updated.setModified(LocalDateTime.now());
                         return dataServiceMongoRepository.save(updated).doOnSuccess(saved -> {
                             var updatedStatus = updated.getStatus();
                             if (updatedStatus == Status.PUBLISHED || dataService.getStatus() != updatedStatus) {

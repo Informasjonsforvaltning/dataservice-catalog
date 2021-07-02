@@ -14,7 +14,12 @@ import reactor.rabbitmq.OutboundMessageResult;
 import reactor.rabbitmq.Sender;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -47,6 +52,9 @@ public class DataServiceServiceTest {
 
         dataServiceService.create(dataService, CATALOG_ID).subscribe();
 
+        assertTrue(LocalDateTime.now().minus(1, ChronoUnit.MINUTES).isBefore(dataService.getCreated()));
+        assertNull(dataService.getModified());
+
         verify(sender, times(0)).sendWithPublishConfirms(any());
     }
 
@@ -67,6 +75,8 @@ public class DataServiceServiceTest {
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
 
         dataServiceService.update(dataService.getId(), CATALOG_ID, dataService).subscribe();
+
+        assertTrue(LocalDateTime.now().minus(1, ChronoUnit.MINUTES).isBefore(dataService.getModified()));
 
         verify(sender, times(0)).sendWithPublishConfirms(any());
     }
