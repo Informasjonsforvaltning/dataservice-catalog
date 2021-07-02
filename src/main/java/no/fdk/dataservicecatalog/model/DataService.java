@@ -33,10 +33,8 @@ public class DataService {
 
     public static final String DEFAULT_LANGUAGE = "nb";
 
-    @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime created;
-    @LastModifiedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime modified;
     @Id
