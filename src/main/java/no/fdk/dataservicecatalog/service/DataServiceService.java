@@ -179,9 +179,9 @@ public class DataServiceService {
                     if (saved.getStatus() == Status.PUBLISHED) {
                         triggerHarvest(saved);
 
-                        dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(catalogId)
+                        dataServiceMongoRepository.findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
                             .count()
-                            .doOnNext(count -> log.debug("total count of dataservices for katalog {}: {}",
+                            .doOnNext(count -> log.debug("total count of published dataservices for catalog {}: {}",
                                     catalogId, count))
                             .filter(count -> count == 1)
                             .doOnNext(count -> createNewDataSource(saved, String.format("%s/%s",
@@ -226,9 +226,9 @@ public class DataServiceService {
                             if (updatedStatus == Status.PUBLISHED || dataService.getStatus() != updatedStatus) {
                                 triggerHarvest(saved);
 
-                                dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(catalogId)
+                                dataServiceMongoRepository.findAllByOrganizationIdAndStatus(catalogId, Status.PUBLISHED)
                                         .count()
-                                        .doOnNext(count -> log.debug("total count of dataservices for katalog {}: {}",
+                                        .doOnNext(count -> log.debug("total count of published dataservices for catalog {}: {}",
                                                 catalogId, count))
                                         .filter(count -> count == 1)
                                         .doOnNext(count -> createNewDataSource(saved, String.format("%s/catalogs/%s",

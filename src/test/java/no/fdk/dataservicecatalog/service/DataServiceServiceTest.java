@@ -45,8 +45,8 @@ public class DataServiceServiceTest {
                 .build();
 
         when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
-        when(dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(CATALOG_ID))
-                .thenReturn(Flux.just(dataService, DataService.builder().build()));
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
+                .thenReturn(Flux.just(dataService));
         when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
 
@@ -69,8 +69,8 @@ public class DataServiceServiceTest {
         when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
         when(dataServiceMongoRepository.findByIdAndOrganizationId(dataService.getId(), dataService.getOrganizationId()))
                 .thenReturn(Mono.just(dataService));
-        when(dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(CATALOG_ID))
-                .thenReturn(Flux.just(dataService, DataService.builder().build()));
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
+                .thenReturn(Flux.just(dataService));
         when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
 
@@ -82,7 +82,7 @@ public class DataServiceServiceTest {
     }
 
     @Test
-    void mustTriggerHarvestOnCreateAndNoNewDataSourceWhenHavingMultipleDataservices() {
+    void mustTriggerHarvestOnCreateAndNoNewDataSourceWhenHavingMultiplePublishedDataservices() {
         final DataService dataService = DataService.builder()
                 .id("MY_FIRST_DATASERVICE")
                 .organizationId(CATALOG_ID)
@@ -90,7 +90,7 @@ public class DataServiceServiceTest {
                 .build();
 
         when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
-        when(dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(CATALOG_ID))
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
                 .thenReturn(Flux.just(dataService, DataService.builder().build()));
         when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
@@ -101,7 +101,7 @@ public class DataServiceServiceTest {
     }
 
     @Test
-    void mustTriggerHarvestOnUpdateAndNoNewDataSourceWhenHavingMultipleDataservices() {
+    void mustTriggerHarvestOnUpdateAndNoNewDataSourceWhenHavingMultiplePublishedDataservices() {
         final DataService dataService = DataService.builder()
                 .id("MY_FIRST_DATASERVICE")
                 .organizationId(CATALOG_ID)
@@ -111,7 +111,7 @@ public class DataServiceServiceTest {
         when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
         when(dataServiceMongoRepository.findByIdAndOrganizationId(dataService.getId(), dataService.getOrganizationId()))
                 .thenReturn(Mono.just(dataService));
-        when(dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(CATALOG_ID))
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
                 .thenReturn(Flux.just(dataService, DataService.builder().build()));
         when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
@@ -130,7 +130,7 @@ public class DataServiceServiceTest {
                 .build();
 
         when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
-        when(dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(CATALOG_ID))
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
                 .thenReturn(Flux.just(dataService));
         when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
@@ -151,12 +151,52 @@ public class DataServiceServiceTest {
         when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
         when(dataServiceMongoRepository.findByIdAndOrganizationId(dataService.getId(), dataService.getOrganizationId()))
                 .thenReturn(Mono.just(dataService));
-        when(dataServiceMongoRepository.findAllByOrganizationIdOrderByCreatedDesc(CATALOG_ID))
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
                 .thenReturn(Flux.just(dataService));
         when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
                 new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
 
         dataServiceService.update(dataService.getId(), CATALOG_ID, dataService).subscribe();
+
+        verify(sender, times(2)).sendWithPublishConfirms(any());
+    }
+
+    @Test
+    void mustTriggerNewDataSourceOnFirstPublishedUpdate() {
+        final DataService dataService = DataService.builder()
+                .id("MY_FIRST_DATASERVICE")
+                .organizationId(CATALOG_ID)
+                .status(Status.PUBLISHED)
+                .build();
+
+        when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
+        when(dataServiceMongoRepository.findByIdAndOrganizationId(dataService.getId(), dataService.getOrganizationId()))
+                .thenReturn(Mono.just(dataService));
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
+                .thenReturn(Flux.just(dataService));
+        when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
+                new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
+
+        dataServiceService.update(dataService.getId(), CATALOG_ID, dataService).subscribe();
+
+        verify(sender, times(2)).sendWithPublishConfirms(any());
+    }
+
+    @Test
+    void mustTriggerNewDataSourceOnFirstPublishedCreate() {
+        final DataService dataService = DataService.builder()
+                .id("MY_FIRST_DATASERVICE")
+                .organizationId(CATALOG_ID)
+                .status(Status.PUBLISHED)
+                .build();
+
+        when(dataServiceMongoRepository.save(dataService)).thenReturn(Mono.just(dataService));
+        when(dataServiceMongoRepository.findAllByOrganizationIdAndStatus(CATALOG_ID, Status.PUBLISHED))
+                .thenReturn(Flux.just(dataService));
+        when(sender.sendWithPublishConfirms(any())).thenReturn(Flux.just(new OutboundMessageResult<>(
+                new OutboundMessage("", "", "".getBytes(StandardCharsets.UTF_8)), true)));
+
+        dataServiceService.create(dataService, CATALOG_ID).subscribe();
 
         verify(sender, times(2)).sendWithPublishConfirms(any());
     }
