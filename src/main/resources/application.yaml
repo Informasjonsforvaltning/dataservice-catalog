@@ -22,7 +22,20 @@ spring:
     template:
       routing-key: 'dataservice.publisher.HarvestTrigger'
       exchange: 'harvests'
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  metrics:
+    export:
+      statsd:
+        enabled: true
+        flavor: telegraf
+        host: fdk-monitoring-services-telegraf
+        port: 8125
+    tags:
+      application: dataservice-catalog
 application:
   data-service-catalog-gui-url: ${DATA_SERVICE_CATALOG_GUI_URL}
   catalog-base-uri: ${CATALOG_BASE_URI:http://localhost}
