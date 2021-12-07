@@ -11,16 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@master
+      - name: Auth gcloud CLI for image-store
+        uses: google-github-actions/auth@main
         with:
-          service_account_email: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
 
       - name: Configure docker to use the gcloud command-line tool as a credential helper
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker eu.gcr.io
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -29,9 +29,45 @@ jobs:
 
       - name: Package with maven
         run: mvn clean package --no-transfer-progress
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image with latest tag
-        run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/dataservice-catalog:latest
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: eu.gcr.io/digdir-fdk-infra/dataservice-catalog
+          flavor: |
+            latest=true
+          tags: |
+            type=raw,value=${{ github.sha }},priority=1000
+            type=ref,event=branch
+
+      - name: Build
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args:  |
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       - name: Set max map count for elasticsearch
         run: sudo sysctl -w vm.max_map_count=262144
@@ -39,31 +75,44 @@ jobs:
       - name: Run tests
         run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:latest" verify --no-transfer-progress
 
-      - name: Publish docker image to Google Cloud
-        run: docker -- push eu.gcr.io/digdir-fdk-infra/dataservice-catalog -a
+      - name: Push
+        id: docker_push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args:  |
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       - name: Apply Helm template
         run: |
           helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
           helm fetch --untar --untardir ./helm fdk/dataservice-catalog
-          helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA" -f ./helm/dataservice-catalog/values/prod.yaml ./helm/dataservice-catalog/ > ./kubectlapply.yaml
+          helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/dataservice-catalog:$GITHUB_SHA" \
+          -f ./helm/dataservice-catalog/values/prod.yaml \
+          ./helm/dataservice-catalog/ > ./kubectlapply.yaml
           chmod o+w ./kubectlapply.yaml
           cat kubectlapply.yaml
 
-      - name: Get kubeconfig file from GKE
-        uses: machine-learning-apps/gke-kubeconfig@master
+      - name: Auth gcloud CLI for deploy
+        uses: google-github-actions/auth@main
         with:
-          application_credentials: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY }}
-          project_id: digdir-fdk-prod
-          location_zone: europe-north1-a
-          cluster_name: digdir-fdk-prod
+          credentials_json: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY }}
 
-      - name: Deploy to production
-        uses: docker://bitnami/kubectl:latest
-        env:
-          KUBECONFIG: '/github/workspace/.kube/config'
-        with:
-          args: "apply -f ./kubectlapply.yaml --force"
+      - name: Deploy to GCP & check status
+        run: |
+          gcloud container clusters get-credentials digdir-fdk-dev --region europe-north1-a --project digdir-fdk-dev
+          kubectl apply -f ./kubectlapply.yaml --force
+          if ! kubectl --namespace=prod rollout status deployment dataservice-catalog; then
+            kubectl --namespace=prod rollout undo deployment dataservice-catalog
+            kubectl --namespace=prod rollout status deployment dataservice-catalog
+            exit 1
+          fi
 
       - name: Notify slack
         uses: 8398a7/action-slack@v3
