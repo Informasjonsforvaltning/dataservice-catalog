@@ -106,7 +106,7 @@ jobs:
 
       - name: Deploy to GCP & check status
         run: |
-          gcloud container clusters get-credentials digdir-fdk-dev --region europe-north1-a --project digdir-fdk-dev
+          gcloud container clusters get-credentials digdir-fdk-prod --region europe-north1-a --project digdir-fdk-prod
           kubectl apply -f ./kubectlapply.yaml --force
           if ! kubectl --namespace=prod rollout status deployment dataservice-catalog; then
             kubectl --namespace=prod rollout undo deployment dataservice-catalog
