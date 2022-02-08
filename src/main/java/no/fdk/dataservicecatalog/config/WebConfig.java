@@ -23,6 +23,7 @@ public class WebConfig implements WebFluxConfigurer {
     @Bean
     public RouterFunction<ServerResponse> catalogRouter(CatalogHandler catalogHandler) {
         return route(GET("/catalogs").and(rdfAccept()), catalogHandler::listCatalogs)
+                .andRoute(GET("/catalogs"), catalogHandler::allPermittedCatalogs)
                 .andRoute(GET("/catalogs/{catalogId}").and(rdfAccept()), catalogHandler::getCatalog)
                 .andRoute(GET("/catalogs/{catalogId}/dataservices/{dataServiceId}").and(rdfAccept()), catalogHandler::getDataService);
     }
