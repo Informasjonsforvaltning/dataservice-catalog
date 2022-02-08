@@ -40,6 +40,12 @@ public class PermissionManager implements ReactiveAuthorizationManager<Authoriza
         return authentication.cast(JwtAuthenticationToken.class).map(auth -> {
             if (auth.isAuthenticated()) {
                 var path = authorizationContext.getExchange().getRequest().getPath().pathWithinApplication().value();
+                if (path.contentEquals("/catalogs")) {
+                    return new AuthorizationDecision(
+                            getResourceRoles((String) auth.getTokenAttributes().get("authorities"))
+                                    .stream()
+                                    .anyMatch(rr -> rr instanceof OrganizationResourceRole || rr instanceof SystemRootAdminRole));
+                }
                 if (path.startsWith("/catalogs/")) {
                     Matcher matcher = catalogIdPattern.matcher(path);
                     if (matcher.find()) {

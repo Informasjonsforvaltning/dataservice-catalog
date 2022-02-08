@@ -2,13 +2,15 @@ package no.fdk.dataservicecatalog.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.fdk.dataservicecatalog.service.CatalogService;
 import no.fdk.dataservicecatalog.service.DcatApNoModelService;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jena.riot.Lang;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -17,6 +19,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @RequiredArgsConstructor
 public class CatalogHandler {
     private final DcatApNoModelService dcatApNoModelService;
+    private final CatalogService catalogService;
 
     public Mono<ServerResponse> listCatalogs(ServerRequest serverRequest) {
         Lang jenaLang = dcatApNoModelService.jenaLangFromAcceptHeader(serverRequest.headers().accept());
@@ -48,5 +51,9 @@ public class CatalogHandler {
                 .doOnSuccess(model -> log.info("Successfully built model for data service with ID {}", dataServiceId))
                 .doOnError(error -> log.info("Failed to build model for data service with ID {}", dataServiceId, error))
                 .flatMap(model -> ok().bodyValue(dcatApNoModelService.serialise(model, jenaLang)));
+    }
+
+    public Mono<ServerResponse> allPermittedCatalogs(ServerRequest serverRequest) {
+        return ok().body(catalogService.getAllPermittedCatalogs(), List.class);
     }
 }

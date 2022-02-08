@@ -7,4 +7,5 @@ import lombok.Data;
 @Builder
 public class Catalog {
     private String id;
+    private Integer dataServiceCount;
 }

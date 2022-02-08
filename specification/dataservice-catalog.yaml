@@ -215,6 +215,21 @@ paths:
       responses:
         '204':
           description: No Content
+  /catalogs:
+    get:
+      tags:
+        - catalogs
+      description: Returnerer samlinger av kataloger
+      operationId: allPermittedCatalogs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Catalog'
 components:
   schemas:
     DataService:
@@ -348,6 +363,19 @@ components:
       properties:
         apiSpecUrl:
           type: string
+    Catalog:
+      type: object
+      description: En katalog
+      required:
+        - id
+        - dataServiceCount
+      properties:
+        id:
+          type: string
+          nullable: false
+        dataServiceCount:
+          type: integer
+          nullable: false
   securitySchemes:
     bearerAuth:
       type: http
