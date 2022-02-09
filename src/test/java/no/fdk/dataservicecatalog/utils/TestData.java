@@ -11,6 +11,16 @@ import static java.lang.String.format;
 import static java.util.Map.entry;
 
 public class TestData {
+    public static String MONGO_USER = "testuser";
+    public static String MONGO_PASSWORD = "testpassword";
+    public static int MONGO_PORT = 27017;
+    public static String MONGO_DB_NAME = "dataservice-catalog";
+
+    public static Map<String, String> MONGO_ENV_VALUES = Map.ofEntries(
+            Map.entry("MONGO_INITDB_ROOT_USERNAME", MONGO_USER),
+            Map.entry("MONGO_INITDB_ROOT_PASSWORD", MONGO_PASSWORD)
+    );
+
     public static List<DataService> createDataServices(String organizationId) {
         return List.of(
                 DataService
