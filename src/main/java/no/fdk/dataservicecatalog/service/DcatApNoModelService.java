@@ -225,7 +225,12 @@ public class DcatApNoModelService {
                 if (mediaType != null && !mediaType.isBlank()) {
                     dataServiceResource.addProperty(
                         DCAT.mediaType,
-                        ResourceFactory.createResource(URIref.encode(format("https://www.iana.org/assignments/media-types/%s", mediaType)))
+                        ResourceFactory.createResource(
+                                URIref.encode(
+                                        mediaType.startsWith("https://www.iana.org/assignments/media-types/") ?
+                                                mediaType :
+                                                format("https://www.iana.org/assignments/media-types/%s", mediaType)
+                                ))
                     );
                 }
             });
