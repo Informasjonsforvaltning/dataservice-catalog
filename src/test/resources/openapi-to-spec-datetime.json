@@ -1,0 +1,34 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "datetimetest"
+    },
+    "paths": {
+        "/v1/datetimetest": {
+            "get": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DateTimeObj"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "DateTimeObj": {
+            "type": "object",
+            "properties": {
+                "datetime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2021-12-09T11:25:26.316965Z"
+                }
+            }
+        }
+    }
+}
