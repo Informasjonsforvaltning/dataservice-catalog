@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.config.ApplicationProperties;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
+import no.fdk.dataservicecatalog.dto.shared.apispecification.ExternalDocumentation;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Info;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.servers.Server;
 import no.fdk.dataservicecatalog.exceptions.NotFoundException;
@@ -64,6 +65,11 @@ public class DataServiceService {
             servers = Collections.emptyList();
         }
 
+        var externalDocs = apiSpecification.getExternalDocs();
+        if (externalDocs == null) {
+            externalDocs = new ExternalDocumentation();
+        }
+
         return DataService.builder()
                 .id(dataServiceId)
                 .organizationId(organizationId)
@@ -80,6 +86,7 @@ public class DataServiceService {
                 .termsOfServiceUrl(apiInfo.getTermsOfService())
                 .status(Status.DRAFT)
                 .imported(true)
+                .landingPage(externalDocs.getUrl())
                 .build();
 
     }
