@@ -255,13 +255,6 @@ public class DcatApNoModelService {
             );
         }
 
-        if (dataService.getExternalDocs() != null && dataService.getExternalDocs().getUrl() != null && isURI(dataService.getExternalDocs().getUrl())) {
-            dataServiceResource.addProperty(
-                DCAT.landingPage,
-                ResourceFactory.createResource(URIref.encode(dataService.getExternalDocs().getUrl()))
-            );
-        }
-
         if (dataService.getLicense() != null && dataService.getLicense().getUrl() != null && isURI(dataService.getLicense().getUrl())) {
             dataServiceResource.addProperty(
                     DCTerms.license,
