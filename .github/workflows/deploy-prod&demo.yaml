@@ -16,6 +16,7 @@ jobs:
       repo: ${{ github.repository }}
       actor: ${{ github.actor }}
       java_version: '11'
+      coverage_file_path: ./target/site/jacoco/jacoco.xml
       environment: 'prod'
       cluster: 'digdir-fdk-prod'
     secrets:
