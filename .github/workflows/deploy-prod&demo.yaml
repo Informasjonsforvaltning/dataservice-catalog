@@ -15,7 +15,7 @@ jobs:
       caller_sha: ${{ github.sha }}
       repo: ${{ github.repository }}
       actor: ${{ github.actor }}
-      java_version: '11'
+      java_version: '17'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
       environment: 'prod'
       cluster: 'digdir-fdk-prod'
