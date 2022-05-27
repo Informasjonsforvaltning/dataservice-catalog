@@ -5,7 +5,6 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.media.Content;
-import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.parser.OpenAPIV3Parser;
@@ -19,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class OpenApiV3JsonParser implements Parser {
+public class OpenApiV3Parser implements Parser {
 
     public boolean canParse(String spec) {
         return Parser.isValidSwaggerOrOpenApiV3(spec, ApiType.OPENAPI, "3");

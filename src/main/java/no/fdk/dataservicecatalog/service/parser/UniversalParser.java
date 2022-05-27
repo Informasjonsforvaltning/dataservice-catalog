@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 public class UniversalParser implements Parser {
     static private final Parser[] parsers = {
-        new OpenApiV3JsonParser(),
-        new SwaggerJsonParser()
+        new OpenApiV3Parser(),
+        new SwaggerParser()
     };
 
     public boolean canParse(String spec) {

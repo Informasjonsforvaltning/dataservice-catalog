@@ -16,11 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OpenAPIToApiSpecificationConverterTest {
 
     private static String spec;
-    private final SwaggerJsonParser swaggerJsonParser = new SwaggerJsonParser();
+    private static String yamlSpec;
+    private final SwaggerParser swaggerJsonParser = new SwaggerParser();
 
     @BeforeAll
     public static void setup() throws IOException {
         spec = IOUtils.toString(new ClassPathResource("openapi-to-spec-datetime.json").getInputStream(),
+                StandardCharsets.UTF_8);
+        yamlSpec = IOUtils.toString(new ClassPathResource("openapi-to-spec-datetime.yaml").getInputStream(),
                 StandardCharsets.UTF_8);
     }
 
@@ -31,14 +34,32 @@ public class OpenAPIToApiSpecificationConverterTest {
     }
 
     @Test
+    public void CanParseYAML_ShouldReturnTrue() {
+        boolean result = swaggerJsonParser.canParse(yamlSpec);
+        assertTrue(result);
+    }
+
+    @Test
     public void ParseToOpenAPI_ShouldParse() throws Exception {
         OpenAPI parsed = swaggerJsonParser.parseToOpenAPI(spec);
         assertEquals(parsed.getInfo().getTitle(), "datetimetest");
     }
 
     @Test
+    public void ParseYAMLToOpenAPI_ShouldParse() throws Exception {
+        OpenAPI parsed = swaggerJsonParser.parseToOpenAPI(yamlSpec);
+        assertEquals(parsed.getInfo().getTitle(), "datetimetest");
+    }
+
+    @Test
     public void Convert_ShouldConvert() throws Exception {
         OpenAPI parsed = swaggerJsonParser.parseToOpenAPI(spec);
+        OpenAPIToApiSpecificationConverter.convert(parsed);
+    }
+
+    @Test
+    public void ConvertYAML_ShouldConvert() throws Exception {
+        OpenAPI parsed = swaggerJsonParser.parseToOpenAPI(yamlSpec);
         OpenAPIToApiSpecificationConverter.convert(parsed);
     }
 }
