@@ -4,10 +4,12 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.converter.SwaggerConverter;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
+import no.fdk.dataservicecatalog.model.ApiType;
+import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 
-public class SwaggerParser implements Parser {
-    public boolean canParse(String spec) {
-        return Parser.isValidSwaggerOrOpenApiV3(spec, ApiType.SWAGGER, "2");
+public class SwaggerParser {
+    public boolean canParse(OpenAPIMeta specMeta) {
+        return ParserUtils.isValidSwaggerOrOpenApiV3(specMeta, ApiType.SWAGGER, "2");
     }
 
     public OpenAPI parseToOpenAPI(String spec) throws ParseException {

@@ -2,26 +2,28 @@ package no.fdk.dataservicecatalog.service.parser;
 
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
+import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 
-import java.util.Arrays;
-
-public class UniversalParser implements Parser {
-    static private final Parser[] parsers = {
-        new OpenApiV3Parser(),
-        new SwaggerParser()
-    };
-
+public class UniversalParser {
+    static private final OpenApiV3Parser openApiParser = new OpenApiV3Parser();
+    static private final SwaggerParser swaggerParser = new SwaggerParser();
     public boolean canParse(String spec) {
-        return Arrays.stream(parsers).anyMatch(parser -> parser.canParse(spec));
+        OpenAPIMeta specMeta = ParserUtils.readMandatoryMetaProperties(spec);
+        return openApiParser.canParse(specMeta) || swaggerParser.canParse(specMeta);
     }
 
     public ApiSpecification parse(String spec) throws ParseException {
+        ApiSpecification parsed;
+        OpenAPIMeta specMeta = ParserUtils.readMandatoryMetaProperties(spec);
 
-        Parser selectedParser = Arrays.stream(parsers)
-            .filter(parser -> parser.canParse(spec))
-            .findFirst()
-            .orElseThrow(() -> new ParseException("Source specification is not valid"));
+        if (openApiParser.canParse(specMeta)) {
+            parsed = openApiParser.parse(spec);
+        } else if (swaggerParser.canParse(specMeta)) {
+            parsed = swaggerParser.parse(spec);
+        } else {
+            throw new ParseException("Available parsers not able to parse source specification");
+        }
 
-        return selectedParser.parse(spec);
+        return parsed;
     }
 }

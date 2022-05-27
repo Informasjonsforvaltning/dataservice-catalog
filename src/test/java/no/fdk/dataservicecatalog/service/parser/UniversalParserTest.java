@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Tag("unit")
 public class UniversalParserTest {
 
-    private final Parser parser = new UniversalParser();
+    private final UniversalParser parser = new UniversalParser();
 
     @Test
     public void CanParse_WhenSwagger_ShouldReturnTrue() throws IOException {

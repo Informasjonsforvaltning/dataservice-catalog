@@ -28,13 +28,13 @@ public class OpenApiV3YamlParserTest {
 
     @Test
     public void CanParse_ShouldReturnTrue() {
-        boolean result = openApiV3JsonParser.canParse(spec);
+        boolean result = openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
     public void CanParse_ShouldReturnFalse() {
-        boolean result = openApiV3JsonParser.canParse(invalidSpec);
+        boolean result = openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec));
         assertFalse(result);
     }
 

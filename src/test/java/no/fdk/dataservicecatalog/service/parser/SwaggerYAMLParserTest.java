@@ -29,13 +29,13 @@ public class SwaggerYAMLParserTest {
 
     @Test
     public void CanParse_ShouldReturnTrue() {
-        boolean result = swaggerJsonParser.canParse(spec);
+        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
     public void CanParse_ShouldReturnFalse() {
-        boolean result = swaggerJsonParser.canParse(invalidSpec);
+        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec));
         assertFalse(result);
     }
 

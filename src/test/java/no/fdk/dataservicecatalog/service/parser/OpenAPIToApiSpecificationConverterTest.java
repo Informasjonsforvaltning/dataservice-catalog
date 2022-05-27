@@ -29,13 +29,13 @@ public class OpenAPIToApiSpecificationConverterTest {
 
     @Test
     public void CanParse_ShouldReturnTrue() {
-        boolean result = swaggerJsonParser.canParse(spec);
+        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
     public void CanParseYAML_ShouldReturnTrue() {
-        boolean result = swaggerJsonParser.canParse(yamlSpec);
+        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(yamlSpec));
         assertTrue(result);
     }
 
