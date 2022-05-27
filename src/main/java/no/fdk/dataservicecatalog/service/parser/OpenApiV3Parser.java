@@ -10,6 +10,8 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
+import no.fdk.dataservicecatalog.model.ApiType;
+import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,10 +20,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class OpenApiV3Parser implements Parser {
+public class OpenApiV3Parser {
 
-    public boolean canParse(String spec) {
-        return Parser.isValidSwaggerOrOpenApiV3(spec, ApiType.OPENAPI, "3");
+    public boolean canParse(OpenAPIMeta specMeta) {
+        return ParserUtils.isValidSwaggerOrOpenApiV3(specMeta, ApiType.OPENAPI, "3");
     }
 
     public OpenAPI parseToOpenAPI(String spec) throws ParseException {
