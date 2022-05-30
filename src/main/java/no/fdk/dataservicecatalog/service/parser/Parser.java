@@ -1,9 +1,15 @@
 package no.fdk.dataservicecatalog.service.parser;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
+import no.fdk.dataservicecatalog.model.OpenAPIInfo;
+import no.fdk.dataservicecatalog.model.OpenAPIMeta;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public interface Parser {
 
@@ -23,27 +29,49 @@ public interface Parser {
 
     ApiSpecification parse(String spec) throws ParseException;
 
-    static boolean isValidSwaggerOrOpenApiV3(String spec, ApiType apiType, String minimalVersion) {
-        try {
-            JsonElement element = new JsonParser().parse(spec);
-            String version = element.getAsJsonObject().get(apiType.label).getAsString();
-            if (!(version.length() > 2 && version.startsWith(minimalVersion))) {
+    static boolean isValidSwaggerOrOpenApiV3(String spec, ApiType apiType, String majorVersion) {
+        OpenAPIMeta specMeta = readMandatoryMetaProperties(spec);
+        if (specMeta != null) {
+            String version;
+            if (apiType == ApiType.OPENAPI) {
+                version = specMeta.getOpenapi();
+            } else {
+                version = specMeta.getSwagger();
+            }
+            if (version == null || !isValidSemVerWithCorrectMajor(version, majorVersion)) {
                 return false;
             }
-
-            JsonElement info = element.getAsJsonObject().get("info");
+            OpenAPIInfo info = specMeta.getInfo();
             if (info == null) {
                 return false;
             }
 
-            String title = info.getAsJsonObject().get("title").getAsString();
+            String title = info.getTitle();
             if (title == null || title.isEmpty()) {
                 return false;
             }
-            String documentVersion = info.getAsJsonObject().get("version").getAsString();
+
+            String documentVersion = info.getVersion();
             return documentVersion != null && !documentVersion.isEmpty();
-        } catch (Exception e) {
+        } else {
             return false;
+        }
+    }
+
+    private static boolean isValidSemVerWithCorrectMajor(String semver, String major) {
+        Pattern versionPattern = Pattern.compile("^" + major + "\\.[0-9]+(\\.[0-9]+)?");
+        Matcher matcher = versionPattern.matcher(semver);
+
+        return matcher.matches();
+    }
+
+    private static OpenAPIMeta readMandatoryMetaProperties(String spec) {
+        try {
+            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            return mapper.readValue(spec, OpenAPIMeta.class);
+        } catch (Exception e) {
+            return null;
         }
     }
 }

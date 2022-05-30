@@ -1,0 +1,5 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://testdirektoratet.no/api'
+    description: prod
+info: invalid-info-object

@@ -1,10 +1,8 @@
 package no.fdk.dataservicecatalog.service.parser;
 
 import io.swagger.v3.oas.models.OpenAPI;
-
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import org.apache.commons.io.IOUtils;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("unit")
-public class SwaggerJsonParserTest {
+public class SwaggerYAMLParserTest {
 
     private final SwaggerParser swaggerJsonParser = new SwaggerParser();
 
@@ -25,8 +23,8 @@ public class SwaggerJsonParserTest {
 
     @BeforeAll
     public static void setup() throws IOException {
-        spec = IOUtils.toString(new ClassPathResource("fs-api-swagger.json").getInputStream(), StandardCharsets.UTF_8);
-        invalidSpec = IOUtils.toString(new ClassPathResource("fs-api-swagger-invalid-missing-title.json").getInputStream(), StandardCharsets.UTF_8);
+        spec = IOUtils.toString(new ClassPathResource("fs-api-swagger.yaml").getInputStream(), StandardCharsets.UTF_8);
+        invalidSpec = IOUtils.toString(new ClassPathResource("fs-api-swagger-invalid-missing-title.yaml").getInputStream(), StandardCharsets.UTF_8);
     }
 
     @Test

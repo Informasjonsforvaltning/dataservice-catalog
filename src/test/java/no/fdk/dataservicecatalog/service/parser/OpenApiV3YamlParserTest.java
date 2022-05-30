@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("unit")
-public class OpenApiV3JsonParserTest {
+public class OpenApiV3YamlParserTest {
 
     private static String spec;
     private static String invalidSpec;
@@ -22,8 +22,8 @@ public class OpenApiV3JsonParserTest {
 
     @BeforeAll
     public static void setup() throws IOException {
-        spec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3.json").getInputStream(), StandardCharsets.UTF_8);
-        invalidSpec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3-invalid-missing-title.json").getInputStream(), StandardCharsets.UTF_8);
+        spec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3.yaml").getInputStream(), StandardCharsets.UTF_8);
+        invalidSpec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3-invalid-missing-title.yaml").getInputStream(), StandardCharsets.UTF_8);
     }
 
     @Test

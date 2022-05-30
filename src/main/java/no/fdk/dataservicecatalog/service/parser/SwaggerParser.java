@@ -5,7 +5,7 @@ import io.swagger.v3.parser.converter.SwaggerConverter;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
 import no.fdk.dataservicecatalog.exceptions.ParseException;
 
-public class SwaggerJsonParser implements Parser {
+public class SwaggerParser implements Parser {
     public boolean canParse(String spec) {
         return Parser.isValidSwaggerOrOpenApiV3(spec, ApiType.SWAGGER, "2");
     }
