@@ -26,7 +26,7 @@ public interface Parser {
 
     ApiSpecification parse(String spec) throws ParseException;
 
-    static boolean isValidSwaggerOrOpenApiV3(String spec, ApiType apiType, String minimalVersion) {
+    static boolean isValidSwaggerOrOpenApiV3(String spec, ApiType apiType, String majorVersion) {
         OpenAPIMeta specMeta = readMandatoryMetaProperties(spec);
         if (specMeta != null) {
             String version;
@@ -35,7 +35,7 @@ public interface Parser {
             } else {
                 version = specMeta.getSwagger();
             }
-            if (version == null || !(version.length() > 2 && version.startsWith(minimalVersion))) {
+            if (version == null || !version.startsWith(majorVersion)) {
                 return false;
             }
             OpenAPIInfo info = specMeta.getInfo();
