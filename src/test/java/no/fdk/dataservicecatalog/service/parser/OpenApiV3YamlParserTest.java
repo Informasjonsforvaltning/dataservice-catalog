@@ -34,9 +34,8 @@ public class OpenApiV3YamlParserTest {
     }
 
     @Test
-    public void CanParse_ShouldReturnFalse() throws ParseException {
-        boolean result = openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec));
-        assertFalse(result);
+    public void CanParse_ShouldThrowException() {
+        assertThrows(ParseException.class, () -> openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec)));
     }
 
     @Test
