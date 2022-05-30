@@ -3,6 +3,7 @@ package no.fdk.dataservicecatalog.service.parser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import no.fdk.dataservicecatalog.exceptions.ParseException;
 import no.fdk.dataservicecatalog.model.ApiType;
 import no.fdk.dataservicecatalog.model.OpenAPIInfo;
 import no.fdk.dataservicecatalog.model.OpenAPIMeta;
@@ -47,13 +48,13 @@ public class ParserUtils {
 
         return matcher.matches();
     }
-    public static OpenAPIMeta readMandatoryMetaProperties(String spec) {
+    public static OpenAPIMeta readMandatoryMetaProperties(String spec) throws ParseException {
         try {
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.readValue(spec, OpenAPIMeta.class);
         } catch (Exception e) {
-            return null;
+            throw new ParseException("Unable to read mandatory properties: " + e.getMessage());
         }
     }
 }

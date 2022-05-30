@@ -2,6 +2,7 @@ package no.fdk.dataservicecatalog.service.parser;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
+import no.fdk.dataservicecatalog.exceptions.ParseException;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -27,13 +28,13 @@ public class OpenApiV3JsonParserTest {
     }
 
     @Test
-    public void CanParse_ShouldReturnTrue() {
+    public void CanParse_ShouldReturnTrue() throws ParseException {
         boolean result = openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
-    public void CanParse_ShouldReturnFalse() {
+    public void CanParse_ShouldReturnFalse() throws ParseException {
         boolean result = openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec));
         assertFalse(result);
     }

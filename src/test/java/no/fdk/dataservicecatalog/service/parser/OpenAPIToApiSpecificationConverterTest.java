@@ -1,6 +1,7 @@
 package no.fdk.dataservicecatalog.service.parser;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import no.fdk.dataservicecatalog.exceptions.ParseException;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -28,13 +29,13 @@ public class OpenAPIToApiSpecificationConverterTest {
     }
 
     @Test
-    public void CanParse_ShouldReturnTrue() {
+    public void CanParse_ShouldReturnTrue() throws ParseException {
         boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
-    public void CanParseYAML_ShouldReturnTrue() {
+    public void CanParseYAML_ShouldReturnTrue() throws ParseException {
         boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(yamlSpec));
         assertTrue(result);
     }
