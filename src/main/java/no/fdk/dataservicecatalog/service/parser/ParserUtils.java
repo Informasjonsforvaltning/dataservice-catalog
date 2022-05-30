@@ -13,32 +13,36 @@ import java.util.regex.Pattern;
 
 public class ParserUtils {
 
-    public static boolean isValidSwaggerOrOpenApiV3(OpenAPIMeta specMeta, ApiType apiType, String majorVersion) {
+    public static boolean isValidSwaggerOrOpenApiV3(OpenAPIMeta specMeta, ApiType apiType, String majorVersion) throws ParseException {
         if (specMeta == null) {
-            return false;
+            throw new ParseException("Source specification missing mandatory fields openapi/swagger & info");
         } else {
-            String version;
-            if (apiType == ApiType.OPENAPI) {
-                version = specMeta.getOpenapi();
-            } else {
-                version = specMeta.getSwagger();
+            String openapi = specMeta.getOpenapi();
+            String swagger = specMeta.getSwagger();
+            if (openapi == null && swagger == null) {
+                throw new ParseException("Source specification missing mandatory field openapi/swagger");
             }
 
-            if (version == null || !isValidSemVerWithCorrectMajor(version, majorVersion)) {
-                return false;
-            }
             OpenAPIInfo info = specMeta.getInfo();
             if (info == null) {
-                return false;
+                throw new ParseException("Source specification missing mandatory field info");
             }
 
             String title = info.getTitle();
             if (title == null || title.isEmpty()) {
-                return false;
+                throw new ParseException("Source specification missing mandatory field info.title");
             }
 
             String documentVersion = info.getVersion();
-            return documentVersion != null && !documentVersion.isEmpty();
+            if(documentVersion == null || documentVersion.isEmpty()) {
+                throw new ParseException("Source specification missing mandatory field info.version");
+            }
+
+            if (apiType == ApiType.OPENAPI) {
+                return openapi != null && isValidSemVerWithCorrectMajor(openapi, majorVersion);
+            } else {
+                return swagger != null && isValidSemVerWithCorrectMajor(swagger, majorVersion);
+            }
         }
     }
 

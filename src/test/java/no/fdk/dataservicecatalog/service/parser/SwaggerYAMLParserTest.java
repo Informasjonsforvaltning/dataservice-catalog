@@ -35,9 +35,8 @@ public class SwaggerYAMLParserTest {
     }
 
     @Test
-    public void CanParse_ShouldReturnFalse() throws ParseException {
-        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec));
-        assertFalse(result);
+    public void CanParse_ShouldThrowException() {
+        assertThrows(ParseException.class, () -> swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec)));
     }
 
     @Test

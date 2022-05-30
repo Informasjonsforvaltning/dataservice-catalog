@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 public class OpenApiV3Parser {
 
-    public boolean canParse(OpenAPIMeta specMeta) {
+    public boolean canParse(OpenAPIMeta specMeta) throws ParseException {
         return ParserUtils.isValidSwaggerOrOpenApiV3(specMeta, ApiType.OPENAPI, "3");
     }
 
