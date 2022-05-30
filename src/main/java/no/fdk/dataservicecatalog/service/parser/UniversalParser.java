@@ -7,7 +7,7 @@ import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 public class UniversalParser {
     static private final OpenApiV3Parser openApiParser = new OpenApiV3Parser();
     static private final SwaggerParser swaggerParser = new SwaggerParser();
-    public boolean canParse(String spec) {
+    public boolean canParse(String spec) throws ParseException {
         OpenAPIMeta specMeta = ParserUtils.readMandatoryMetaProperties(spec);
         return openApiParser.canParse(specMeta) || swaggerParser.canParse(specMeta);
     }

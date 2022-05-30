@@ -1,6 +1,7 @@
 package no.fdk.dataservicecatalog.service.parser;
 
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecification;
+import no.fdk.dataservicecatalog.exceptions.ParseException;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ public class UniversalParserTest {
     private final UniversalParser parser = new UniversalParser();
 
     @Test
-    public void CanParse_WhenSwagger_ShouldReturnTrue() throws IOException {
+    public void CanParse_WhenSwagger_ShouldReturnTrue() throws Exception {
         String spec = IOUtils.toString(new ClassPathResource("fs-api-swagger.json").getInputStream(), "UTF-8");
         String yamlSpec = IOUtils.toString(new ClassPathResource("fs-api-swagger.yaml").getInputStream(), "UTF-8");
         assertTrue(parser.canParse(spec));
@@ -24,7 +25,7 @@ public class UniversalParserTest {
     }
 
     @Test
-    public void CanParse_WhenOpenApi_ShouldReturnTrue() throws IOException {
+    public void CanParse_WhenOpenApi_ShouldReturnTrue() throws Exception {
         String spec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3.json").getInputStream(), "UTF-8");
         String yamlSpec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3.yaml").getInputStream(), "UTF-8");
         assertTrue(parser.canParse(spec));
@@ -32,7 +33,7 @@ public class UniversalParserTest {
     }
 
     @Test
-    public void CanParse_WhenSwagger_ShouldReturnFalse() throws IOException {
+    public void CanParse_WhenSwagger_ShouldReturnFalse() throws Exception {
         String spec = IOUtils.toString(new ClassPathResource("fs-api-swagger-invalid-missing-title.json").getInputStream(), "UTF-8");
         String yamloSpec = IOUtils.toString(new ClassPathResource("fs-api-swagger-invalid-missing-title.yaml").getInputStream(), "UTF-8");
         assertFalse(parser.canParse(spec));
@@ -40,7 +41,7 @@ public class UniversalParserTest {
     }
 
     @Test
-    public void CanParse_WhenOpenApi_ShouldReturnFalseWhen() throws IOException {
+    public void CanParse_WhenOpenApi_ShouldReturnFalseWhen() throws Exception {
         String spec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3-invalid-missing-title.json").getInputStream(), "UTF-8");
         String yamlSpec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3-invalid-missing-title.yaml").getInputStream(), "UTF-8");
         assertFalse(parser.canParse(spec));
@@ -48,11 +49,11 @@ public class UniversalParserTest {
     }
 
     @Test
-    public void CanParse_InvalidInfo_ShouldReturnFalse() throws IOException {
+    public void CanParse_InvalidInfo_ShouldThrowParseException() throws IOException {
         String spec = IOUtils.toString(new ClassPathResource("openapi3-invalid-info.json").getInputStream(), "UTF-8");
         String yamloSpec = IOUtils.toString(new ClassPathResource("openapi3-invalid-info.yaml").getInputStream(), "UTF-8");
-        assertFalse(parser.canParse(spec));
-        assertFalse(parser.canParse(yamloSpec));
+        assertThrows(ParseException.class, () -> parser.canParse(spec));
+        assertThrows(ParseException.class, () -> parser.canParse(yamloSpec));
     }
 
     @Test
