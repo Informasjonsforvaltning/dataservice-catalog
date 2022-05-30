@@ -8,6 +8,9 @@ import no.fdk.dataservicecatalog.exceptions.ParseException;
 import no.fdk.dataservicecatalog.model.OpenAPIInfo;
 import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public interface Parser {
 
     enum ApiType {
@@ -35,7 +38,7 @@ public interface Parser {
             } else {
                 version = specMeta.getSwagger();
             }
-            if (version == null || !version.startsWith(majorVersion)) {
+            if (version == null || !isValidSemVerWithCorrectMajor(version, majorVersion)) {
                 return false;
             }
             OpenAPIInfo info = specMeta.getInfo();
@@ -53,6 +56,13 @@ public interface Parser {
         } else {
             return false;
         }
+    }
+
+    private static boolean isValidSemVerWithCorrectMajor(String semver, String major) {
+        Pattern versionPattern = Pattern.compile("^" + major + "\\.[0-9]+(\\.[0-9]+)?");
+        Matcher matcher = versionPattern.matcher(semver);
+
+        return matcher.matches();
     }
 
     private static OpenAPIMeta readMandatoryMetaProperties(String spec) {
