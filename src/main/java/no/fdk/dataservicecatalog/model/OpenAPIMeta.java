@@ -1,12 +1,16 @@
 package no.fdk.dataservicecatalog.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 @Data
-@NoArgsConstructor
+@Jacksonized
+@Builder
 public class OpenAPIMeta {
-    private String openapi;
-    private String swagger;
+    @Builder.Default
+    private String openapi = "";
+    @Builder.Default
+    private String swagger = "";
     private OpenAPIInfo info;
 }

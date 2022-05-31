@@ -19,7 +19,7 @@ public class ParserUtils {
         } else {
             String openapi = specMeta.getOpenapi();
             String swagger = specMeta.getSwagger();
-            if (openapi == null && swagger == null) {
+            if (stringIsNullOrEmpty(openapi) && stringIsNullOrEmpty(swagger)) {
                 throw new ParseException("Source specification missing mandatory field openapi/swagger");
             }
 
@@ -29,12 +29,12 @@ public class ParserUtils {
             }
 
             String title = info.getTitle();
-            if (title == null || title.isEmpty()) {
+            if (stringIsNullOrEmpty(title)) {
                 throw new ParseException("Source specification missing mandatory field info.title");
             }
 
             String documentVersion = info.getVersion();
-            if(documentVersion == null || documentVersion.isEmpty()) {
+            if(stringIsNullOrEmpty(documentVersion)) {
                 throw new ParseException("Source specification missing mandatory field info.version");
             }
 
@@ -60,5 +60,9 @@ public class ParserUtils {
         } catch (Exception e) {
             throw new ParseException("Unable to read mandatory properties: " + e.getMessage());
         }
+    }
+
+    private static boolean stringIsNullOrEmpty(String str) {
+        return str == null || str.isEmpty();
     }
 }

@@ -1,7 +1,10 @@
 logging:
   level.root: WARN
   level.no: ${LOG_LEVEL:DEBUG}
-
+server:
+  error:
+    include-message: always
+  port: 8080
 spring:
   security.oauth2.resourceserver.jwt:
     jwk-set-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk/protocol/openid-connect/certs
