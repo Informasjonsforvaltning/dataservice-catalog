@@ -1,11 +1,15 @@
 package no.fdk.dataservicecatalog.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 @Data
-@NoArgsConstructor
+@Builder
+@Jacksonized
 public class OpenAPIInfo {
-    public String title;
-    public String version;
+    @Builder.Default
+    private String title = "";
+    @Builder.Default
+    private String version = "";
 }
