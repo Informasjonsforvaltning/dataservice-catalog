@@ -20,40 +20,40 @@ public class UniversalParserTest {
     public void CanParse_WhenSwagger_ShouldReturnTrue() throws Exception {
         String spec = IOUtils.toString(new ClassPathResource("fs-api-swagger.json").getInputStream(), "UTF-8");
         String yamlSpec = IOUtils.toString(new ClassPathResource("fs-api-swagger.yaml").getInputStream(), "UTF-8");
-        assertTrue(parser.canParse(spec));
-        assertTrue(parser.canParse(yamlSpec));
+        assertTrue(parser.isParseable(spec));
+        assertTrue(parser.isParseable(yamlSpec));
     }
 
     @Test
     public void CanParse_WhenOpenApi_ShouldReturnTrue() throws Exception {
         String spec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3.json").getInputStream(), "UTF-8");
         String yamlSpec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3.yaml").getInputStream(), "UTF-8");
-        assertTrue(parser.canParse(spec));
-        assertTrue(parser.canParse(yamlSpec));
+        assertTrue(parser.isParseable(spec));
+        assertTrue(parser.isParseable(yamlSpec));
     }
 
     @Test
     public void CanParse_WhenSwagger_ShouldThrowParseException() throws IOException {
         String spec = IOUtils.toString(new ClassPathResource("fs-api-swagger-invalid-missing-title.json").getInputStream(), "UTF-8");
         String yamloSpec = IOUtils.toString(new ClassPathResource("fs-api-swagger-invalid-missing-title.yaml").getInputStream(), "UTF-8");
-        assertThrows(ParseException.class, () -> parser.canParse(spec));
-        assertThrows(ParseException.class, () -> parser.canParse(yamloSpec));
+        assertThrows(ParseException.class, () -> parser.isParseable(spec));
+        assertThrows(ParseException.class, () -> parser.isParseable(yamloSpec));
     }
 
     @Test
     public void CanParse_WhenOpenApi_ShouldThrowParseException() throws IOException {
         String spec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3-invalid-missing-title.json").getInputStream(), "UTF-8");
         String yamlSpec = IOUtils.toString(new ClassPathResource("enhetsregisteret-openapi3-invalid-missing-title.yaml").getInputStream(), "UTF-8");
-        assertThrows(ParseException.class, () -> parser.canParse(spec));
-        assertThrows(ParseException.class, () -> parser.canParse(yamlSpec));
+        assertThrows(ParseException.class, () -> parser.isParseable(spec));
+        assertThrows(ParseException.class, () -> parser.isParseable(yamlSpec));
     }
 
     @Test
     public void CanParse_InvalidInfo_ShouldThrowParseException() throws IOException {
         String spec = IOUtils.toString(new ClassPathResource("openapi3-invalid-info.json").getInputStream(), "UTF-8");
         String yamloSpec = IOUtils.toString(new ClassPathResource("openapi3-invalid-info.yaml").getInputStream(), "UTF-8");
-        assertThrows(ParseException.class, () -> parser.canParse(spec));
-        assertThrows(ParseException.class, () -> parser.canParse(yamloSpec));
+        assertThrows(ParseException.class, () -> parser.isParseable(spec));
+        assertThrows(ParseException.class, () -> parser.isParseable(yamloSpec));
     }
 
     @Test

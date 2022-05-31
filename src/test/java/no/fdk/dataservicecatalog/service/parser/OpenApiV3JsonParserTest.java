@@ -29,13 +29,13 @@ public class OpenApiV3JsonParserTest {
 
     @Test
     public void CanParse_ShouldReturnTrue() throws ParseException {
-        boolean result = openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
+        boolean result = openApiV3JsonParser.isParseable(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
     public void CanParse_ShouldThrowException() {
-        assertThrows(ParseException.class, () -> openApiV3JsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec)));
+        assertThrows(ParseException.class, () -> openApiV3JsonParser.isParseable(ParserUtils.readMandatoryMetaProperties(invalidSpec)));
     }
 
     @Test

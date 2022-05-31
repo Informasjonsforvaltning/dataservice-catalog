@@ -7,18 +7,18 @@ import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 public class UniversalParser {
     static private final OpenApiV3Parser openApiParser = new OpenApiV3Parser();
     static private final SwaggerParser swaggerParser = new SwaggerParser();
-    public boolean canParse(String spec) throws ParseException {
+    public boolean isParseable(String spec) throws ParseException {
         OpenAPIMeta specMeta = ParserUtils.readMandatoryMetaProperties(spec);
-        return openApiParser.canParse(specMeta) || swaggerParser.canParse(specMeta);
+        return openApiParser.isParseable(specMeta) || swaggerParser.isParseable(specMeta);
     }
 
     public ApiSpecification parse(String spec) throws ParseException {
         ApiSpecification parsed;
         OpenAPIMeta specMeta = ParserUtils.readMandatoryMetaProperties(spec);
 
-        if (openApiParser.canParse(specMeta)) {
+        if (openApiParser.isParseable(specMeta)) {
             parsed = openApiParser.parse(spec);
-        } else if (swaggerParser.canParse(specMeta)) {
+        } else if (swaggerParser.isParseable(specMeta)) {
             parsed = swaggerParser.parse(spec);
         } else {
             throw new ParseException("Available parsers not able to parse source specification");
