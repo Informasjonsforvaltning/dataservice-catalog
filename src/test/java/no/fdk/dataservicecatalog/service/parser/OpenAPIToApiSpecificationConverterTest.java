@@ -30,13 +30,13 @@ public class OpenAPIToApiSpecificationConverterTest {
 
     @Test
     public void CanParse_ShouldReturnTrue() throws ParseException {
-        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
+        boolean result = swaggerJsonParser.isParseable(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
     public void CanParseYAML_ShouldReturnTrue() throws ParseException {
-        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(yamlSpec));
+        boolean result = swaggerJsonParser.isParseable(ParserUtils.readMandatoryMetaProperties(yamlSpec));
         assertTrue(result);
     }
 

@@ -32,13 +32,13 @@ public class SwaggerJsonParserTest {
 
     @Test
     public void CanParse_ShouldReturnTrue() throws ParseException {
-        boolean result = swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(spec));
+        boolean result = swaggerJsonParser.isParseable(ParserUtils.readMandatoryMetaProperties(spec));
         assertTrue(result);
     }
 
     @Test
     public void CanParse_ShouldThrowException() {
-        assertThrows(ParseException.class, () -> swaggerJsonParser.canParse(ParserUtils.readMandatoryMetaProperties(invalidSpec)));
+        assertThrows(ParseException.class, () -> swaggerJsonParser.isParseable(ParserUtils.readMandatoryMetaProperties(invalidSpec)));
     }
 
     @Test

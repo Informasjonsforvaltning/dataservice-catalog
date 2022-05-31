@@ -8,7 +8,7 @@ import no.fdk.dataservicecatalog.model.ApiType;
 import no.fdk.dataservicecatalog.model.OpenAPIMeta;
 
 public class SwaggerParser {
-    public boolean canParse(OpenAPIMeta specMeta) throws ParseException {
+    public boolean isParseable(OpenAPIMeta specMeta) throws ParseException {
         return ParserUtils.isValidSwaggerOrOpenApiV3(specMeta, ApiType.SWAGGER, "2");
     }
 
