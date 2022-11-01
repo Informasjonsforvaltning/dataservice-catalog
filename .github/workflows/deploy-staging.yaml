@@ -13,9 +13,6 @@ jobs:
     uses: Informasjonsforvaltning/workflows/.github/workflows/build-deploy-maven.yaml@main
     with:
       app_name: dataservice-catalog
-      caller_sha: ${{ github.sha }}
-      repo: ${{ github.repository }}
-      actor: ${{ github.actor }}
       java_version: '17'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
       environment: 'staging'
@@ -25,3 +22,4 @@ jobs:
       GCP_SA_DIGDIR_FDK_GCR_KEY: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
       DIGDIR_FDK_AUTODEPLOY: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      DEPENDABOT_SLACK_WEBHOOK_URL: ${{ secrets.DEPENDABOT_SLACK_WEBHOOK_URL }}
