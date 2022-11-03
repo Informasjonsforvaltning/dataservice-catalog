@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.0</version>
+        <version>2.7.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.fdk</groupId>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>7.1.1</version>
+            <version>7.2</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
@@ -50,8 +50,7 @@
         <!-- Metrics -->
         <dependency>
             <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-statsd</artifactId>
-            <version>1.9.0</version>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
         <dependency>
@@ -122,18 +121,16 @@
         <dependency>
             <groupId>io.swagger.parser.v3</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>2.0.32</version>
+            <version>2.1.7</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -145,13 +142,13 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.17.1</version>
+            <version>1.17.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>1.17.1</version>
+            <version>1.17.5</version>
             <scope>test</scope>
         </dependency>
 
