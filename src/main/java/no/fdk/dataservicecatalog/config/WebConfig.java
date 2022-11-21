@@ -45,7 +45,8 @@ public class WebConfig implements WebFluxConfigurer {
                 MediaType.valueOf(Lang.TURTLE.getHeaderString()), MediaType.valueOf(Lang.RDFXML.getHeaderString()),
                 MediaType.valueOf(Lang.RDFJSON.getHeaderString()), MediaType.valueOf(Lang.JSONLD.getHeaderString()),
                 MediaType.valueOf(Lang.TRIX.getHeaderString()), MediaType.valueOf(Lang.TRIG.getHeaderString()),
-                MediaType.valueOf(Lang.NQUADS.getHeaderString()), MediaType.valueOf(Lang.NTRIPLES.getHeaderString()));
+                MediaType.valueOf(Lang.NQUADS.getHeaderString()), MediaType.valueOf(Lang.NTRIPLES.getHeaderString()))
+                .and(accept(MediaType.APPLICATION_JSON).negate());
     }
 
     @Bean
