@@ -25,10 +25,12 @@ public final class OrganizationResourceRole implements ResourceRole {
             return this.organizationRole == OrganizationRole.admin;
         }
         if (permission == OrganizationPermission.write) {
-            return this.organizationRole == OrganizationRole.admin;
+            return this.organizationRole == OrganizationRole.admin ||
+                this.organizationRole == OrganizationRole.write;
         }
         if (permission == OrganizationPermission.read) {
             return this.organizationRole == OrganizationRole.admin ||
+                this.organizationRole == OrganizationRole.write ||
                 this.organizationRole == OrganizationRole.read;
         }
         return false;
@@ -48,7 +50,7 @@ public final class OrganizationResourceRole implements ResourceRole {
     public enum OrganizationRole {
         //smallcase is used because this represents role field in token
         read,
-        //        write, //reserved for future
+        write,
         //        publish, //reserved for future
         admin
     }
