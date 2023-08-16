@@ -2,6 +2,7 @@ package no.fdk.dataservicecatalog.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +13,9 @@ import no.fdk.dataservicecatalog.dto.acat.TermsAndConditions;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ExternalDocumentation;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.Contact;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.info.License;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

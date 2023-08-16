@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class CatalogService {
-
     private final DataServiceMongoRepository dataServiceMongoRepository;
 
     public Mono<List<Catalog>> getAllPermittedCatalogs() {
@@ -40,7 +39,8 @@ public class CatalogService {
         if (SecurityUtils.isSysAdmin(authorities)) {
             return dataServiceMongoRepository.findAll();
         } else {
-            return dataServiceMongoRepository.findByOrganizationIdIn(SecurityUtils.authCatalogs(authorities));
+            final List<String> orgIds = SecurityUtils.authCatalogs(authorities);
+            return dataServiceMongoRepository.findByOrganizationIdIn(orgIds);
         }
     }
 
