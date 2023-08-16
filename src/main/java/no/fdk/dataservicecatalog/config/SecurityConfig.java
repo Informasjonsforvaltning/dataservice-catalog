@@ -4,8 +4,8 @@ import no.fdk.dataservicecatalog.security.PermissionManager;
 import no.fdk.dataservicecatalog.security.RDFMatcher;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
@@ -18,11 +18,11 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import java.util.Collections;
 import java.util.List;
 
-@EnableWebFluxSecurity
+@Configuration
 public class SecurityConfig {
 
     @Bean
-    CorsConfigurationSource corsConfiguration() {
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.applyPermitDefaultValues();
         corsConfig.addAllowedMethod(HttpMethod.POST);
@@ -37,28 +37,29 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.csrf().disable();
-
-        http.cors()
-            .and().authorizeExchange()
-                .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers(HttpMethod.GET, "/ping").permitAll()
-                .pathMatchers(HttpMethod.GET, "/ready").permitAll()
-                .matchers(new RDFMatcher()).permitAll()
-                .pathMatchers(HttpMethod.DELETE)
-                    .access((PermissionManager.of("organization", "write")))
-                .pathMatchers(HttpMethod.PATCH)
-                    .access((PermissionManager.of("organization", "write")))
-                .pathMatchers(HttpMethod.POST)
-                    .access((PermissionManager.of("organization", "write")))
-                .anyExchange().access((PermissionManager.of("organization", "read")))
-            .and().oauth2ResourceServer().jwt();
+    public SecurityWebFilterChain springSecurityFilterChain(
+            ServerHttpSecurity http, OAuth2ResourceServerProperties oAuth2ResourceServerProperties) throws Exception {
+        http
+            .csrf(spec -> spec.disable())
+            .cors(spec -> spec.configurationSource(corsConfigurationSource()))
+            .authorizeExchange(spec -> spec
+                    .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                    .pathMatchers(HttpMethod.GET, "/ping").permitAll()
+                    .pathMatchers(HttpMethod.GET, "/ready").permitAll()
+                    .matchers(new RDFMatcher()).permitAll()
+                    .pathMatchers(HttpMethod.DELETE)
+                        .access((PermissionManager.of("organization", "write")))
+                    .pathMatchers(HttpMethod.PATCH)
+                        .access((PermissionManager.of("organization", "write")))
+                    .pathMatchers(HttpMethod.POST)
+                        .access((PermissionManager.of("organization", "write")))
+                    .anyExchange()
+                        .access((PermissionManager.of("organization", "read"))))
+            .oauth2ResourceServer(spec -> spec.jwt(jwtSpec -> jwtSpec.jwtDecoder(jwtDecoder(oAuth2ResourceServerProperties))));
 
         return http.build();
     }
 
-    @Bean
     public ReactiveJwtDecoder jwtDecoder(OAuth2ResourceServerProperties properties) {
         NimbusReactiveJwtDecoder jwtDecoder = NimbusReactiveJwtDecoder.withJwkSetUri(properties.getJwt().getJwkSetUri()).build();
 
