@@ -6,7 +6,7 @@ import no.fdk.dataservicecatalog.utils.jwk.JwkStore;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class MockServer {
-    private static WireMockServer mockserver = new WireMockServer(5000);
+    private static WireMockServer mockserver = new WireMockServer(5050);
 
     public static void startMockServer() {
         if(!mockserver.isRunning()) {

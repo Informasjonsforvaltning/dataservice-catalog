@@ -67,4 +67,4 @@ application:
 
 spring:
   config.activate.on-profile: integration-test
-  security.oauth2.resourceserver.jwt.jwk-set-uri: http://localhost:5000/auth/realms/fdk/protocol/openid-connect/certs
+  security.oauth2.resourceserver.jwt.jwk-set-uri: http://localhost:5050/auth/realms/fdk/protocol/openid-connect/certs
