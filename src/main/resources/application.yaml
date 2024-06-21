@@ -6,6 +6,8 @@ server:
     include-message: always
   port: 8080
 spring:
+  codec:
+    max-in-memory-size: 5000KB
   security.oauth2.resourceserver.jwt:
     jwk-set-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk/protocol/openid-connect/certs
     issuer-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk
