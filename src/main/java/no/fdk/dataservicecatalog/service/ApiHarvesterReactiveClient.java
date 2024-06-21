@@ -8,6 +8,7 @@ import no.fdk.dataservicecatalog.service.parser.UniversalParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.Exceptions;
@@ -21,6 +22,13 @@ public class ApiHarvesterReactiveClient {
 
     public ApiHarvesterReactiveClient() {
         webClient = WebClient.builder()
+                .exchangeStrategies(
+                        ExchangeStrategies.builder()
+                                .codecs(clientCodecConfigurer ->
+                                        clientCodecConfigurer.defaultCodecs()
+                                                .maxInMemorySize(5000 * 1024)
+                                ).build()
+                )
                 .defaultHeader("accept", MediaType.APPLICATION_JSON_VALUE).build();
     }
 
