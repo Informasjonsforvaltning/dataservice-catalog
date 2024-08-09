@@ -252,7 +252,8 @@ public class TestData {
                                         .phone("phone-12")
                                         .build()
                         )
-                        .mediaTypes(Set.of("application/json", "text/xml"))
+                        .mediaTypes(Set.of("https://www.iana.org/assignments/media-types/application/json", "https://www.iana.org/assignments/media-types/text/xml"))
+                        .formats(Set.of("http://publications.europa.eu/resource/authority/file-type/JSON", "http://publications.europa.eu/resource/authority/file-type/XML"))
                         .build(),
                 DataService
                         .builder()
@@ -281,7 +282,8 @@ public class TestData {
                                         .phone("phone-13")
                                         .build()
                         )
-                        .mediaTypes(Set.of("application/json", "text/xml"))
+                        .mediaTypes(Set.of("https://www.iana.org/assignments/media-types/application/json", "https://www.iana.org/assignments/media-types/text/xml"))
+                        .formats(Set.of("http://publications.europa.eu/resource/authority/file-type/JSON", "http://publications.europa.eu/resource/authority/file-type/XML"))
                         .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
                         .build(),
                 DataService
@@ -311,7 +313,8 @@ public class TestData {
                                         .phone("phone-14")
                                         .build()
                         )
-                        .mediaTypes(Set.of("application/json", "text/xml"))
+                        .mediaTypes(Set.of("https://www.iana.org/assignments/media-types/application/json", "https://www.iana.org/assignments/media-types/text/xml"))
+                        .formats(Set.of("http://publications.europa.eu/resource/authority/file-type/JSON", "http://publications.europa.eu/resource/authority/file-type/XML"))
                         .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
                         .serviceType("CUSTOMER_RELATIONS")
                         .build(),
@@ -367,7 +370,8 @@ public class TestData {
                                 .phone("phone")
                                 .build()
                 )
-                .mediaTypes(Set.of("application/json", "text/xml"))
+                .mediaTypes(Set.of("https://www.iana.org/assignments/media-types/application/json", "https://www.iana.org/assignments/media-types/text/xml"))
+                .formats(Set.of("http://publications.europa.eu/resource/authority/file-type/JSON", "http://publications.europa.eu/resource/authority/file-type/XML"))
                 .servesDataset(Set.of("http://some-dataset-1", "http://some-dataset-2"))
                 .serviceType("CUSTOMER_RELATIONS")
                 .build();

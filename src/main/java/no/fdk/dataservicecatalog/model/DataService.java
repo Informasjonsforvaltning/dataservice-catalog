@@ -46,6 +46,7 @@ public class DataService {
     private License license;
     private List<String> endpointUrls;
     private Set<String> mediaTypes;
+    private Set<String> formats;
     private Map<String, String> description;
     private List<String> endpointDescriptions;
     private Access access;
