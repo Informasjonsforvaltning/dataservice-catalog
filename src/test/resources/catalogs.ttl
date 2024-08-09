@@ -41,6 +41,7 @@
     dcat:endpointDescription  <http://endpoint-description-13> ;
     dcat:endpointURL          <http://endpoint-url-13-2> , <http://endpoint-url-13-1> ;
     dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> ;
     dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
 
 <http://localhost/data-services/catalog-id-2/id-2>
@@ -91,7 +92,8 @@
                               ] ;
     dcat:endpointDescription  <http://endpoint-description-12> ;
     dcat:endpointURL          <http://endpoint-url-12-1> , <http://endpoint-url-12-2> ;
-    dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> .
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> .
 
 <http://localhost/data-services/catalog-id-2/id-1>
     a       dcat:DataService .
@@ -158,6 +160,7 @@
     dcat:endpointDescription  <http://endpoint-description-14> ;
     dcat:endpointURL          <http://endpoint-url-14-1> , <http://endpoint-url-14-2> ;
     dcat:mediaType            <https://www.iana.org/assignments/media-types/application/json> , <https://www.iana.org/assignments/media-types/text/xml> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> ;
     dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
 
 <http://localhost/data-services/catalog-id-2/id-5>
@@ -227,6 +230,7 @@
     dcat:endpointDescription  <http://endpoint-description-13> ;
     dcat:endpointURL          <http://endpoint-url-13-2> , <http://endpoint-url-13-1> ;
     dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> ;
     dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
 
 <http://localhost/catalogs/catalog-id-1>
@@ -285,6 +289,7 @@
     dcat:endpointDescription  <http://endpoint-description-14> ;
     dcat:endpointURL          <http://endpoint-url-14-1> , <http://endpoint-url-14-2> ;
     dcat:mediaType            <https://www.iana.org/assignments/media-types/text/xml> , <https://www.iana.org/assignments/media-types/application/json> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> ;
     dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
 
 <http://localhost/data-services/catalog-id-2/id-3>
@@ -306,7 +311,8 @@
                               ] ;
     dcat:endpointDescription  <http://endpoint-description-12> ;
     dcat:endpointURL          <http://endpoint-url-12-2> , <http://endpoint-url-12-1> ;
-    dcat:mediaType            <https://www.iana.org/assignments/media-types/application/json> , <https://www.iana.org/assignments/media-types/text/xml> .
+    dcat:mediaType            <https://www.iana.org/assignments/media-types/application/json> , <https://www.iana.org/assignments/media-types/text/xml> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> .
 
 <http://localhost/data-services/catalog-id-1/id-15>
     a                         dcat:DataService ;

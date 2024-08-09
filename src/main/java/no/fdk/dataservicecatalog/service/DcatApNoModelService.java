@@ -8,12 +8,10 @@ import no.fdk.dataservicecatalog.model.Catalog;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.model.Status;
 import no.fdk.dataservicecatalog.repository.DataServiceMongoRepository;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.reasoner.rulesys.impl.LPAgendaEntry;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.util.FileUtils;
@@ -231,6 +229,17 @@ public class DcatApNoModelService {
                                                 mediaType :
                                                 format("https://www.iana.org/assignments/media-types/%s", mediaType)
                                 ))
+                    );
+                }
+            });
+        }
+
+        if (dataService.getFormats() != null) {
+            dataService.getFormats().forEach(format -> {
+                if (format != null && !format.isBlank() && isURI(format)) {
+                    dataServiceResource.addProperty(
+                            DCTerms.format,
+                            ResourceFactory.createResource(URIref.encode(format))
                     );
                 }
             });

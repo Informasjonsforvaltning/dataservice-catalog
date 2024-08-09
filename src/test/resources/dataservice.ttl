@@ -20,4 +20,5 @@
     dcat:endpointDescription  <http://endpoint-description> ;
     dcat:endpointURL          <http://endpoint-url-1> , <http://endpoint-url-2> ;
     dcat:mediaType            <https://www.iana.org/assignments/media-types/application/json> , <https://www.iana.org/assignments/media-types/text/xml> ;
+    dct:format                <http://publications.europa.eu/resource/authority/file-type/JSON> , <http://publications.europa.eu/resource/authority/file-type/XML> ;
     dcat:servesDataset        <http://some-dataset-1> , <http://some-dataset-2> .
