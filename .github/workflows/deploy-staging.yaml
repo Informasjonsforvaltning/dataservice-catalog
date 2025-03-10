@@ -13,12 +13,11 @@ jobs:
     uses: Informasjonsforvaltning/workflows/.github/workflows/build-push.yaml@main
     with:
       app_name: dataservice-catalog
-      java_version: '17'
+      java_version: '21'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
       environment: staging
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GCP_SA_DIGDIR_FDK_GCR_KEY: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   deploy:
@@ -40,6 +39,4 @@ jobs:
     if: ${{ github.actor == 'dependabot[bot]' }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/build.yaml@main
     with:
-      java_version: '17'
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      java_version: '21'
