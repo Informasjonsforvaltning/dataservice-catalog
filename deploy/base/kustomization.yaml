@@ -6,5 +6,5 @@ resources:
   - dataservice-catalog-service.yaml
 images:
   - name: dataservice-catalog
-    newName: eu.gcr.io/digdir-fdk-infra/dataservice-catalog
+    newName: ghcr.io/informasjonsforvaltning/dataservice-catalog
     newTag: $(GIT_COMMIT_SHA)

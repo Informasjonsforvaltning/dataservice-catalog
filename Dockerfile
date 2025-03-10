@@ -1,4 +1,4 @@
-FROM maven:3-openjdk-17 AS MAVEN_BUILD_ENVIRONMENT
+FROM maven:3.9.6-eclipse-temurin-21 AS MAVEN_BUILD_ENVIRONMENT
 
 COPY pom.xml /tmp/
 COPY src /tmp/src/
@@ -6,7 +6,7 @@ WORKDIR /tmp/
 
 RUN mvn clean package --no-transfer-progress -DskipTests
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre-alpine
 
 ENV TZ=Europe/Oslo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
