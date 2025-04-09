@@ -16,6 +16,7 @@ jobs:
       java_version: '21'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
       environment: staging
+      gh_environment: staging
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -28,6 +29,7 @@ jobs:
     with:
       app_name: dataservice-catalog
       environment: staging
+      gh_environment: staging
       cluster: digdir-fdk-dev
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
