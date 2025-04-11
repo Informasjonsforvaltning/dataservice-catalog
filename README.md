@@ -1,45 +1,45 @@
-# dataservice-catalog
+# Data Service Catalog
 
-Backend for the data service registration.
+This application provides an API for the management of data services. A data service is defined according to
+the [DCAT-AP-NO](https://data.norge.no/specification/dcat-ap-no) specification.
 
-## Requirements
-- maven
-- java 8
-- docker
-- docker-compose
+For a broader understanding of the system’s context, refer to
+the [architecture documentation](https://github.com/Informasjonsforvaltning/architecture-documentation) wiki. For more
+specific context on this application, see the **Registration** subsystem section.
 
-## Run tests
-Run tests with maven:
+## Getting Started
+
+These instructions will give you a copy of the project up and running on your local machine for development and testing
+purposes.
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- Java 21
+- Maven
+- Docker
+
+### Running locally
+
+Clone the repository
+
+```sh
+git clone https://github.com/Informasjonsforvaltning/dataservice-catalog.git
+cd dataservice-catalog
 ```
+
+Start MongoDB, RabbitMQ and the application (either through your IDE using the dev profile, or via CLI):
+
+```sh
+docker compose up -d
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+### Running tests
+
+```sh
 mvn verify
 ```
 
-## Run locally
-Start the application with docker-compose and contact it with maven.
-```
-docker-compose up -d
 
-curl http://localhost:8080/ping
-curl http://localhost:8080/ready
-```
-
-It is also possible to start the application with maven, this requires mongodb & rabbitmq from docker-compose to be running.
-```
-mvn spring-boot:run -Dspring-boot.run.profiles=develop
-```
-
-Then in another terminal e.g.
-```
-curl http://localhost:9080/ping
-curl http://localhost:9080/ready
-```
-
-## Datastore
-To inspect local MongoDB:
-```
-% docker-compose exec mongodb mongo
-% use admin
-% db.auth("admin","admin")
-% use dataservice-catalog
-% db.dataservices.find()
-```

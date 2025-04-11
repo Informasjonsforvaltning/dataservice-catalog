@@ -2,23 +2,6 @@ version: "3"
 
 services:
 
-  dataservice-catalog:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      - SSO_HOST=https://sso.staging.fellesdatakatalog.digdir.no
-      - MONGO_USERNAME=admin
-      - MONGO_PASSWORD=admin
-      - RABBIT_USERNAME=admin
-      - RABBIT_PASSWORD=admin
-      - DATA_SERVICE_CATALOG_GUI_URL=http://localhost:8171
-      - CATALOG_BASE_URI=http://dataservice-catalog:8080
-      - ORGANIZATION_CATALOGUE_BASE_URI=https://organization-catalogue.staging.fellesdatakatalog.digdir.no
-    depends_on:
-      - mongodb
-      - rabbitmq
-
   mongodb:
     image: mongo:latest
     environment:
