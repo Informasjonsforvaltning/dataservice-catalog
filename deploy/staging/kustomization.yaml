@@ -4,6 +4,3 @@ kind: Kustomization
 namespace: staging
 resources:
   - ../base
-
-patchesStrategicMerge:
-  - env.yaml

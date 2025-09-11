@@ -4,6 +4,3 @@ kind: Kustomization
 namespace: demo
 resources:
   - ../base
-
-patchesStrategicMerge:
-  - env.yaml
