@@ -9,8 +9,8 @@ spring:
   codec:
     max-in-memory-size: 5000KB
   security.oauth2.resourceserver.jwt:
-    jwk-set-uri: ${KEYCLOAK_OIDC_ISSUER:https://keycloak.staging.fellesdatakatalog.digdir.no/realms/fdk}/protocol/openid-connect/certs
-    issuer-uri: ${KEYCLOAK_OIDC_ISSUER:https://keycloak.staging.fellesdatakatalog.digdir.no/realms/fdk}
+    jwk-set-uri: ${KEYCLOAK_OIDC_ISSUER:https://auth.staging.fellesdatakatalog.digdir.no/realms/fdk}/protocol/openid-connect/certs
+    issuer-uri: ${KEYCLOAK_OIDC_ISSUER:https://auth.staging.fellesdatakatalog.digdir.no/realms/fdk}
   data:
     mongodb:
       authentication-database: admin
