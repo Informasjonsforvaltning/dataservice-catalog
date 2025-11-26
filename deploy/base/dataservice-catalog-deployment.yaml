@@ -51,11 +51,11 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: DATASERVICE_CATALOG_BASE_URI
-            - name: SSO_HOST
+            - name: KEYCLOAK_OIDC_ISSUER
               valueFrom:
                 secretKeyRef:
-                  name: commonurl
-                  key: SSO_BASE_URI
+                  name: keycloak
+                  key: KEYCLOAK_OIDC_ISSUER
           image: dataservice-catalog
           imagePullPolicy: Always
           ports:
