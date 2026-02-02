@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fdk.dataservicecatalog.dto.shared.apispecification.ApiSpecificationSource;
 import no.fdk.dataservicecatalog.model.DataService;
 import no.fdk.dataservicecatalog.service.DataServiceService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -24,10 +25,7 @@ public class DataServiceRegistrationHandler {
     }
 
     public Mono<ServerResponse> create(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(DataService.class)
-                .flatMap(dataService -> ok().body(
-                        dataServiceService.create(dataService, serverRequest.pathVariable("catalogId")), DataService.class)
-                );
+        return status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     public Mono<ServerResponse> get(ServerRequest serverRequest) {
@@ -37,29 +35,18 @@ public class DataServiceRegistrationHandler {
     }
 
     public Mono<ServerResponse> delete(ServerRequest serverRequest) {
-        var dataServiceId = serverRequest.pathVariable("dataServiceId");
-        var catalogId = serverRequest.pathVariable("catalogId");
-        return dataServiceService.deleteById(dataServiceId, catalogId)
-                .flatMap(isDeleted -> isDeleted ? noContent().build() : notFound().build());
+        return status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     public Mono<ServerResponse> patch(ServerRequest serverRequest) {
-        var dataServiceId = serverRequest.pathVariable("dataServiceId");
-        var catalogId = serverRequest.pathVariable("catalogId");
-        return serverRequest.bodyToMono(DataService.class)
-                .flatMap(updated -> ok().body(dataServiceService.update(dataServiceId, catalogId, updated), DataService.class));
+        return status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     public Mono<ServerResponse> importByUrl(ServerRequest serverRequest) {
-        var catalogId = serverRequest.pathVariable("catalogId");
-        return serverRequest.bodyToMono(ApiSpecificationSource.class)
-                .flatMap(apiSpecificationSource -> ok().body(dataServiceService.importFromSpecification(apiSpecificationSource, catalogId), DataService.class));
+        return status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     public Mono<ServerResponse> editByUrl(ServerRequest serverRequest) {
-        var dataServiceId = serverRequest.pathVariable("dataServiceId");
-        var catalogId = serverRequest.pathVariable("catalogId");
-        return serverRequest.bodyToMono(ApiSpecificationSource.class)
-                .flatMap(source -> ok().body(dataServiceService.importFromSpecification(dataServiceId, catalogId, source), DataService.class));
+        return status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 }
